@@ -1,0 +1,14 @@
+http://www.omdbapi.com/?i=tt3896198&apikey=ccff33de
+
+-----------------------------------------------------------
+
+USAGE:
+Send all data requests to:
+
+http://www.omdbapi.com/?i=tt3896198&apikey=ccff33de
+
+
+Poster API requests:
+
+http://img.omdbapi.com/?i=tt3896198&apikey=ccff33de
+
