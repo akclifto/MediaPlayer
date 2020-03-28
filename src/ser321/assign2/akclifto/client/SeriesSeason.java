@@ -86,32 +86,44 @@ public class SeriesSeason {
         }
     }
 
+    /**if series added from JSON file, not URL Search*/
     public SeriesSeason(JSONObject jsonObject, String actionOption){
 
         JSONObject data = jsonObject;
 
-        try{
+        if(actionOption.equalsIgnoreCase("search")){
 
-            genre = new ArrayList<>();
-            JSONArray jsonArray = jsonObject.getJSONArray("genre");
-            for(int i = 0; i < jsonArray.length();i++) {
-                genre.add(jsonArray.get(i).toString());
+            try{
+
+                genre = new ArrayList<>();
+                JSONArray jsonArray = jsonObject.getJSONArray("genre");
+                for(int i = 0; i < jsonArray.length();i++) {
+                    genre.add(jsonArray.get(i).toString());
+                }
+
+                this.title = jsonObject.getString("title");
+                this.season = jsonObject.getString("seriesSeason");
+                this.imdbRating = jsonObject.getString("imdbRating");
+                this.posterLink = jsonObject.getString("poster");
+                this.plotSummary = jsonObject.getString("plotSummary");
+
+                System.out.println("Added new entry for: " + season);
+
+                //TODO add to episode list if season is the same
+
+            } catch(Exception ex){
+                System.out.println("Exception importing from JSON file: " + ex.getMessage());
+                ex.printStackTrace();
             }
-
-            this.title = jsonObject.getString("title");
-            this.season = jsonObject.getString("seriesSeason");
-            this.imdbRating = jsonObject.getString("imdbRating");\
-            this.posterLink = jsonObject.getString("poster");
-            this.plotSummary = jsonObject.getString("plotSummary");
-
-            System.out.println("Added new entry for: " + season);
-
-            //TODO add to episode list if season is the same
-
-        } catch(Exception ex){
-            System.out.println("Exception importing from JSON file: " + ex.getMessage());
-            ex.printStackTrace();
+        } else {
+            addFromURL(jsonObject);
         }
+    }
+
+    /**if series added from URL search, not a JSON file*/
+    private void addFromURL(JSONObject jsonObject) {
+
+        //TODO
     }
 
     /* All setters/getters */
