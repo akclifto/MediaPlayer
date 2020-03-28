@@ -86,7 +86,7 @@ public class Episode implements JSONString, Serializable {
 
         String result = "{}";
         try{
-            result = this.toJson().toString(0);
+            result = this.toJson().toString(4);
         } catch(Exception ex) {
             System.out.println("Exception in Episode toJSONString(): " + ex.getMessage());
             ex.printStackTrace();

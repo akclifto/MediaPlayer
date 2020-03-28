@@ -76,12 +76,18 @@ public class SeriesSeason {
 
         try{
 
-            this.title = jsonObject.getString("title");
-            this.season = jsonObject.getString("seriesSeason");
-            this.genre = jsonObject.getString("genre");
-            this.imdbRating = jsonObject.getString("imdbRating");
-            this.posterLink = jsonObject.getString("poster");
-            this.plotSummary = jsonObject.getString("plotSummary");
+            jsonObject.put("title", title);
+            jsonObject.put("seriesSeason", season);
+            jsonObject.put("imdbRating", imdbRating);
+            jsonObject.put("genre", genre);
+            jsonObject.put("poster", posterLink);
+            jsonObject.put("plotSummary", plotSummary);
+
+            JSONArray episodes = new JSONArray();
+            for(int i = 0; i < episodeList.size(); i++) {
+                episodes.put(i, episodeList.get(i).toJson());
+            }
+            jsonObject.put("Episodes", episodes);
 
             System.out.println("Added new entry for: " + season);
 
@@ -102,15 +108,20 @@ public class SeriesSeason {
 
             try{
 
-                this.title = jsonObject.getString("title");
-                this.season = jsonObject.getString("seriesSeason");
-                this.imdbRating = jsonObject.getString("imdbRating");
-                this.posterLink = jsonObject.getString("poster");
-                this.plotSummary = jsonObject.getString("plotSummary");
+                data.put("title", title);
+                data.put("seriesSeason", season);
+                data.put("imdbRating", imdbRating);
+                data.put("genre", genre);
+                data.put("poster", posterLink);
+                data.put("plotSummary", plotSummary);
+
+                JSONArray episodes = new JSONArray();
+                for(int i = 0; i < episodeList.size(); i++) {
+                    episodes.put(i, episodeList.get(i).toJson());
+                }
+                data.put("Episodes", episodes);
 
                 System.out.println("Added new entry for: " + season);
-
-                //TODO add to episode list if season is the same
 
             } catch(Exception ex){
                 System.out.println("Exception importing from JSON file: " + ex.getMessage());
@@ -169,7 +180,7 @@ public class SeriesSeason {
 
         if (episodeList.isEmpty()) {
             episodeList.add(episode);
-            System.out.println(episode.getName() + " added to the Episode list.");
+            System.out.println(episode.getName() + " added to the Episode list for " + title);
             return;
         }
 
@@ -184,7 +195,7 @@ public class SeriesSeason {
             System.out.println("Episode already included in the Episode list.");
         } else {
             episodeList.add(episode);
-            System.out.println(episode.getName() + " added to the Episode list.");
+            System.out.println(episode.getName() + " added to the Episode list for " + title);
         }
     }
 
@@ -192,7 +203,7 @@ public class SeriesSeason {
 
         String ret = "{}";
         try {
-            ret = this.toJson().toString(0);
+            ret = this.toJson().toString(4);
         } catch (Exception ex) {
             System.out.println("Exception in toJsonString: " + ex.getMessage());
         }
@@ -209,6 +220,13 @@ public class SeriesSeason {
             series.put("genre", genre);
             series.put("poster", posterLink);
             series.put("plotSummary", plotSummary);
+
+            JSONArray episodes = new JSONArray();
+            for(int i = 0; i < episodeList.size(); i++) {
+                episodes.put(i, episodeList.get(i).toJson());
+            }
+            series.put("Episodes", episodes);
+
         } catch (Exception ex) {
             System.out.println("Exception in toJson: " + ex.getMessage());
         }

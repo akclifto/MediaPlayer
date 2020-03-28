@@ -465,15 +465,21 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		System.out.println(epi.toJSONString());
 		System.out.println(epi.toString());
 		System.out.println("\n\n");
+		Episode ep2 = new Episode("Adam redux v.2", "11/10");
 
 		System.out.println("SERIES TESTS: ");
-		SeriesSeason series = new SeriesSeason("The show name here", "season 1", "8.5",
+		SeriesSeason series = new SeriesSeason("The GreatShow", "season 1", "8.5",
 				"Action", "https://fakelink.com", "The plot thickens...");
 		System.out.println(series.toJsonString());
 		System.out.printf(series.toString());
 		series.addToEpisodeList(epi);
 		series.printEpisodes();
 		System.out.println("\n\n");
+		series.addToEpisodeList(ep2);
+		series.printEpisodes();
+
+		//print the full series again
+		System.out.println(series.toJsonString());
 
 
 
