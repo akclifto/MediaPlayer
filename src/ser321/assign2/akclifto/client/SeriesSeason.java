@@ -1,6 +1,5 @@
 package ser321.assign2.akclifto.client;
 
-import javafx.scene.chart.XYChart;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -74,30 +73,27 @@ public class SeriesSeason {
      * */
     public SeriesSeason(JSONObject jsonObject){
 
-        try{
+        episodeList = new ArrayList<>();
+        try {
+            title = jsonObject.getString("title");
+            season = jsonObject.getString("season");
+            imdbRating = jsonObject.getString("imdbRating");
+            genre = jsonObject.getString("genre");
+            posterLink = jsonObject.getString("posterLink");
+            plotSummary = jsonObject.getString("plotSummary");
 
-            jsonObject.put("title", title);
-            jsonObject.put("seriesSeason", season);
-            jsonObject.put("imdbRating", imdbRating);
-            jsonObject.put("genre", genre);
-            jsonObject.put("poster", posterLink);
-            jsonObject.put("plotSummary", plotSummary);
-
-            JSONArray episodes = new JSONArray();
-            for(int i = 0; i < episodeList.size(); i++) {
-                episodes.put(i, episodeList.get(i).toJson());
+            //go through episode list array
+            JSONArray episodes = jsonObject.getJSONArray("episodes");
+            for (int i = 0; i < episodes.length(); i++) {
+                Episode episode = new Episode(episodes.getJSONObject(i));
+                episodeList.add(episode);
             }
-            jsonObject.put("Episodes", episodes);
-
-            System.out.println("Added new entry for: " + season);
-
-            //TODO add to episode list if season is the same
-
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception importing from JSON file: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
+
 
     /**if series added from JSON file, not URL Search*/
     public SeriesSeason(JSONObject jsonObject, String actionOption){
@@ -119,7 +115,7 @@ public class SeriesSeason {
                 for(int i = 0; i < episodeList.size(); i++) {
                     episodes.put(i, episodeList.get(i).toJson());
                 }
-                data.put("Episodes", episodes);
+                data.put("episodes", episodes);
 
                 System.out.println("Added new entry for: " + season);
 
@@ -138,7 +134,7 @@ public class SeriesSeason {
         //TODO
     }
 
-    /* All setters/getters */
+    /* All getters */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -175,7 +171,11 @@ public class SeriesSeason {
     }
 
 
-
+    /**
+     * Methods to add a series episode to the episode list.
+     * @param episode : episodes to be added to the list.
+     * @return void
+     * */
     public void addToEpisodeList(Episode episode) {
 
         if (episodeList.isEmpty()) {
@@ -199,7 +199,11 @@ public class SeriesSeason {
         }
     }
 
-    public String toJsonString() {
+    /**
+     * Methods to display String in JSON file format output.
+     * @return void
+     * */
+    public String toJSONString() {
 
         String ret = "{}";
         try {
@@ -210,6 +214,10 @@ public class SeriesSeason {
         return ret;
     }
 
+    /**
+     * Methods to serialize data to JSON file
+     * @return void
+     * */
     public JSONObject toJson() {
 
         JSONObject series = new JSONObject();
@@ -225,7 +233,7 @@ public class SeriesSeason {
             for(int i = 0; i < episodeList.size(); i++) {
                 episodes.put(i, episodeList.get(i).toJson());
             }
-            series.put("Episodes", episodes);
+            series.put("episodes", episodes);
 
         } catch (Exception ex) {
             System.out.println("Exception in toJson: " + ex.getMessage());
@@ -235,6 +243,7 @@ public class SeriesSeason {
 
     /**
      * Method to print out the list of episodes.
+     * @return void
      * */
     public void printEpisodes(){
 
@@ -246,6 +255,10 @@ public class SeriesSeason {
     }
 
 
+    /**
+     * Override method to output String data to console
+     * @return String of formatted console output.
+     * */
     @Override
     public String toString() {
 

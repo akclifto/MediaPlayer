@@ -57,16 +57,11 @@ public interface Library {
     void removeSeriesSeason(String title);
 
     /*serialize and save a JSON file output for the library*/
-    void saveLibraryToFile(String filename, SeriesSeason season, List<Episode> episodeList) throws IOException;
+    void saveLibraryToFile(String filename);
 
     /*load JSON file and initialize in library*/
     void restoreLibraryFromFile(String filename) throws FileNotFoundException;
 
-    /* serialize SeriesSeason object to JSON Object */
-    JSONObject serializeSeason(SeriesSeason season);
-
-    /* serialize Episode from the episode list to JSON Array */
-    JSONArray serializeEpisode(List<Episode> episodeList);
 
 
 }

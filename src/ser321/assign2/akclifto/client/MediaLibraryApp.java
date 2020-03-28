@@ -470,7 +470,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		System.out.println("SERIES TESTS: ");
 		SeriesSeason series = new SeriesSeason("The GreatShow", "season 1", "8.5",
 				"Action", "https://fakelink.com", "The plot thickens...");
-		System.out.println(series.toJsonString());
+		System.out.println(series.toJSONString());
 		System.out.printf(series.toString());
 		series.addToEpisodeList(epi);
 		series.printEpisodes();
@@ -479,7 +479,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		series.printEpisodes();
 
 		//print the full series again
-		System.out.println(series.toJsonString());
+		System.out.println(series.toJSONString());
+
+		System.out.println("JSON OBJECT-PASSING TESTS");
+
 
 
 

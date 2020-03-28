@@ -168,57 +168,12 @@ public class SeasonLibrary implements Library {
     }
 
     @Override
-    public void saveLibraryToFile(String filename, SeriesSeason season, List<Episode> episodeList) {
+    public void saveLibraryToFile(String filename) {
+        //TODO
 
-        try {
-            JSONObject objSeason = serializeSeason(season);
-            JSONArray arrEpisodes = serializeEpisode(episodeList);
-            String append = ".json";
-            System.out.println("Writing JSON to file " + filename);
-            File outFile = new File(filename + append);
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outFile));
-            outputStream.writeObject(objSeason);
-            outputStream.writeObject(arrEpisodes);
-            outputStream.close();
-
-        } catch (IOException e) {
-            System.out.println("Exception: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
-    @Override
-    public JSONObject serializeSeason(SeriesSeason season) {
 
-        JSONObject objSeason = new JSONObject();
-        objSeason.put("title", season.getTitle());
-        objSeason.put("season", season.getSeason());
-        objSeason.put("imdbRating", season.getImdbRating());
-        objSeason.put("genre", season.getGenre());
-        objSeason.put("poster", season.getPosterLink());
-        objSeason.put("plotSummary", season.getPlotSummary());
-        objSeason.put("episodes", season.getEpisodeList());
-        return objSeason;
-    }
-
-    @Override
-    public JSONArray serializeEpisode(List<Episode> episodeList) {
-
-        JSONArray arrEpisode = new JSONArray();
-        for (Episode index : episodeList) {
-
-            if (episodeList.isEmpty()) {
-                System.out.println("No Episodes to write to JSON!");
-                break;
-            }
-
-            JSONObject obj = new JSONObject();
-            obj.put("Name", index.getName());
-            obj.put("imdbRating", index.getImdbRating());
-            obj.toJSONArray(arrEpisode);
-        }
-        return arrEpisode;
-    }
 
     @Override
     public void restoreLibraryFromFile(String filename) {
