@@ -1,6 +1,9 @@
 package ser321.assign2.akclifto.client;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +34,10 @@ import java.util.List;
  */
 public class SeriesSeason {
 
-    private String name;        // name of the TV show/series
+    private String title;        // title of the TV show/series
     private String season;      // season number
     private String imdbRating;  // imdb rating
-    private String genre;       // genre of the series
+    private List<String> genre;       // genre of the series
     private String posterLink;  // link to the movie poster
     private String plotSummary; // summary of the plot
 
@@ -50,21 +53,6 @@ public class SeriesSeason {
     }
 
     /**
-     * Explicit constructor call.
-     * */
-    public SeriesSeason(String name, String season, String imdbRating, String genre,
-                        String posterLink, String plotSummary) {
-
-        this.name = name;
-        this.season = season;
-        this.imdbRating = imdbRating;
-        this.genre = genre;
-        this.posterLink = posterLink;
-        this.plotSummary = plotSummary;
-
-    }
-
-    /**
      * Method used to import JSON file from SeasonLibrary to construct in
      * Series Season object.
      * @param jsonObject : JSON object to transmit information about a series/season
@@ -75,10 +63,14 @@ public class SeriesSeason {
 
         try{
 
-            this.name = jsonObject.getString("title");
+            genre = new ArrayList<>();
+            JSONArray jsonArray = jsonObject.getJSONArray("genre");
+            for(int i = 0; i < jsonArray.length();i++) {
+               genre.add(jsonArray.get(i).toString());
+            }
+            this.title = jsonObject.getString("title");
             this.season = jsonObject.getString("seriesSeason");
             this.imdbRating = jsonObject.getString("imdbRating");
-            this.genre = jsonObject.getString("genre");
             this.posterLink = jsonObject.getString("poster");
             this.plotSummary = jsonObject.getString("plotSummary");
 
@@ -94,50 +86,61 @@ public class SeriesSeason {
         }
     }
 
+    public SeriesSeason(JSONObject jsonObject, String actionOption){
+
+        JSONObject data = jsonObject;
+
+        try{
+
+            genre = new ArrayList<>();
+            JSONArray jsonArray = jsonObject.getJSONArray("genre");
+            for(int i = 0; i < jsonArray.length();i++) {
+                genre.add(jsonArray.get(i).toString());
+            }
+
+            this.title = jsonObject.getString("title");
+            this.season = jsonObject.getString("seriesSeason");
+            this.imdbRating = jsonObject.getString("imdbRating");\
+            this.posterLink = jsonObject.getString("poster");
+            this.plotSummary = jsonObject.getString("plotSummary");
+
+            System.out.println("Added new entry for: " + season);
+
+            //TODO add to episode list if season is the same
+
+        } catch(Exception ex){
+            System.out.println("Exception importing from JSON file: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
     /* All setters/getters */
-    public void setTitle(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getTitle() {
-        return this.name;
+        return this.title;
     }
 
-    public void setSeason(String season) {
-        this.season = season;
-    }
 
     public String getSeason() {
         return this.season;
     }
 
-    public void setImdbRating(String imdbRating) {
-        this.imdbRating = imdbRating;
-    }
 
     public String getImdbRating() {
         return this.imdbRating;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public String getGenre() {
-        return this.genre;
-    }
-
-    public void setPosterLink(String posterLink) {
-        this.posterLink = posterLink;
+    public List<String> getGenre() {
+        return genre;
     }
 
     public String getPosterLink() {
         return this.posterLink;
     }
 
-    public void setEpisodeList(List<Episode> episodeList) {
-        this.episodeList = episodeList;
-    }
 
     public List<Episode> getEpisodeList() {
         return this.episodeList;
@@ -145,14 +148,6 @@ public class SeriesSeason {
 
     public String getPlotSummary() {
         return this.plotSummary;
-    }
-
-    public void setPlotSummary(String plotSummary) {
-        this.plotSummary = plotSummary;
-    }
-
-    public void setEpisode(Episode episode) {
-        this.episode = episode;
     }
 
     public Episode getEpisode() {
@@ -197,7 +192,7 @@ public class SeriesSeason {
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("title", name);
+            obj.put("title", title);
             obj.put("seriesSeason", season);
             obj.put("imdbRating", imdbRating);
             obj.put("genre", genre);
@@ -209,15 +204,15 @@ public class SeriesSeason {
         return obj;
     }
 
-    @Override
-    public String toString() {
-
-        return "Title: " + name +
-                "\nSeason: " + season +
-                "\nIMDB Rating: " + imdbRating +
-                "\nGenre: " + genre +
-                "\nPosterLink: " + posterLink +
-                "\nPlot Summary: " + plotSummary + "\n";
-    }
+//    @Override
+//    public String toString() {
+//
+//        return "Title: " + title +
+//                "\nSeason: " + season +
+//                "\nIMDB Rating: " + imdbRating +
+//                "\nGenre: " + genre +
+//                "\nPosterLink: " + posterLink +
+//                "\nPlot Summary: " + plotSummary + "\n";
+//    }
 
 }

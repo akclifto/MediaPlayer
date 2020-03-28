@@ -459,20 +459,23 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	public static void main(String[] args) {
 
-		String name = "first.last";
-		String key = "use-your-last.ombd-key";
-		if (args.length >= 2) {
-			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
-			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
-			name = args[0];
-			key = args[1];
-		}
-		try {
-			//System.out.println("calling constructor name "+name);
-			MediaLibraryApp mla = new MediaLibraryApp(name, key);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+
+
+
+//		String name = "first.last";
+//		String key = "use-your-last.ombd-key";
+//		if (args.length >= 2) {
+//			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
+//			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
+//			name = args[0];
+//			key = args[1];
+//		}
+//		try {
+//			//System.out.println("calling constructor name "+name);
+//			MediaLibraryApp mla = new MediaLibraryApp(name, key);
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
 	}
 
 }
