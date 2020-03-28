@@ -111,8 +111,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 			// set poster image here-----default poster image
-			setAlbumImage(posterImg);
-//			setPosterImage(posterImg);
+//			setAlbumImage(posterImg);
+			setPosterImage(posterImg);
 		} catch (Exception ex) {
 			System.out.println("unable to open image");
 		}
@@ -219,8 +219,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 		clearTree(root, model);
-		// put nodes in the tree for all registered with the library
 
+		// put nodes in the tree for all registered with the library
+		DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode("Series");
+		model.insertNodeInto(seriesNode, root, model.getChildCount(root));
 
 		String[] titleList = library.getTitles();
 		for (String s : titleList) {
@@ -360,12 +362,20 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			System.out.println("Save " + ((savRes) ? "successful" : "not implemented")); //TODO implement that current library is saved to JSON file
 		} else if (e.getActionCommand().equals("Restore")) {
 			boolean resRes = false;
-			rebuildTree();
+			try {
+				rebuildTree();
+			} catch (Exception ex){
+				System.out.println("Exception trying to rebuild tree: " + ex.getMessage());
+			}
+			this.revalidate(); // recalculate the layout(which is necessary when adding components)
+			this.repaint();	  //repaint the image of the swing window
+
 			System.out.println("Restore " + ((resRes) ? "successful" : "not implemented")); // TODO: implement that tree is restored to library
 		} else if (e.getActionCommand().equals("Series-SeasonAdd")) {
 			System.out.println("Series-SeasonAdd not implemented"); // TODO: implement that the whole season with all episodes currently in tree will be added to library
 		} else if (e.getActionCommand().equals("Search")) {
 			// TODO: implement that the search result is used to create new series/season object
+
 			/*
 			 * In the below API(s) the error response should be appropriately handled
 			 */
@@ -391,12 +401,30 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 		} else if (e.getActionCommand().equals("Tree Refresh")) {
 			rebuildTree();
-		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
-			System.out.println("Series-SeasonRemove not implemented"); //TODO: remove the season from library
 
+		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
+			int option = JOptionPane.showConfirmDialog(null,
+					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
+					"Remove Series-Season",
+					JOptionPane.YES_NO_OPTION);
+			if(option == JOptionPane.YES_OPTION) {
+				try {
+					library.getSeasonLibrary().removeSeason(seriesSeasonJTF.getText());
+					rebuildTree();
+					this.revalidate();
+					this.repaint();
+				} catch (Exception ex) {
+					System.out.println("Exception removing Series-Season: " + ex.getMessage());
+					ex.printStackTrace();
+				}
+			}
 		}
 		tree.addTreeSelectionListener(this);
 	}
+
+
+
+
 
 	/**
 	 * A method to do asynchronous url request printing the result to System.out
@@ -469,13 +497,21 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		series.addToEpisodeList(ep2);
 		System.out.println("");
 		//print the full series again
-		System.out.println(series.toJSONString());
 
+		SeriesSeason series2 = new SeriesSeason("Shows", "season 4", "5.5",
+				"comedy", "weblinke.co", "some plot lines");
 
-		System.out.println("JSON OBJECT-PASSING TESTS");
-		SeasonLibrary sl = SeasonLibrary.getInstance();
-//		sl.loadHistory("series.json");
-		sl.printAll();
+		Episode ep3 = new Episode("Epi 1", "8.0");
+		Episode ep4 = new Episode("Epi 2", "5/10");
+		Episode ep5 = new Episode("Epi 3", "1/10");
+		series2.addToEpisodeList(ep3);
+		series2.addToEpisodeList(ep4);
+		series2.addToEpisodeList(ep5);
+		SeasonLibrary sl  = SeasonLibrary.getInstance();
+		boolean flag = sl.saveLibraryToFile("OUTPUT.json");
+
+		System.out.println("flag is : " + flag);
+		sl.restoreLibraryFromFile("OUTPUT.json");
 
 
 //		String name = "first.last";
@@ -492,6 +528,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 //		} catch (Exception ex) {
 //			ex.printStackTrace();
 //		}
-
+//
 	}
 }

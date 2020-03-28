@@ -53,10 +53,10 @@ public interface Library {
     void removeSeriesSeason(String title);
 
     /*serialize and save a JSON file output for the library*/
-    void saveLibraryToFile(String filename);
+    boolean saveLibraryToFile(String fileName);
 
     /*load JSON file and initialize in library*/
-    void restoreLibraryFromFile(String filename) throws FileNotFoundException;
+    boolean restoreLibraryFromFile(String filename) throws FileNotFoundException;
 
 
 

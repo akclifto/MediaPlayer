@@ -34,13 +34,12 @@ import java.util.List;
  */
 public class SeriesSeason {
 
-    private String title;        // title of the TV show/series
-    private String seriesSeason;      // seriesSeason number
+    private String title;       // title of the TV show/series
+    private String seriesSeason;// seriesSeason number
     private String imdbRating;  // imdb rating
     private String genre;       // genre of the series
     private String posterLink;  // link to the movie poster
     private String plotSummary; // summary of the plot
-
     private List<Episode> episodeList; // List of Episodes
 
     public SeriesSeason() {
@@ -76,6 +75,12 @@ public class SeriesSeason {
 
         try{
 
+            //go through episode list array
+            JSONArray episodes = jsonObject.getJSONArray("episodes");
+            for (int i = 0; i < episodes.length(); i++) {
+                Episode episode = new Episode(episodes.getJSONObject(i));
+                addToEpisodeList(episode);
+            }
             this.title = jsonObject.getString("title");
             this.seriesSeason = jsonObject.getString("seriesSeason");
             this.imdbRating = jsonObject.getString("imdbRating");
@@ -83,19 +88,13 @@ public class SeriesSeason {
             this.posterLink = jsonObject.getString("poster");
             this.plotSummary = jsonObject.getString("plotSummary");
 
-            //go through episode list array
-            JSONArray episodes = jsonObject.getJSONArray("episodes");
-            for (int i = 0; i < episodes.length(); i++) {
-                Episode episode = new Episode(episodes.getJSONObject(i));
-                episodeList.add(episode);
-            }
-
             System.out.println("Added new entry for: " + seriesSeason);
 
         } catch(Exception ex){
             System.out.println("Exception importing from JSON file: " + ex.getMessage());
             ex.printStackTrace();
         }
+
     }
 
 
@@ -106,20 +105,18 @@ public class SeriesSeason {
         if(actionOption.equalsIgnoreCase("search")){
 
             try{
-
-                title = jsonObject.getString("title");
-                seriesSeason = jsonObject.getString("seriesSeason");
-                imdbRating = jsonObject.getString("imdbRating");
-                genre = jsonObject.getString("genre");
-                posterLink = jsonObject.getString("posterLink");
-                plotSummary = jsonObject.getString("plotSummary");
-
                 //go through episode list array
                 JSONArray episodes = jsonObject.getJSONArray("episodes");
                 for (int i = 0; i < episodes.length(); i++) {
                     Episode episode = new Episode(episodes.getJSONObject(i));
-                    episodeList.add(episode);
+                    addToEpisodeList(episode);
                 }
+                this.title = jsonObject.getString("title");
+                this.seriesSeason = jsonObject.getString("seriesSeason");
+                this.imdbRating = jsonObject.getString("imdbRating");
+                this.genre = jsonObject.getString("genre");
+                this.posterLink = jsonObject.getString("poster");
+                this.plotSummary = jsonObject.getString("plotSummary");
 
                 System.out.println("Added new entry for: " + seriesSeason);
 
@@ -131,6 +128,7 @@ public class SeriesSeason {
             addFromURL(jsonObject);
         }
     }
+
 
     /**if series added from URL search, not a JSON file*/
     private void addFromURL(JSONObject jsonObject) {
@@ -172,6 +170,17 @@ public class SeriesSeason {
 
     public String getPlotSummary() {
         return this.plotSummary;
+    }
+
+    public Episode getEpisode(String title) {
+
+        for(Episode epi : episodeList) {
+            if(epi.getName().equalsIgnoreCase(title)){
+                return epi;
+            }
+        }
+            System.out.println("Episode " + title + " not found in list");
+            return null;
     }
 
 
@@ -245,13 +254,15 @@ public class SeriesSeason {
         return series;
     }
 
+
+
     /**
      * Method to print out the list of episodes.
      * @return void
      * */
     public void printEpisodes(){
 
-        System.out.println(title + "\n");
+        System.out.println(title + ": \n");
         for(Episode e : getEpisodeList()) {
             e.print();
             System.out.println();
