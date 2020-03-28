@@ -111,8 +111,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 			// set poster image here-----default poster image
-//			setAlbumImage(posterImg);
-			setPosterImage(posterImg);
+			setAlbumImage(posterImg);
+//			setPosterImage(posterImg);
 		} catch (Exception ex) {
 			System.out.println("unable to open image");
 		}
@@ -327,7 +327,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 					episodeJTF.setText(nodeLabel);                // name of the episode
 					ratingJTF.setText(ss.getImdbRating());    // change to rating of the episode
 					String parentLabel = (String) parent.getUserObject();
-		//			genreJTF.setText(ss.getGenre());  TODO fix for List<>
+					genreJTF.setText(ss.getGenre());
 					setPosterImage(ss.getPosterLink());
 					summaryJTA.setText(ss.getPlotSummary());
 					seriesSeasonJTF.setText(parentLabel);        // Change to season name

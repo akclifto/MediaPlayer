@@ -37,7 +37,7 @@ public class SeriesSeason {
     private String title;        // title of the TV show/series
     private String season;      // season number
     private String imdbRating;  // imdb rating
-    private List<String> genre;       // genre of the series
+    private String genre;       // genre of the series
     private String posterLink;  // link to the movie poster
     private String plotSummary; // summary of the plot
 
@@ -63,13 +63,9 @@ public class SeriesSeason {
 
         try{
 
-            genre = new ArrayList<>();
-            JSONArray jsonArray = jsonObject.getJSONArray("genre");
-            for(int i = 0; i < jsonArray.length();i++) {
-               genre.add(jsonArray.get(i).toString());
-            }
             this.title = jsonObject.getString("title");
             this.season = jsonObject.getString("seriesSeason");
+            this.genre = jsonObject.getString("genre");
             this.imdbRating = jsonObject.getString("imdbRating");
             this.posterLink = jsonObject.getString("poster");
             this.plotSummary = jsonObject.getString("plotSummary");
@@ -94,12 +90,6 @@ public class SeriesSeason {
         if(actionOption.equalsIgnoreCase("search")){
 
             try{
-
-                genre = new ArrayList<>();
-                JSONArray jsonArray = jsonObject.getJSONArray("genre");
-                for(int i = 0; i < jsonArray.length();i++) {
-                    genre.add(jsonArray.get(i).toString());
-                }
 
                 this.title = jsonObject.getString("title");
                 this.season = jsonObject.getString("seriesSeason");
@@ -145,7 +135,7 @@ public class SeriesSeason {
         return this.imdbRating;
     }
 
-    public List<String> getGenre() {
+    public String getGenre() {
         return genre;
     }
 
