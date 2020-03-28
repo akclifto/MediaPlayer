@@ -1,5 +1,6 @@
 package ser321.assign2.akclifto.client;
 
+import javafx.scene.chart.XYChart;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -48,6 +49,18 @@ public class SeriesSeason {
         //ctor
     }
 
+    public SeriesSeason(String title, String season, String imdbRating, String genre,
+                        String posterLink, String plotSummary) {
+
+        this.title = title;
+        this.season = season;
+        this.imdbRating = imdbRating;
+        this.genre = genre;
+        this.posterLink = posterLink;
+        this.plotSummary = plotSummary;
+        episodeList = new ArrayList<>();
+    }
+
     public SeriesSeason(String jsonString) {
         this(new JSONObject(jsonString));
     }
@@ -73,8 +86,6 @@ public class SeriesSeason {
             System.out.println("Added new entry for: " + season);
 
             //TODO add to episode list if season is the same
-
-
 
         } catch(Exception ex){
             System.out.println("Exception importing from JSON file: " + ex.getMessage());
@@ -152,9 +163,6 @@ public class SeriesSeason {
         return this.plotSummary;
     }
 
-    public Episode getEpisode() {
-        return this.episode;
-    }
 
 
     public void addToEpisodeList(Episode episode) {
@@ -181,6 +189,7 @@ public class SeriesSeason {
     }
 
     public String toJsonString() {
+
         String ret = "{}";
         try {
             ret = this.toJson().toString(0);
@@ -192,29 +201,42 @@ public class SeriesSeason {
 
     public JSONObject toJson() {
 
-        JSONObject obj = new JSONObject();
+        JSONObject series = new JSONObject();
         try {
-            obj.put("title", title);
-            obj.put("seriesSeason", season);
-            obj.put("imdbRating", imdbRating);
-            obj.put("genre", genre);
-            obj.put("poster", posterLink);
-            obj.put("plotSummary", plotSummary);
+            series.put("title", title);
+            series.put("seriesSeason", season);
+            series.put("imdbRating", imdbRating);
+            series.put("genre", genre);
+            series.put("poster", posterLink);
+            series.put("plotSummary", plotSummary);
         } catch (Exception ex) {
             System.out.println("Exception in toJson: " + ex.getMessage());
         }
-        return obj;
+        return series;
     }
 
-//    @Override
-//    public String toString() {
-//
-//        return "Title: " + title +
-//                "\nSeason: " + season +
-//                "\nIMDB Rating: " + imdbRating +
-//                "\nGenre: " + genre +
-//                "\nPosterLink: " + posterLink +
-//                "\nPlot Summary: " + plotSummary + "\n";
-//    }
+    /**
+     * Method to print out the list of episodes.
+     * */
+    public void printEpisodes(){
+
+        System.out.println("\nEpisodes for " + title + ": ");
+        for(Episode e : getEpisodeList()) {
+            e.print();
+            System.out.println();
+        }
+    }
+
+
+    @Override
+    public String toString() {
+
+        return "Title: " + title +
+                "\nSeason: " + season +
+                "\nIMDB Rating: " + imdbRating +
+                "\nGenre: " + genre +
+                "\nPosterLink: " + posterLink +
+                "\nPlot Summary: " + plotSummary + "\n";
+    }
 
 }

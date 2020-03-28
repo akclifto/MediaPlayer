@@ -3,6 +3,7 @@ package ser321.assign2.akclifto.client;
 import ser321.assign2.lindquis.MediaLibraryGui;
 
 import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialException;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
@@ -459,23 +460,37 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	public static void main(String[] args) {
 
+		System.out.println("EPISODE TESTS: ");
+		Episode epi = new Episode("Adam", "10.0");
+		System.out.println(epi.toJSONString());
+		System.out.println(epi.toString());
+		System.out.println("\n\n");
+
+		System.out.println("SERIES TESTS: ");
+		SeriesSeason series = new SeriesSeason("The show name here", "season 1", "8.5",
+				"Action", "https://fakelink.com", "The plot thickens...");
+		System.out.println(series.toJsonString());
+		System.out.printf(series.toString());
+		series.addToEpisodeList(epi);
+		series.printEpisodes();
+		System.out.println("\n\n");
 
 
 
-		String name = "first.last";
-		String key = "use-your-last.ombd-key";
-		if (args.length >= 2) {
-			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
-			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
-			name = args[0];
-			key = args[1];
-		}
-		try {
-			//System.out.println("calling constructor name "+name);
-			MediaLibraryApp mla = new MediaLibraryApp(name, key);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+//		String name = "first.last";
+//		String key = "use-your-last.ombd-key";
+//		if (args.length >= 2) {
+//			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
+//			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
+//			name = args[0];
+//			key = args[1];
+//		}
+//		try {
+//			//System.out.println("calling constructor name "+name);
+//			MediaLibraryApp mla = new MediaLibraryApp(name, key);
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
 	}
 
 }

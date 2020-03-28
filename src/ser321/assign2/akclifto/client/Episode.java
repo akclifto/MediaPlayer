@@ -37,6 +37,9 @@ public class Episode implements JSONString, Serializable {
     public Episode(){}
 
 
+    /**
+     * Explicit Constructor
+     * */
     public Episode(String name, String imdbRating){
 
         this.name = name;
@@ -44,6 +47,9 @@ public class Episode implements JSONString, Serializable {
     }
 
 
+    /**
+     * JSONObject Constructor
+     * */
     public Episode(JSONObject jsonObj){
 
         this.name = jsonObj.getString("title");
@@ -59,12 +65,33 @@ public class Episode implements JSONString, Serializable {
     }
 
 
+    /**
+     * Method to serialize data to JSON file.
+     * @return JSONObject
+     * */
+    public JSONObject toJson() {
+
+        JSONObject episode = new JSONObject();
+        episode.put("name", name);
+        episode.put("imdbRating", imdbRating);
+        return  episode;
+    }
+
+    /**
+     * Method to serialize data to JSON, but outputs a string.
+     * @return String of JSON data
+     * */
     @Override
     public String toJSONString() {
 
-        JSONObject obj = new JSONObject();
-
-        return obj.toString();
+        String result = "{}";
+        try{
+            result = this.toJson().toString(0);
+        } catch(Exception ex) {
+            System.out.println("Exception in Episode toJSONString(): " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     @Override
@@ -73,5 +100,11 @@ public class Episode implements JSONString, Serializable {
         return "Episode Name: " + name +
                 "\nIMDB Rating: " + imdbRating;
     }
+
+    public void print(){
+        System.out.println("Episode: " + name);
+        System.out.println("IMDB Rating: " + imdbRating);
+    }
+
 }
 
