@@ -1,44 +1,47 @@
 {
-    "The Guardians of the Galaxy Vol. 2" : {
-        "title": "The Guardians of the Galaxy Vol. 2",
-        "seriesSeason" : "Guardians of the Galaxy - Released 2017",
-        "imdbRating" : "7.6",
-        "genre" : "Action, Adventure, Comedy, Sci-Fi",
-        "poster" : "https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyNTgwNzIyNzg@._V1_SX300.jpg",
-        "plotSummary" : "The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star-Lord's encounter with his father the ambitious celestial being Ego."
-    },
-    "The Geology Methodology": {
-        "title": "The Geology Methodology",
-        "seriesSeason": "The Big Bang Theory - Season 11",
-        "imdbRating": "7.5",
-        "genre" : "Comedy, Sitcom",
-        "poster": "https://m.media-amazon.com/images/M/MV5BY2FmZTY5YTktOWRlYy00NmIyLWE0ZmQtZDg2YjlmMzczZDZiXkEyXkFqcGdeQXVyNjg4NzAyOTA@._V1_SX300.jpg",
-        "plotSummary" : "When Bert asks Sheldon to collaborate on a project with him, Sheldon becomes worried about others finding out because he thinks geology is beneath him. Raj seeks advice after reconnecting with Ruchi."
-    },
-    "The Final Countdown": {
-        "title": "The Final Countdown",
-        "seriesSeason": "The IT Crowd - Season 4",
-        "imdbRating": "8.4",
-        "genre" : "Comedy, Sitcom",
-        "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
-        "plotSummary" : "Roy tries to locate a window-cleaner who left his ladders in Roy's flat, Moss becomes a member of the strange, secret, elite club of Countdown (1982) champions, and Jen investigates what's going on in the Heads of Department meetings."
-    },
-    "Moss and the German": {
-        "title": "Moss and the German",
-        "seriesSeason": "The IT Crowd - Season 2",
-        "imdbRating": "8.3",
-        "genre" : "Comedy, Sitcom",
-        "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
-        "plotSummary" : "Jen complains that Roy and Moss spend too much time together, so Moss takes a German cooking class."
-    },
-    "Smoke and Mirrors": {
-        "title": "Smoke and Mirrors",
-        "seriesSeason": "The IT Crowd - Season 2",
-        "imdbRating": "7.9",
-        "genre" : "Comedy, Sitcom",
-        "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
-        "plotSummary" : "To help Jen with her bra discomfort, Moss miraculously invents the most comfortable bra in the world, so the gang decides to patent it without fully testing the product first. Moss also invents an alter ego to promote the product.\n"
-    }
+  "The Guardians of the Galaxy Vol. 2": {
+    "title": "The Guardians of the Galaxy Vol. 2",
+    "seriesSeason": "Guardians of the Galaxy - Released 2017",
+    "imdbRating": "7.6",
+    "genre": "Action, Adventure, Comedy, Sci-Fi",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyNTgwNzIyNzg@._V1_SX300.jpg",
+    "plotSummary": "The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star-Lord's encounter with his father the ambitious celestial being Ego.",
+    "episodes": []
+  },
+  "The Geology Methodology": {
+    "title": "The Geology Methodology",
+    "seriesSeason": "The Big Bang Theory - Season 11",
+    "imdbRating": "7.5",
+    "genre": "Comedy, Sitcom",
+    "poster": "https://m.media-amazon.com/images/M/MV5BY2FmZTY5YTktOWRlYy00NmIyLWE0ZmQtZDg2YjlmMzczZDZiXkEyXkFqcGdeQXVyNjg4NzAyOTA@._V1_SX300.jpg",
+    "plotSummary": "When Bert asks Sheldon to collaborate on a project with him, Sheldon becomes worried about others finding out because he thinks geology is beneath him. Raj seeks advice after reconnecting with Ruchi.",
+    "episodes": []
+  },
+  "The Final Countdown": {
+    "title": "The Final Countdown",
+    "seriesSeason": "The IT Crowd - Season 4",
+    "imdbRating": "8.4",
+    "genre": "Comedy, Sitcom",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
+    "plotSummary": "Roy tries to locate a window-cleaner who left his ladders in Roy's flat, Moss becomes a member of the strange, secret, elite club of Countdown (1982) champions, and Jen investigates what's going on in the Heads of Department meetings.",
+    "episodes": []
+  },
+  "Moss and the German": {
+    "title": "Moss and the German",
+    "seriesSeason": "The IT Crowd - Season 2",
+    "imdbRating": "8.3",
+    "genre": "Comedy, Sitcom",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
+    "plotSummary": "Jen complains that Roy and Moss spend too much time together, so Moss takes a German cooking class.",
+    "episodes": []
+  },
+  "Smoke and Mirrors": {
+    "title": "Smoke and Mirrors",
+    "seriesSeason": "The IT Crowd - Season 2",
+    "imdbRating": "7.9",
+    "genre": "Comedy, Sitcom",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
+    "plotSummary": "To help Jen with her bra discomfort, Moss miraculously invents the most comfortable bra in the world, so the gang decides to patent it without fully testing the product first. Moss also invents an alter ego to promote the product.\n",
+    "episodes": []
+  }
 }
-
-

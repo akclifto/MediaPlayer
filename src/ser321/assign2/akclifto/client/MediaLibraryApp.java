@@ -3,7 +3,6 @@ package ser321.assign2.akclifto.client;
 import ser321.assign2.lindquis.MediaLibraryGui;
 
 import javax.imageio.ImageIO;
-import javax.sql.rowset.serial.SerialException;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
@@ -83,7 +82,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + authorKey + "&t=";
-		library = new SeasonLibrary();
+		library = SeasonLibrary.getInstance();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// register this object as an action listener for menu item clicks. This will cause
@@ -462,28 +461,21 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 		System.out.println("EPISODE TESTS: ");
 		Episode epi = new Episode("Adam", "10.0");
-		System.out.println(epi.toJSONString());
-		System.out.println(epi.toString());
-		System.out.println("\n\n");
 		Episode ep2 = new Episode("Adam redux v.2", "11/10");
-
 		System.out.println("SERIES TESTS: ");
 		SeriesSeason series = new SeriesSeason("The GreatShow", "season 1", "8.5",
 				"Action", "https://fakelink.com", "The plot thickens...");
-		System.out.println(series.toJSONString());
-		System.out.printf(series.toString());
 		series.addToEpisodeList(epi);
-		series.printEpisodes();
-		System.out.println("\n\n");
 		series.addToEpisodeList(ep2);
-		series.printEpisodes();
-
+		System.out.println("");
 		//print the full series again
 		System.out.println(series.toJSONString());
 
+
 		System.out.println("JSON OBJECT-PASSING TESTS");
-
-
+		SeasonLibrary sl = SeasonLibrary.getInstance();
+//		sl.loadHistory("series.json");
+		sl.printAll();
 
 
 //		String name = "first.last";
@@ -500,6 +492,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 //		} catch (Exception ex) {
 //			ex.printStackTrace();
 //		}
-	}
 
+	}
 }

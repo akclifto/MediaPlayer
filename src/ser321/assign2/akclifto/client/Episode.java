@@ -36,19 +36,16 @@ public class Episode implements JSONString, Serializable {
 
     public Episode(){}
 
-
     /**
      * Explicit Constructor
      * */
     public Episode(String name, String imdbRating){
-
         this.name = name;
         this.imdbRating = imdbRating;
     }
 
-
     /**
-     * JSONObject Constructor
+     * JSONObject Constructor to deserialize from JSON
      * */
     public Episode(JSONObject jsonObj){
 

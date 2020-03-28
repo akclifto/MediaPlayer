@@ -1,12 +1,16 @@
 package ser321.assign2.akclifto.client;
 
-import com.sun.javafx.collections.SetAdapterChange;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.*;
+import java.awt.event.ContainerEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+
 
 /**
  * Copyright 2020 Adam Clifton (akclifto@asu.edu),
@@ -38,21 +42,23 @@ public class SeasonLibrary implements Library {
 
     private HashMap<String, SeriesSeason> library;
     private static final String fileName = "series.json";
-    private List<SeriesSeason> seriesSeasonList = new LinkedList<>(); // List of SeriesSeason objects
+    private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
     private static SeasonLibrary sLibrary = null;
 
-//    public SeasonLibrary(){
-//        library = new HashMap<>();
-//    }
 
     public SeasonLibrary() {
+
         this.library = new HashMap<>();
+        this.seriesSeasonList = new ArrayList<>();
+
         try {
             InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
             if (is == null) {
                 is = new FileInputStream(new File(fileName));
             }
+
             JSONObject media = new JSONObject(new JSONTokener(is));
+
             Iterator<String> it = media.keys();
             while (it.hasNext()) {
                 String mediaTitle = it.next();
@@ -60,6 +66,7 @@ public class SeasonLibrary implements Library {
                 if (aMed != null) {
                     SeriesSeason ss = new SeriesSeason(aMed);
                     library.put(mediaTitle, ss);
+                    seriesSeasonList.add(ss);
                 }
             }
         } catch (Exception ex) {
@@ -162,7 +169,7 @@ public class SeasonLibrary implements Library {
     @Override
     public void addSeriesSeason() {
 
-        //TODO
+
     }
 
     @Override
@@ -195,6 +202,7 @@ public class SeasonLibrary implements Library {
     public void restoreLibraryFromFile(String filename) {
 
         this.library = new HashMap<>();
+        seriesSeasonList = new ArrayList<>();
 
         try {
             InputStream is = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -210,6 +218,7 @@ public class SeasonLibrary implements Library {
                 if (seriesJSON != null) {
                     SeriesSeason ss = new SeriesSeason(seriesJSON);
                     library.put(mediaTitle, ss);
+                    seriesSeasonList.add(ss);
                 }
             }
         } catch (Exception ex) {
@@ -217,5 +226,32 @@ public class SeasonLibrary implements Library {
         }
     }
 
+    public void clearLibrary(){
+        library.clear();
+    }
 
+    public void loadHistory(String fileName) {
+
+        clearLibrary();
+
+        try{
+            String content = Files.readString(Paths.get(fileName));
+            JSONObject json = new JSONObject(content);
+            System.out.println(json.toString(2));
+            JSONObject jsonLibrary;
+        //TODO  WORK ON THIS MAYBE?  IDK IF I NEED TO
+
+        } catch (Exception ex) {
+            System.out.println("Exception in Library LoadHistory: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+    }
+
+    public void printAll(){
+
+        for(SeriesSeason ss : seriesSeasonList){
+            System.out.println(ss.toJSONString());
+        }
+    }
 }
