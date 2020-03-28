@@ -88,6 +88,9 @@ public class SeriesSeason {
                 Episode episode = new Episode(episodes.getJSONObject(i));
                 episodeList.add(episode);
             }
+
+            System.out.println("Added new entry for: " + season);
+
         } catch (Exception ex) {
             System.out.println("Exception importing from JSON file: " + ex.getMessage());
             ex.printStackTrace();
@@ -97,25 +100,25 @@ public class SeriesSeason {
 
     /**if series added from JSON file, not URL Search*/
     public SeriesSeason(JSONObject jsonObject, String actionOption){
-
-        JSONObject data = jsonObject;
-
+        
+        episodeList = new ArrayList<>();
         if(actionOption.equalsIgnoreCase("search")){
 
             try{
 
-                data.put("title", title);
-                data.put("seriesSeason", season);
-                data.put("imdbRating", imdbRating);
-                data.put("genre", genre);
-                data.put("poster", posterLink);
-                data.put("plotSummary", plotSummary);
+                title = jsonObject.getString("title");
+                season = jsonObject.getString("season");
+                imdbRating = jsonObject.getString("imdbRating");
+                genre = jsonObject.getString("genre");
+                posterLink = jsonObject.getString("posterLink");
+                plotSummary = jsonObject.getString("plotSummary");
 
-                JSONArray episodes = new JSONArray();
-                for(int i = 0; i < episodeList.size(); i++) {
-                    episodes.put(i, episodeList.get(i).toJson());
+                //go through episode list array
+                JSONArray episodes = jsonObject.getJSONArray("episodes");
+                for (int i = 0; i < episodes.length(); i++) {
+                    Episode episode = new Episode(episodes.getJSONObject(i));
+                    episodeList.add(episode);
                 }
-                data.put("episodes", episodes);
 
                 System.out.println("Added new entry for: " + season);
 

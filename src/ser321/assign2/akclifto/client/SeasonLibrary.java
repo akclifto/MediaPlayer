@@ -1,5 +1,6 @@
 package ser321.assign2.akclifto.client;
 
+import com.sun.javafx.collections.SetAdapterChange;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -37,9 +38,12 @@ public class SeasonLibrary implements Library {
 
     private HashMap<String, SeriesSeason> library;
     private static final String fileName = "series.json";
-    private SeriesSeason seriesSeason; // provide collection of seriesSeason info
     private List<SeriesSeason> seriesSeasonList = new LinkedList<>(); // List of SeriesSeason objects
+    private static SeasonLibrary sLibrary = null;
 
+//    public SeasonLibrary(){
+//        library = new HashMap<>();
+//    }
 
     public SeasonLibrary() {
         this.library = new HashMap<>();
@@ -61,6 +65,18 @@ public class SeasonLibrary implements Library {
         } catch (Exception ex) {
             System.out.println("Exception reading " + fileName + ": " + ex.getMessage());
         }
+    }
+
+    /**
+     * Construct Season Library, Singleton
+     * @return SeasonLibrary
+     * */
+    public static SeasonLibrary getInstance() {
+
+        if (sLibrary == null) {
+            sLibrary = new SeasonLibrary();
+        }
+        return sLibrary;
     }
 
 
@@ -145,8 +161,8 @@ public class SeasonLibrary implements Library {
 
     @Override
     public void addSeriesSeason() {
-        seriesSeasonList.add(seriesSeason);
-        System.out.println(seriesSeason.getTitle() + "was added to the library.");
+
+        //TODO
     }
 
     @Override
