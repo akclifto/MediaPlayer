@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -231,7 +233,8 @@ public class SeasonLibrary implements Library {
                 series = ss.toJson();
                 seriesArr.put(series);
             }
-            master.put("libraryMap", seriesArr);
+            master.put("library", seriesArr);
+            master.put("library", seriesArr);
 
         } catch(Exception ex) {
             System.out.println("Exception in ConstructJSON: " + ex.getMessage());
@@ -300,7 +303,7 @@ public class SeasonLibrary implements Library {
         try {
             clearLibrary();
             this.libraryMap = new HashMap<>();
-            seriesSeasonList = new ArrayList<>();
+            this.seriesSeasonList = new ArrayList<>();
             initialize(filename);
             return true;
         } catch(Exception ex){
@@ -314,30 +317,23 @@ public class SeasonLibrary implements Library {
 
         clearLibrary();
 
-//        try{
-//            String content = Files.readString(Paths.get(fileName));
-//            JSONObject jsonSeries = new JSONObject(content);
-//            System.out.println(jsonSeries.toString(2));
-//
-//            JSONObject json = jsonSeries.getJSONObject("libraryMap");
-//            JSONArray seriesArray = json.getJSONArray("series");
-//            for(int i = 0; i < jsonSeries.length(); i++){
-//                JSONObject obj = jsonSeries.getJSONObject(i);
-//                libraryMap.put(series.getString("title"), new SeriesSeason(series));
-//
-//
-//
-//                //construct the inner most JSON file level: episodes
-//                JSONArray episodes = new JSONArray();
-//
-//
-//
-//            }
-//        } catch(Exception ex) {
-//            System.out.println("Exception loading JSON file: " +ex.getMessage());
-//            ex.printStackTrace();
-//            return false;
-//        }
+        try{
+            String content = Files.readString(Paths.get(fileName));
+            JSONObject jsonSeries = new JSONObject(content);
+            System.out.println(jsonSeries.toString(2));
+
+            JSONArray libArr = jsonSeries.getJSONArray("library");
+
+            for(int i = 0; i < libArr.length(); i++){
+                JSONObject seriesObj = libArr.getJSONObject(i);
+                libraryMap.put(seriesObj.getString("series"), new SeriesSeason(seriesObj));
+
+            }
+        } catch(Exception ex) {
+            System.out.println("Exception loading JSON file: " +ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
           return false;
     }
 
@@ -362,7 +358,7 @@ public class SeasonLibrary implements Library {
                 JSONObject aMed = media.optJSONObject(mediaTitle);
                 if (aMed != null) {
                     SeriesSeason ss = new SeriesSeason(aMed);
-                    libraryMap.put(mediaTitle, ss);
+                    libraryMap.put(mediaTitle, new SeriesSeason((aMed)));
                     seriesSeasonList.add(ss);
 
                 }

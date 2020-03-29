@@ -200,7 +200,7 @@ public class SeriesSeason {
 
         boolean flag = false;
         for (Episode value : episodeList) {
-            if (value.getName().equals(episode.getName())) {
+            if (value.getName().equalsIgnoreCase(episode.getName())) {
                 flag = true;
                 break;
             }
@@ -250,7 +250,7 @@ public class SeriesSeason {
                 episodes.put(i, episodeList.get(i).toJson());
             }
             series.put("episodes", episodes);
-            seriesRoot.put(title, series);
+            seriesRoot.put("series", series);
 
         } catch (Exception ex) {
             System.out.println("Exception in toJson: " + ex.getMessage());

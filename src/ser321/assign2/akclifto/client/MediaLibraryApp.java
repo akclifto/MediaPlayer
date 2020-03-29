@@ -487,6 +487,36 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	public static void main(String[] args) {
 
+
+		SeasonLibrary sl  = SeasonLibrary.getInstance();
+		sl.loadHistory("Test.json");
+
+		System.out.println("libraryMap size: " + sl.getlibrarySize());
+		System.out.println("seasonlist size: " + sl.getSeriesSeason().size());
+
+		boolean flag = sl.loadHistory("Test.json");
+		System.out.println(flag);
+
+
+//		String name = "first.last";
+//		String key = "use-your-last.ombd-key";
+//		if (args.length >= 2) {
+//			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
+//			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
+//			name = args[0];
+//			key = args[1];
+//		}
+//		try {
+//			//System.out.println("calling constructor name "+name);
+//			MediaLibraryApp mla = new MediaLibraryApp(name, key);
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+//
+	}
+
+	public static void testCase() {
+
 		System.out.println("EPISODE TESTS: ");
 		Episode epi = new Episode("Adam", "10.0");
 		Episode ep2 = new Episode("Adam redux v.2", "11/10");
@@ -506,36 +536,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		series2.addToEpisodeList(ep5);
 
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
-//		sl.restoreLibraryFromFile("series.json");
 		sl.addSeriesSeason(series);
 		sl.addSeriesSeason(series2);
 		sl.add(series);
 		sl.add(series2);
-		sl.saveLibraryToFile("Test.json");
-		sl.clearLibrary();
-		sl = SeasonLibrary.getInstance();
-		sl.restoreLibraryFromFile("Test.json");
-		System.out.println("libraryMap size: " + sl.getlibrarySize());
-		System.out.println("seasonlist size: " + sl.getSeriesSeason().size());
-
-		boolean flag = sl.loadHistory("test.json");
-		System.out.println(flag);
-
-
-//		String name = "first.last";
-//		String key = "use-your-last.ombd-key";
-//		if (args.length >= 2) {
-//			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
-//			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
-//			name = args[0];
-//			key = args[1];
-//		}
-//		try {
-//			//System.out.println("calling constructor name "+name);
-//			MediaLibraryApp mla = new MediaLibraryApp(name, key);
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-//
 	}
 }
