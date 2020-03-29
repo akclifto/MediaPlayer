@@ -66,6 +66,10 @@ public class SeasonLibrary implements Library {
         return this;
     }
 
+    public int getlibrarySize(){
+        return library.size();
+    }
+
     public boolean removeSeason(String title) {
 
         return remove(title);
@@ -203,9 +207,8 @@ public class SeasonLibrary implements Library {
         System.out.println("\nSaving current library to file.");
         JSONObject jsonSeries = constructSaveFile();
         try(PrintWriter out = new PrintWriter(fileName)){
-    //        out.println("{ \"library\": ");
             out.println(jsonSeries.toString(4));
-    //        out.println("}");
+
             System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -215,14 +218,22 @@ public class SeasonLibrary implements Library {
     }
 
 
+    public void constructJSON() {
+
+
+
+
+    }
+
     /**
      * Helper method to serialize a file for JSON output.
      * @return JSONArray for write output.
      * */
-    public JSONObject constructSaveFile() {
+    private JSONObject constructSaveFile() {
 
         JSONObject seriesSeasons = new JSONObject();
         JSONArray seriesRoot = new JSONArray();
+        JSONObject libraryRoot = new JSONObject();
         try {
 
             Set<String> keys = library.keySet();
@@ -244,7 +255,6 @@ public class SeasonLibrary implements Library {
                 for(int i = 0; i < library.get(key).getEpisodeList().size(); i++) {
                     Episode episode = library.get(key).getEpisodeList().get(i);
                     JSONObject epiJSON = new JSONObject();
-                    epiJSON.put("seriesName",library.get(key).getTitle());
                     epiJSON.put("name", episode.getName());
                     epiJSON.put("imdbRating", episode.getImdbRating());
                     episodes.put(epiJSON);
@@ -255,7 +265,8 @@ public class SeasonLibrary implements Library {
                 //link the series array with the object
                 seriesRoot.put(seriesJSON);
                 //link with root level
-                seriesSeasons.put("series", seriesRoot);
+ //               seriesSeasons.put("series", seriesRoot);
+                libraryRoot.put("library", seriesRoot);
             }
 
         } catch(Exception ex) {
@@ -263,7 +274,7 @@ public class SeasonLibrary implements Library {
             ex.printStackTrace();
         }
 
-        return seriesSeasons;
+        return libraryRoot;
     }
 
 

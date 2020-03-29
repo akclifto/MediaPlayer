@@ -235,6 +235,8 @@ public class SeriesSeason {
     public JSONObject toJson() {
 
         JSONObject series = new JSONObject();
+        JSONObject seriesRoot = new JSONObject();
+
         try {
             series.put("title", title);
             series.put("seriesSeason", seriesSeason);
@@ -248,13 +250,13 @@ public class SeriesSeason {
                 episodes.put(i, episodeList.get(i).toJson());
             }
             series.put("episodes", episodes);
+            seriesRoot.put("series", series);
 
         } catch (Exception ex) {
             System.out.println("Exception in toJson: " + ex.getMessage());
         }
-        return series;
+        return seriesRoot;
     }
-
 
 
     /**

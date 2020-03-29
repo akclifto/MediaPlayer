@@ -105,6 +105,7 @@ public class Episode implements JSONString, Serializable {
     }
 
     public void print(){
+
         System.out.println("Episode: " + name);
         System.out.println("IMDB Rating: " + imdbRating);
     }

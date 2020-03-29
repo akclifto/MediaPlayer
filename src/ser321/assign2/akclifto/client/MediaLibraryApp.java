@@ -496,11 +496,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		series.addToEpisodeList(epi);
 		series.addToEpisodeList(ep2);
 		System.out.println("");
-		//print the full series again
-
 		SeriesSeason series2 = new SeriesSeason("Shows", "season 4", "5.5",
 				"comedy", "weblinke.co", "some plot lines");
-
 		Episode ep3 = new Episode("Epi 1", "8.0");
 		Episode ep4 = new Episode("Epi 2", "5/10");
 		Episode ep5 = new Episode("Epi 3", "1/10");
@@ -509,13 +506,20 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		series2.addToEpisodeList(ep5);
 
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
+//		sl.restoreLibraryFromFile("series.json");
 		sl.addSeriesSeason(series);
 		sl.addSeriesSeason(series2);
-		sl.printAll();
-		sl.restoreLibraryFromFile("series.json");
-		sl.saveLibraryToFile("TESTERTONS.json");
-		boolean flag = sl.loadHistory("OUTPUT.json");
-		System.out.println(flag);
+		sl.add(series);
+		sl.add(series2);
+
+		sl.getSeasonLibrary().printAll();
+		System.out.println();
+		System.out.println(sl.getSeasonLibrary().getlibrarySize());
+		sl.saveLibraryToFile("Test.json");
+
+//		sl.saveLibraryToFile("OUTPUT.json");
+//		boolean flag = sl.loadHistory("OUTPUT.json");
+//		System.out.println(flag);
 
 
 //		boolean flag = sl.saveLibraryToFile("OUTPUT.json");
