@@ -34,8 +34,6 @@ public class Episode implements JSONString, Serializable {
     private String name;        // name of episode
     private String imdbRating;  // imdb rating
     private JSONObject epData;  // store JSONObject information
-
-
     public Episode(){}
 
     /**
@@ -56,6 +54,7 @@ public class Episode implements JSONString, Serializable {
         this.imdbRating= epData.getString("imdbRating");
     }
 
+    /*All setters/getters*/
     public String getName() {
         return name;
     }
@@ -102,12 +101,6 @@ public class Episode implements JSONString, Serializable {
 
         return "Episode Name: " + name +
                 "\nIMDB Rating: " + imdbRating;
-    }
-
-    public void print(){
-
-        System.out.println("Episode: " + name);
-        System.out.println("IMDB Rating: " + imdbRating);
     }
 
 }

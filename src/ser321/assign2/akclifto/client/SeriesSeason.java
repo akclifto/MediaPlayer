@@ -42,10 +42,14 @@ public class SeriesSeason {
     private String plotSummary; // summary of the plot
     private List<Episode> episodeList; // List of Episodes
 
-    public SeriesSeason() {
-        //ctor
-    }
+    /**
+     * Empty constructor call.
+     * */
+    public SeriesSeason() {    }
 
+    /**
+     * Explicit constructor call.
+     * */
     public SeriesSeason(String title, String seriesSeason, String imdbRating, String genre,
                         String posterLink, String plotSummary) {
 
@@ -58,9 +62,6 @@ public class SeriesSeason {
         episodeList = new ArrayList<>();
     }
 
-    public SeriesSeason(String jsonString) {
-        this(new JSONObject(jsonString));
-    }
 
     /**
      * Method used to import JSON file from SeasonLibrary to construct in
@@ -101,29 +102,8 @@ public class SeriesSeason {
     /**if series added from JSON file, not URL Search*/
     public SeriesSeason(JSONObject jsonObject, String actionOption){
 
-        episodeList = new ArrayList<>();
         if(actionOption.equalsIgnoreCase("search")){
-
-            try{
-                //go through episode list array
-                JSONArray episodes = jsonObject.getJSONArray("episodes");
-                for (int i = 0; i < episodes.length(); i++) {
-                    Episode episode = new Episode(episodes.getJSONObject(i));
-                    addToEpisodeList(episode);
-                }
-                this.title = jsonObject.getString("title");
-                this.seriesSeason = jsonObject.getString("seriesSeason");
-                this.imdbRating = jsonObject.getString("imdbRating");
-                this.genre = jsonObject.getString("genre");
-                this.posterLink = jsonObject.getString("poster");
-                this.plotSummary = jsonObject.getString("plotSummary");
-
-                System.out.println("Added new entry for: " + seriesSeason);
-
-            } catch(Exception ex){
-                System.out.println("Exception importing from JSON file: " + ex.getMessage());
-                ex.printStackTrace();
-            }
+            new SeriesSeason(jsonObject);
         } else {
             addFromURL(jsonObject);
         }
@@ -136,7 +116,7 @@ public class SeriesSeason {
         //TODO
     }
 
-    /* All getters */
+    /* All setters/getters */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -172,15 +152,35 @@ public class SeriesSeason {
         return this.plotSummary;
     }
 
+    /**
+     * Helper method to check if episode is already included
+     * in the series
+     * @param name : name of the episode
+     * @return true if episode included in list, false otherwise.
+     * */
+    public boolean checkEpisode(String name) {
 
-    public Episode getEpisode(String title) {
+        for(Episode epi : episodeList){
+            if(epi.getName().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method to retrieve an episode from the episodeList
+     * @param name : name of the episode
+     * @return Episode if found, null if not found.
+     * */
+    public Episode getEpisode(String name) {
 
         for(Episode epi : episodeList) {
-            if(epi.getName().equalsIgnoreCase(title)){
+            if(epi.getName().equalsIgnoreCase(name)){
                 return epi;
             }
         }
-            System.out.println("Episode " + title + " not found in list");
+            System.out.println("Episode " + name + " not found in list");
             return null;
     }
 
@@ -214,8 +214,8 @@ public class SeriesSeason {
     }
 
     /**
-     * Methods to display String in JSON file format output.
-     * @return void
+     * Methods to display String data in JSON file format for write output.
+     * @return String of formatted SeriesSeason data.
      * */
     public String toJSONString() {
 
@@ -229,7 +229,7 @@ public class SeriesSeason {
     }
 
     /**
-     * Methods to serialize data to JSON file
+     * Methods to serialize data to JSON file.
      * @return void
      * */
     public JSONObject toJson() {
@@ -268,7 +268,7 @@ public class SeriesSeason {
 
         System.out.println(title + ": \n");
         for(Episode e : getEpisodeList()) {
-            e.print();
+            e.toString();
             System.out.println();
         }
     }

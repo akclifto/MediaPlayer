@@ -487,12 +487,15 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	public static void main(String[] args) {
 
+
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
 		sl.restoreLibraryFromFile("test_output.json");
 
 		boolean flag = sl.saveLibraryToFile("test.json");
 		System.out.println(flag);
 
+		Episode epi = sl.getSeriesSeason("The GreatShow").getEpisode("Adam");
+		System.out.println(epi.toString());
 
 
 
@@ -514,7 +517,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 //
 	}
 
-	public static void testCase() {
+	private static void testCase() {
 
 		System.out.println("EPISODE TESTS: ");
 		Episode epi = new Episode("Adam", "10.0");

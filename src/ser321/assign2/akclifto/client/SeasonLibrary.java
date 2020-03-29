@@ -150,11 +150,11 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println(title + "was found in the SeriesSeason list and returned.");
+                System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
         }
-        System.out.println(title + "was not found in the SeriesSeason list!");
+        System.out.println(title + " was not found in the SeriesSeason list!");
         return null;
     }
 
@@ -168,7 +168,7 @@ public class SeasonLibrary implements Library {
 
         if (seriesSeasonList.isEmpty()) {
             seriesSeasonList.add(seriesSeason);
-            System.out.println(seriesSeason.getTitle() + "was added to the Library list");
+            System.out.println(seriesSeason.getTitle() + " was added to the Library list");
             return;
         }
 
