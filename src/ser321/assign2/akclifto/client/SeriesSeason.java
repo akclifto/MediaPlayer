@@ -172,6 +172,7 @@ public class SeriesSeason {
         return this.plotSummary;
     }
 
+
     public Episode getEpisode(String title) {
 
         for(Episode epi : episodeList) {

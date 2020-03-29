@@ -47,7 +47,6 @@ public class SeasonLibrary implements Library {
 
         this.library = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
-
     }
 
     /**
@@ -58,13 +57,10 @@ public class SeasonLibrary implements Library {
 
         if (sLibrary == null) {
             sLibrary = new SeasonLibrary();
-            sLibrary.restoreLibraryFromFile(fileName);
+         //   sLibrary.restoreLibraryFromFile(fileName);
         }
         return sLibrary;
     }
-
-
-
 
     public SeasonLibrary getSeasonLibrary(){
         return this;
@@ -157,7 +153,7 @@ public class SeasonLibrary implements Library {
     @Override
     public void addSeriesSeason() {
 
-//TODO ----
+        //TODO
     }
 
     public void addSeriesSeason(SeriesSeason seriesSeason) {
@@ -204,11 +200,13 @@ public class SeasonLibrary implements Library {
     @Override
     public boolean saveLibraryToFile(String fileName) {
 
-        System.out.println("Saving current library to file.");
-        JSONArray jsonArraySeries = constructSaveFile();
+        System.out.println("\nSaving current library to file.");
+        JSONObject jsonSeries = constructSaveFile();
         try(PrintWriter out = new PrintWriter(fileName)){
-            out.println(jsonArraySeries.toString(4));
-            //System.out.println(jsonArraySeries.toString(4));
+    //        out.println("{ \"library\": ");
+            out.println(jsonSeries.toString(4));
+    //        out.println("}");
+            System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -221,15 +219,15 @@ public class SeasonLibrary implements Library {
      * Helper method to serialize a file for JSON output.
      * @return JSONArray for write output.
      * */
-    public JSONArray constructSaveFile() {
+    public JSONObject constructSaveFile() {
 
-        JSONArray seriesSeasons = new JSONArray();
+        JSONObject seriesSeasons = new JSONObject();
+        JSONArray seriesRoot = new JSONArray();
         try {
 
             Set<String> keys = library.keySet();
 
             //set the root JSONArray
-
             for(String key : keys) {
                 //construct the next JSON file level: series/seasons
                 JSONObject seriesJSON = new JSONObject();
@@ -252,10 +250,12 @@ public class SeasonLibrary implements Library {
                     episodes.put(epiJSON);
                 }
 
-                //link the episodes with the series level
+                //link the episodes with the within series level
                 seriesJSON.put("episodes", episodes);
-                //link the series with the root level
-                seriesSeasons.put(seriesJSON);
+                //link the series array with the object
+                seriesRoot.put(seriesJSON);
+                //link with root level
+                seriesSeasons.put("series", seriesRoot);
             }
 
         } catch(Exception ex) {
@@ -272,7 +272,7 @@ public class SeasonLibrary implements Library {
     public boolean restoreLibraryFromFile(String filename) {
 
         try {
-            library.clear();
+            clearLibrary();
             this.library = new HashMap<>();
             seriesSeasonList = new ArrayList<>();
             initialize(filename);
@@ -284,9 +284,40 @@ public class SeasonLibrary implements Library {
 
     }
 
+    public boolean loadHistory(String fileName) {
+
+        clearLibrary();
+
+//        try{
+//            String content = Files.readString(Paths.get(fileName));
+//            JSONObject jsonSeries = new JSONObject(content);
+//            System.out.println(jsonSeries.toString(2));
+//
+//            JSONObject json = jsonSeries.getJSONObject("library");
+//            JSONArray seriesArray = json.getJSONArray("series");
+//            for(int i = 0; i < jsonSeries.length(); i++){
+//                JSONObject obj = jsonSeries.getJSONObject(i);
+//                library.put(series.getString("title"), new SeriesSeason(series));
+//
+//
+//
+//                //construct the inner most JSON file level: episodes
+//                JSONArray episodes = new JSONArray();
+//
+//
+//
+//            }
+//        } catch(Exception ex) {
+//            System.out.println("Exception loading JSON file: " +ex.getMessage());
+//            ex.printStackTrace();
+//            return false;
+//        }
+          return true;
+    }
+
     /**
      * Helper method to load JSON file from library.
-     * @param fileName : path to JSON file
+     * @param fileName : path-to or name-of JSON file
      * @return void
      * */
     public void initialize(String fileName){
@@ -312,30 +343,12 @@ public class SeasonLibrary implements Library {
         } catch (Exception ex) {
             System.out.println("Exception reading " + fileName + ": " + ex.getMessage());
         }
-
     }
 
     public void clearLibrary(){
         library.clear();
     }
 
-    public void loadHistory(String fileName) {
-
-//        clearLibrary();
-//
-//        try{
-//            String content = Files.readString(Paths.get(fileName));
-//            JSONObject json = new JSONObject(content)
-//            System.out.println(json.toString(2));
-//            JSONObject jsonLibrary;
-//        //TODO  WORK ON THIS MAYBE?  IDK IF I NEED TO
-//
-//        } catch (Exception ex) {
-//            System.out.println("Exception in Library LoadHistory: " + ex.getMessage());
-//            ex.printStackTrace();
-//        }
-
-    }
 
     public void printAll(){
 
