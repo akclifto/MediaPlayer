@@ -250,7 +250,7 @@ public class SeriesSeason {
                 episodes.put(i, episodeList.get(i).toJson());
             }
             series.put("episodes", episodes);
-            seriesRoot.put("series", series);
+            seriesRoot.put(title, series);
 
         } catch (Exception ex) {
             System.out.println("Exception in toJson: " + ex.getMessage());

@@ -511,23 +511,15 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		sl.addSeriesSeason(series2);
 		sl.add(series);
 		sl.add(series2);
-
-		sl.getSeasonLibrary().printAll();
-		System.out.println();
-		System.out.println(sl.getSeasonLibrary().getlibrarySize());
 		sl.saveLibraryToFile("Test.json");
+		sl.clearLibrary();
+		sl = SeasonLibrary.getInstance();
+		sl.restoreLibraryFromFile("Test.json");
+		System.out.println("libraryMap size: " + sl.getlibrarySize());
+		System.out.println("seasonlist size: " + sl.getSeriesSeason().size());
 
-//		sl.saveLibraryToFile("OUTPUT.json");
-//		boolean flag = sl.loadHistory("OUTPUT.json");
-//		System.out.println(flag);
-
-
-//		boolean flag = sl.saveLibraryToFile("OUTPUT.json");
-//
-//		System.out.println("flag is : " + flag);
-//		flag = sl.restoreLibraryFromFile("OUTPUT.json");
-//
-//		System.out.println("flag is : " + flag);
+		boolean flag = sl.loadHistory("test.json");
+		System.out.println(flag);
 
 
 //		String name = "first.last";

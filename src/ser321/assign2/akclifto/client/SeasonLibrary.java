@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class SeasonLibrary implements Library {
 
-    private HashMap<String, SeriesSeason> library;
+    private HashMap<String, SeriesSeason> libraryMap;
 
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
@@ -45,7 +45,7 @@ public class SeasonLibrary implements Library {
 //for tests
     public SeasonLibrary() {
 
-        this.library = new HashMap<>();
+        this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
     }
 
@@ -67,7 +67,7 @@ public class SeasonLibrary implements Library {
     }
 
     public int getlibrarySize(){
-        return library.size();
+        return libraryMap.size();
     }
 
     public boolean removeSeason(String title) {
@@ -80,7 +80,7 @@ public class SeasonLibrary implements Library {
         boolean result = false;
         System.out.println("Adding: " + ss.getTitle());
         try {
-            library.put(ss.getTitle(), ss);
+            libraryMap.put(ss.getTitle(), ss);
             result = true;
         } catch (Exception ex) {
             System.out.println("exception in add: " + ex.getMessage());
@@ -94,7 +94,7 @@ public class SeasonLibrary implements Library {
         boolean result = false;
         System.out.println("Removing " + mediaTitle);
         try {
-            library.remove(mediaTitle);
+            libraryMap.remove(mediaTitle);
             result = true;
         } catch (Exception ex) {
             System.out.println("exception in remove: " + ex.getMessage());
@@ -107,7 +107,7 @@ public class SeasonLibrary implements Library {
     public SeriesSeason get(String mediaTitle) {
         SeriesSeason result = null;
         try {
-            result = library.get(mediaTitle);
+            result = libraryMap.get(mediaTitle);
         } catch (Exception ex) {
             System.out.println("exception in get: " + ex.getMessage());
         }
@@ -119,7 +119,7 @@ public class SeasonLibrary implements Library {
     public String[] getTitles() {
         String[] result = null;
         try {
-            Set<String> vec = library.keySet();
+            Set<String> vec = libraryMap.keySet();
             result = vec.toArray(new String[]{});
         } catch (Exception ex) {
             System.out.println("exception in getTitles: " + ex.getMessage());
@@ -132,7 +132,6 @@ public class SeasonLibrary implements Library {
 
         if (seriesSeasonList.isEmpty()) {
             System.out.println("The series list is empty!");
-            return null;
         }
 
         for (SeriesSeason series : seriesSeasonList) {
@@ -205,11 +204,11 @@ public class SeasonLibrary implements Library {
     public boolean saveLibraryToFile(String fileName) {
 
         System.out.println("\nSaving current library to file.");
-        JSONObject jsonSeries = constructSaveFile();
+        JSONObject jsonSeries = constructJSON();
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));
 
-            System.out.println(jsonSeries.toString(4));
+       //     System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -217,65 +216,81 @@ public class SeasonLibrary implements Library {
         return true;
     }
 
-
-    public void constructJSON() {
-
-
-
-
-    }
-
     /**
      * Helper method to serialize a file for JSON output.
      * @return JSONArray for write output.
      * */
-    private JSONObject constructSaveFile() {
+    public JSONObject constructJSON() {
 
-        JSONObject seriesSeasons = new JSONObject();
-        JSONArray seriesRoot = new JSONArray();
-        JSONObject libraryRoot = new JSONObject();
-        try {
-
-            Set<String> keys = library.keySet();
-
-            //set the root JSONArray
-            for(String key : keys) {
-                //construct the next JSON file level: series/seasons
-                JSONObject seriesJSON = new JSONObject();
-                seriesJSON.put("title", library.get(key).getTitle());
-                seriesJSON.put("seriesSeason", library.get(key).getSeason());
-                seriesJSON.put("imdbRating", library.get(key).getImdbRating());
-                seriesJSON.put("genre", library.get(key).getGenre());
-                seriesJSON.put("poster", library.get(key).getPosterLink());
-                seriesJSON.put("plotSummary", library.get(key).getPlotSummary());
-
-                //construct the inner most JSON file level: episodes
-                JSONArray episodes = new JSONArray();
-
-                for(int i = 0; i < library.get(key).getEpisodeList().size(); i++) {
-                    Episode episode = library.get(key).getEpisodeList().get(i);
-                    JSONObject epiJSON = new JSONObject();
-                    epiJSON.put("name", episode.getName());
-                    epiJSON.put("imdbRating", episode.getImdbRating());
-                    episodes.put(epiJSON);
-                }
-
-                //link the episodes with the within series level
-                seriesJSON.put("episodes", episodes);
-                //link the series array with the object
-                seriesRoot.put(seriesJSON);
-                //link with root level
- //               seriesSeasons.put("series", seriesRoot);
-                libraryRoot.put("library", seriesRoot);
+        JSONObject master = new JSONObject();
+        JSONArray seriesArr = new JSONArray();
+        System.out.println("List size: " + seriesSeasonList.size());
+        try{
+            JSONObject series;
+            for(SeriesSeason ss : seriesSeasonList) {
+                series = ss.toJson();
+                seriesArr.put(series);
             }
+            master.put("libraryMap", seriesArr);
 
         } catch(Exception ex) {
-            System.out.println("Exception saving the file to library: " + ex.getMessage());
+            System.out.println("Exception in ConstructJSON: " + ex.getMessage());
             ex.printStackTrace();
         }
-
-        return libraryRoot;
+        //System.out.println(master.toString(4));
+        return master;
     }
+
+//    /**
+//     * Helper method to serialize a file for JSON output.
+//     * @return JSONArray for write output.
+//     * */
+//    private JSONObject constructSaveFile() {
+//
+//        JSONArray seriesRoot = new JSONArray();
+//        JSONObject libraryRoot = new JSONObject();
+//        try {
+//
+//            Set<String> keys = libraryMap.keySet();
+//
+//            //set the root JSONArray
+//            for(String key : keys) {
+//
+//                //construct the next JSON file level: series/seasons
+//                JSONObject seriesJSON = new JSONObject();
+//                seriesJSON.put("title", libraryMap.get(key).getTitle());
+//                seriesJSON.put("seriesSeason", libraryMap.get(key).getSeason());
+//                seriesJSON.put("imdbRating", libraryMap.get(key).getImdbRating());
+//                seriesJSON.put("genre", libraryMap.get(key).getGenre());
+//                seriesJSON.put("poster", libraryMap.get(key).getPosterLink());
+//                seriesJSON.put("plotSummary", libraryMap.get(key).getPlotSummary());
+//
+//                //construct the inner most JSON file level: episodes
+//                JSONArray episodes = new JSONArray();
+//
+//                for(int i = 0; i < libraryMap.get(key).getEpisodeList().size(); i++) {
+//                    Episode episode = libraryMap.get(key).getEpisodeList().get(i);
+//                    JSONObject epiJSON = new JSONObject();
+//                    epiJSON.put("name", episode.getName());
+//                    epiJSON.put("imdbRating", episode.getImdbRating());
+//                    episodes.put(epiJSON);
+//                }
+//
+//                //link the episodes array with the seriesJSON object
+//                seriesJSON.put("episodes", episodes);
+//                //link the seriesJSON objects to the series array
+//                seriesRoot.put(seriesJSON);
+//                //link series array with root level libraryMap object
+//                libraryRoot.put("libraryMap", seriesRoot);
+//            }
+//
+//        } catch(Exception ex) {
+//            System.out.println("Exception saving the file to libraryMap: " + ex.getMessage());
+//            ex.printStackTrace();
+//        }
+//
+//        return libraryRoot;
+//    }
 
 
 
@@ -284,7 +299,7 @@ public class SeasonLibrary implements Library {
 
         try {
             clearLibrary();
-            this.library = new HashMap<>();
+            this.libraryMap = new HashMap<>();
             seriesSeasonList = new ArrayList<>();
             initialize(filename);
             return true;
@@ -304,11 +319,11 @@ public class SeasonLibrary implements Library {
 //            JSONObject jsonSeries = new JSONObject(content);
 //            System.out.println(jsonSeries.toString(2));
 //
-//            JSONObject json = jsonSeries.getJSONObject("library");
+//            JSONObject json = jsonSeries.getJSONObject("libraryMap");
 //            JSONArray seriesArray = json.getJSONArray("series");
 //            for(int i = 0; i < jsonSeries.length(); i++){
 //                JSONObject obj = jsonSeries.getJSONObject(i);
-//                library.put(series.getString("title"), new SeriesSeason(series));
+//                libraryMap.put(series.getString("title"), new SeriesSeason(series));
 //
 //
 //
@@ -323,11 +338,11 @@ public class SeasonLibrary implements Library {
 //            ex.printStackTrace();
 //            return false;
 //        }
-          return true;
+          return false;
     }
 
     /**
-     * Helper method to load JSON file from library.
+     * Helper method to load JSON file from libraryMap.
      * @param fileName : path-to or name-of JSON file
      * @return void
      * */
@@ -347,8 +362,9 @@ public class SeasonLibrary implements Library {
                 JSONObject aMed = media.optJSONObject(mediaTitle);
                 if (aMed != null) {
                     SeriesSeason ss = new SeriesSeason(aMed);
-                    library.put(mediaTitle, ss);
+                    libraryMap.put(mediaTitle, ss);
                     seriesSeasonList.add(ss);
+
                 }
             }
         } catch (Exception ex) {
@@ -357,11 +373,16 @@ public class SeasonLibrary implements Library {
     }
 
     public void clearLibrary(){
-        library.clear();
+        libraryMap.clear();
     }
 
 
     public void printAll(){
+
+        if(seriesSeasonList.isEmpty()){
+            System.out.println("List is empty");
+            return;
+        }
 
         String sep = "";
         for(SeriesSeason ss : seriesSeasonList){
@@ -369,6 +390,5 @@ public class SeasonLibrary implements Library {
             sep = ", ";
         }
     }
-
 
 }
