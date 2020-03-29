@@ -1,6 +1,5 @@
 package ser321.assign2.akclifto.client;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -31,25 +30,21 @@ import java.util.List;
  */
 public interface Library {
 
-
-    boolean remove(String mediaTitle);
-
+    /*From original sample files*/
     SeriesSeason get(String mediaTitle);
-
     String[] getTitles();
 
     /**
      * Method toget TV show names and seasons available in the library
      * @return String list of names of season series titles
      * */
-    public String getSeriesSeason();
+    String getSeriesSeason();
 
     /**
      *  Method to get seriesSeason List
      * @return seriesSeasonList
      * */
-    public List<SeriesSeason> getSeriesSeasonList();
-
+    List<SeriesSeason> getSeriesSeasonList();
 
     /**
      * get seriesSeason based on title of the series.
@@ -58,17 +53,35 @@ public interface Library {
      * */
     SeriesSeason getSeriesSeason(String title);
 
-    /**Methods to add new seriesSeason*/
+    /**
+     * Method to add new seriesSeason to the library.
+     * @param ss : SeriesSeason object to add to thte library
+     * @return void
+     * */
     void addSeriesSeason(SeriesSeason ss);
 
-    /*remove a series season*/
-    void removeSeriesSeason(String title);
+    /**
+     * Method to remove SeriesSeason from the library by searching its title.
+     * @param title : title of series to remove.
+     * @return true if SeriesSeason removed, false otherwise
+     * */
+    boolean removeSeriesSeason(String title);
 
-    /*serialize and save a JSON file output for the library*/
+    /**
+     * Method to serialize and save library to a JSON file.
+     * @param fileName : name of JSON file to be saved.
+     * @return true if save JSON file to directory, false otherwise
+     * */
     boolean saveLibraryToFile(String fileName);
 
     /*load JSON file and initialize in library*/
-    boolean restoreLibraryFromFile(String filename) throws FileNotFoundException;
+    /**
+     * Method to load library from a given JSON file.  JSON file structure must match
+     * JSON file "saveLibraryToFile structure.
+     * @param filename  : name of the file to load the library.
+     * @return true if library loaded successfully, false otherwise.
+     * */
+    boolean restoreLibraryFromFile(String filename);
 
 
 

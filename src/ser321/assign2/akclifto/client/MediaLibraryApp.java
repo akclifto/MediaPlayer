@@ -492,8 +492,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
 		sl.restoreLibraryFromFile("series.json");
 		System.out.println(sl.getSeriesSeason("The IT Crowd").getEpisodeList().size());
-		boolean flag = sl.saveLibraryToFile("series_output.json");
-//		System.out.println(flag);
+		sl.getSeriesSeason();
 
 
 

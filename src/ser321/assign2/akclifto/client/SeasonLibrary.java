@@ -76,22 +76,7 @@ public class SeasonLibrary implements Library {
 
     public boolean removeSeason(String title) {
 
-        return remove(title);
-    }
-
-
-
-    @Override
-    public boolean remove(String mediaTitle) {
-        boolean result = false;
-        System.out.println("Removing " + mediaTitle);
-        try {
-            libraryMap.remove(mediaTitle);
-            result = true;
-        } catch (Exception ex) {
-            System.out.println("exception in remove: " + ex.getMessage());
-        }
-        return result;
+        return removeSeriesSeason(title);
     }
 
 
@@ -135,13 +120,13 @@ public class SeasonLibrary implements Library {
     @Override
     public String getSeriesSeason() {
 
-        String res= "";
+        StringBuilder res= new StringBuilder();
+        System.out.println("Series in library: ");
         for(SeriesSeason ss : seriesSeasonList){
-            System.out.println(ss.getTitle());
-            res += ss.getTitle();
-            res += ", ";
+            System.out.println(ss.getTitle() + ",  " + ss.getSeason());
+            res.append(ss.getTitle() + ", " + ss.getSeason());
         }
-        return res;
+        return res.toString();
 
     }
 
@@ -189,21 +174,23 @@ public class SeasonLibrary implements Library {
     }
 
     @Override
-    public void removeSeriesSeason(String title) {
+    public boolean removeSeriesSeason(String title) {
 
         if(seriesSeasonList.isEmpty()){
             System.out.println("SeriesSeason List is empty.");
-            return;
+            return false;
         }
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
                 System.out.println(title + " was found and removed from the list.");
+                libraryMap.remove(series);
                 seriesSeasonList.remove(series);
-                break;
+                return true;
             }
         }
         System.out.println(title + "was not found in the list!");
+        return false;
     }
 
     @Override
@@ -238,7 +225,6 @@ public class SeasonLibrary implements Library {
                 seriesArr.put(series);
             }
             master.put("library", seriesArr);
-//            master.put("library", seriesArr);
 
         } catch(Exception ex) {
             System.out.println("Exception in ConstructJSON: " + ex.getMessage());
