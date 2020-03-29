@@ -88,8 +88,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		// register this object as an action listener for menu item clicks. This will cause
 		// my actionPerformed method to be called every time the user selects a menuitem.
 		for (JMenuItem[] userMenuItem : userMenuItems) {
-			for (int j = 0; j < userMenuItem.length; j++) {
-				userMenuItem[j].addActionListener(this);
+			for (JMenuItem jMenuItem : userMenuItem) {
+				jMenuItem.addActionListener(this);
 			}
 		}
 		// register this object as an action listener for the Search button. This will cause
@@ -99,6 +99,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			//tree.addTreeWillExpandListener(this);  // add if you want to get called with expansion/contract
 			tree.addTreeSelectionListener(this);
 			rebuildTree();
+
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, "Handling " +
 					" constructor exception: " + ex.getMessage());
@@ -111,8 +112,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 			// set poster image here-----default poster image
-//			setAlbumImage(posterImg);
-			setPosterImage(posterImg);
+//			setPosterImage(posterImg);
+			setAlbumImage(posterImg);
 		} catch (Exception ex) {
 			System.out.println("unable to open image");
 		}
@@ -125,10 +126,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 * @param posterLink : a url link to the given image
 	 * @return void
 	 */
-	private void setPosterImage(String posterLink) throws IOException {
+	private void setPosterImage(String posterLink) {
 
 		try {
-
 			BufferedImage image = ImageIO.read(new URL(posterLink));
 			// resize width
 			int imgWidth = 290;
@@ -136,6 +136,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			int imgHeight = 366;
 			BufferedImage resized = resize(image, imgHeight, imgWidth);
 			ImageIcon poster = new ImageIcon(resized);
+	//		displayPane.setVerticalAlignment(50);
 			displayPane.setIcon(poster);
 
 		} catch (IOException ex) {
@@ -160,6 +161,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		Graphics2D g2d = resized.createGraphics();
 		g2d.drawImage(tmp, 0, 0, null);
 		g2d.dispose();
+
 		return resized;
 	}
 
@@ -407,9 +409,16 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
 					"Remove Series-Season",
 					JOptionPane.YES_NO_OPTION);
+
 			if(option == JOptionPane.YES_OPTION) {
+
 				try {
-					library.getSeasonLibrary().removeSeason(seriesSeasonJTF.getText());
+					boolean flag = library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
+
+					if(flag){
+						throw new Exception("Selected Series not removed from the list.");
+					}
+
 					rebuildTree();
 					this.revalidate();
 					this.repaint();
@@ -483,24 +492,30 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		return sb.toString();
 	}
 
+
+	/**
+	 * main method: Program entry point.
+	 * @param args :  taken default args or CLI user input.
+	 * @return void
+	 * */
 	public static void main(String[] args) {
 
 
-//		String name = "first.last";
-//		String key = "use-your-last.ombd-key";
-//		if (args.length >= 2) {
-//			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
-//			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
-//			name = args[0];
-//			key = args[1];
-//		}
-//		try {
-//			//System.out.println("calling constructor name "+name);
-//			MediaLibraryApp mla = new MediaLibraryApp(name, key);
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-//
+		String name = "first.last";
+		String key = "use-your-last.ombd-key";
+		if (args.length >= 2) {
+			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
+			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
+			name = args[0];
+			key = args[1];
+		}
+		try {
+			//System.out.println("calling constructor name "+name);
+			MediaLibraryApp mla = new MediaLibraryApp(name, key);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 	}
 
 
@@ -527,6 +542,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		series2.addToEpisodeList(ep3);
 		series2.addToEpisodeList(ep4);
 		series2.addToEpisodeList(ep5);
+		series2.printEpisodes();
 
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
 		sl.addSeriesSeason(series);
@@ -540,7 +556,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		System.out.println(flag);
 		System.out.println("libraryMap size: " + sl.getlibrarySize());
 		System.out.println("seasonlist size: " + sl.getSeriesSeasonList().size());
-//		sl.printAll();
 		sl.saveLibraryToFile("test_output.json");
 	}
 }

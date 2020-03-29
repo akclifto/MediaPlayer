@@ -68,19 +68,13 @@ public class SeasonLibrary implements Library {
         return sLibrary;
     }
 
+    /*All setters/getters*/
     public SeasonLibrary getSeasonLibrary(){
         return this;
     }
-
     public int getlibrarySize(){
         return libraryMap.size();
     }
-
-    public boolean removeSeason(String title) {
-
-        return removeSeriesSeason(title);
-    }
-
 
     @Override
     public SeriesSeason get(String mediaTitle) {
@@ -175,6 +169,7 @@ public class SeasonLibrary implements Library {
         }
     }
 
+
     @Override
     public boolean removeSeriesSeason(String title) {
 
@@ -186,7 +181,7 @@ public class SeasonLibrary implements Library {
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
                 System.out.println(title + " was found and removed from the list.");
-                libraryMap.remove(series);
+                libraryMap.remove(title);
                 seriesSeasonList.remove(series);
                 return true;
             }

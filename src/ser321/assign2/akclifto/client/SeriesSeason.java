@@ -102,7 +102,7 @@ public class SeriesSeason {
      * */
     public SeriesSeason(JSONObject jsonObject, String actionOption){
 
-        if(actionOption.equalsIgnoreCase("add")){  //TODO---
+        if(actionOption.equalsIgnoreCase("Add")){  //TODO---
             new SeriesSeason(jsonObject);
         } else {
             addFromURL(jsonObject);
@@ -261,7 +261,7 @@ public class SeriesSeason {
 
 
     /**
-     * Method to print out the list of episodes.
+     * Debugging method to print out the list of episodes.
      * @return void
      * */
     public void printEpisodes(){
