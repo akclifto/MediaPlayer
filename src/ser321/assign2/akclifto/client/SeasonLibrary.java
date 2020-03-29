@@ -210,7 +210,7 @@ public class SeasonLibrary implements Library {
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));
 
-       //     System.out.println(jsonSeries.toString(4));
+       // System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -244,58 +244,6 @@ public class SeasonLibrary implements Library {
         return master;
     }
 
-//    /**
-//     * Helper method to serialize a file for JSON output.
-//     * @return JSONArray for write output.
-//     * */
-//    private JSONObject constructSaveFile() {
-//
-//        JSONArray seriesRoot = new JSONArray();
-//        JSONObject libraryRoot = new JSONObject();
-//        try {
-//
-//            Set<String> keys = libraryMap.keySet();
-//
-//            //set the root JSONArray
-//            for(String key : keys) {
-//
-//                //construct the next JSON file level: series/seasons
-//                JSONObject seriesJSON = new JSONObject();
-//                seriesJSON.put("title", libraryMap.get(key).getTitle());
-//                seriesJSON.put("seriesSeason", libraryMap.get(key).getSeason());
-//                seriesJSON.put("imdbRating", libraryMap.get(key).getImdbRating());
-//                seriesJSON.put("genre", libraryMap.get(key).getGenre());
-//                seriesJSON.put("poster", libraryMap.get(key).getPosterLink());
-//                seriesJSON.put("plotSummary", libraryMap.get(key).getPlotSummary());
-//
-//                //construct the inner most JSON file level: episodes
-//                JSONArray episodes = new JSONArray();
-//
-//                for(int i = 0; i < libraryMap.get(key).getEpisodeList().size(); i++) {
-//                    Episode episode = libraryMap.get(key).getEpisodeList().get(i);
-//                    JSONObject epiJSON = new JSONObject();
-//                    epiJSON.put("name", episode.getName());
-//                    epiJSON.put("imdbRating", episode.getImdbRating());
-//                    episodes.put(epiJSON);
-//                }
-//
-//                //link the episodes array with the seriesJSON object
-//                seriesJSON.put("episodes", episodes);
-//                //link the seriesJSON objects to the series array
-//                seriesRoot.put(seriesJSON);
-//                //link series array with root level libraryMap object
-//                libraryRoot.put("libraryMap", seriesRoot);
-//            }
-//
-//        } catch(Exception ex) {
-//            System.out.println("Exception saving the file to libraryMap: " + ex.getMessage());
-//            ex.printStackTrace();
-//        }
-//
-//        return libraryRoot;
-//    }
-
-
 
     @Override
     public boolean restoreLibraryFromFile(String filename) {
@@ -327,7 +275,7 @@ public class SeasonLibrary implements Library {
             for(int i = 0; i < libArr.length(); i++){
                 JSONObject seriesObj = libArr.getJSONObject(i);
                 libraryMap.put(seriesObj.getString("series"), new SeriesSeason(seriesObj));
-
+//TODO-----------
             }
         } catch(Exception ex) {
             System.out.println("Exception loading JSON file: " +ex.getMessage());
