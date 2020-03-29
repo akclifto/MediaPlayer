@@ -46,7 +46,9 @@ public class SeasonLibrary implements Library {
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
     private static SeasonLibrary sLibrary = null;
 
-//for tests
+    /**
+     * Constructor used for tests.
+     * */
     public SeasonLibrary() {
 
         this.libraryMap = new HashMap<>();
@@ -61,7 +63,7 @@ public class SeasonLibrary implements Library {
 
         if (sLibrary == null) {
             sLibrary = new SeasonLibrary();
-         //   sLibrary.restoreLibraryFromFile(fileName);
+            sLibrary.restoreLibraryFromFile(fileName);
         }
         return sLibrary;
     }
@@ -124,17 +126,17 @@ public class SeasonLibrary implements Library {
         System.out.println("Series in library: ");
         for(SeriesSeason ss : seriesSeasonList){
             System.out.println(ss.getTitle() + ",  " + ss.getSeason());
-            res.append(ss.getTitle() + ", " + ss.getSeason());
+            res.append(ss.getTitle()).append(", ").append(ss.getSeason());
         }
         return res.toString();
 
     }
 
     @Override
-    public SeriesSeason getSeriesSeason(String title) {
+    public SeriesSeason getSeriesSeason(String title, String season) {
 
         for (SeriesSeason series : seriesSeasonList) {
-            if (series.getTitle().equalsIgnoreCase(title)) {
+            if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
                 System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
@@ -196,7 +198,7 @@ public class SeasonLibrary implements Library {
     @Override
     public boolean saveLibraryToFile(String fileName) {
 
-        System.out.println("\nSaving current library to file.");
+        System.out.println("\nSaving current library to file: " + fileName);
         JSONObject jsonSeries = constructJSON();
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));
@@ -213,7 +215,7 @@ public class SeasonLibrary implements Library {
      * Helper method to serialize a file for JSON output.
      * @return JSONArray for write output.
      * */
-    public JSONObject constructJSON() {
+    private JSONObject constructJSON() {
 
         JSONObject master = new JSONObject();
         JSONArray seriesArr = new JSONArray();
@@ -277,11 +279,21 @@ public class SeasonLibrary implements Library {
         }
     }
 
+    /**
+     * Helper method to clear the library and list
+     * @return void.
+     * */
     private void clearLibrary(){
+
         libraryMap.clear();
+        seriesSeasonList.clear();
     }
 
 
+    /**
+     * Helper method to print everything in the library. Used for debugging.
+     * @return void.
+     * */
     public void printAll(){
 
         System.out.println("\nPRINTING SERIES SEASON LIST CONTENTS: ");

@@ -424,8 +424,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 
 
-
-
 	/**
 	 * A method to do asynchronous url request printing the result to System.out
 	 *
@@ -488,16 +486,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	public static void main(String[] args) {
 
 
-
-		SeasonLibrary sl  = SeasonLibrary.getInstance();
-		sl.restoreLibraryFromFile("series.json");
-		System.out.println(sl.getSeriesSeason("The IT Crowd").getEpisodeList().size());
-		sl.getSeriesSeason();
-
-
-
-
-
 //		String name = "first.last";
 //		String key = "use-your-last.ombd-key";
 //		if (args.length >= 2) {
@@ -515,6 +503,11 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 //
 	}
 
+
+	/**
+	 * Method testCase() used for debugging.
+	 * @return void
+	 * */
 	private static void testCase() {
 
 		System.out.println("EPISODE TESTS: ");

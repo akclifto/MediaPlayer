@@ -49,9 +49,10 @@ public interface Library {
     /**
      * get seriesSeason based on title of the series.
      * @param title : title of series to search and retrieve.
+     * @param season : season to search if multiple seasons in file.
      * @return seriesSeason object.
      * */
-    SeriesSeason getSeriesSeason(String title);
+    SeriesSeason getSeriesSeason(String title, String season);
 
     /**
      * Method to add new seriesSeason to the library.

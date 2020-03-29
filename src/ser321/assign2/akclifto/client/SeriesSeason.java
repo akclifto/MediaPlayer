@@ -42,10 +42,6 @@ public class SeriesSeason {
     private String plotSummary; // summary of the series plot
     private List<Episode> episodeList; // List of Episodes
 
-    /**
-     * Empty constructor call.
-     * */
-    public SeriesSeason() {    }
 
     /**
      * Explicit constructor call.
@@ -270,11 +266,11 @@ public class SeriesSeason {
      * */
     public void printEpisodes(){
 
-        System.out.println(title + ": \n");
+        System.out.println("\n" + title + ": ");
         for(Episode e : getEpisodeList()) {
-            e.toString();
-            System.out.println();
+            System.out.println(e.toString());
         }
+        System.out.println();
     }
 
 

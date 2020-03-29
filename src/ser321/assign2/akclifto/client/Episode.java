@@ -48,6 +48,7 @@ public class Episode implements JSONString, Serializable {
 
     /**
      * JSONObject Constructor to deserialize from JSON
+     * @param jsonObj  : JSONObject used to construct the Episode object
      * */
     public Episode(JSONObject jsonObj){
 
@@ -61,15 +62,12 @@ public class Episode implements JSONString, Serializable {
     public String getName() {
         return name;
     }
-
     public String getImdbRating() {
         return imdbRating;
     }
-
     public JSONObject getEpData(){
         return epData;
     }
-
     public String getEpSummary() {
         return epSummary;
     }
@@ -104,6 +102,10 @@ public class Episode implements JSONString, Serializable {
         return result;
     }
 
+    /**
+     * toString method for debugging.
+     * @return string of episode information.
+     * */
     @Override
     public String toString() {
 
