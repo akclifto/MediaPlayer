@@ -488,14 +488,13 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	public static void main(String[] args) {
 
 
+
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
-		sl.restoreLibraryFromFile("test_output.json");
+		sl.restoreLibraryFromFile("series.json");
+		System.out.println(sl.getSeriesSeason("The IT Crowd").getEpisodeList().size());
+		boolean flag = sl.saveLibraryToFile("series_output.json");
+//		System.out.println(flag);
 
-		boolean flag = sl.saveLibraryToFile("test.json");
-		System.out.println(flag);
-
-		Episode epi = sl.getSeriesSeason("The GreatShow").getEpisode("Adam");
-		System.out.println(epi.toString());
 
 
 
@@ -520,8 +519,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	private static void testCase() {
 
 		System.out.println("EPISODE TESTS: ");
-		Episode epi = new Episode("Adam", "10.0");
-		Episode ep2 = new Episode("Adam redux v.2", "11/10");
+		Episode epi = new Episode("Adam", "10.0", "Things happen");
+		Episode ep2 = new Episode("Adam redux v.2", "11/10", "more things happen");
 		System.out.println("SERIES TESTS: ");
 		SeriesSeason series = new SeriesSeason("The GreatShow", "season 1", "8.5",
 				"Action", "https://fakelink.com", "The plot thickens...");
@@ -530,9 +529,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		System.out.println("");
 		SeriesSeason series2 = new SeriesSeason("Shows", "season 4", "5.5",
 				"comedy", "weblinke.co", "some plot lines");
-		Episode ep3 = new Episode("Epi 1", "8.0");
-		Episode ep4 = new Episode("Epi 2", "5/10");
-		Episode ep5 = new Episode("Epi 3", "1/10");
+		Episode ep3 = new Episode("Epi 1", "8.0", "epSummary1");
+		Episode ep4 = new Episode("Epi 2", "5/10", "epSummary2");
+		Episode ep5 = new Episode("Epi 3", "1/10", "epSummary3");
 		series2.addToEpisodeList(ep3);
 		series2.addToEpisodeList(ep4);
 		series2.addToEpisodeList(ep5);
@@ -540,17 +539,16 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
 		sl.addSeriesSeason(series);
 		sl.addSeriesSeason(series2);
-		sl.add(series);
-		sl.add(series2);
+		sl.addSeriesSeason(series);
+		sl.addSeriesSeason(series2);
+		sl.printAll();
 		sl.saveLibraryToFile("test.json");
 
 		boolean flag = sl.restoreLibraryFromFile("test.json");
 		System.out.println(flag);
 		System.out.println("libraryMap size: " + sl.getlibrarySize());
-		System.out.println("seasonlist size: " + sl.getSeriesSeason().size());
-		sl.printAll();
+		System.out.println("seasonlist size: " + sl.getSeriesSeasonList().size());
+//		sl.printAll();
 		sl.saveLibraryToFile("test_output.json");
-
-
 	}
 }

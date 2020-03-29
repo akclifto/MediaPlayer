@@ -39,7 +39,7 @@ public class SeriesSeason {
     private String imdbRating;  // imdb rating
     private String genre;       // genre of the series
     private String posterLink;  // link to the movie poster
-    private String plotSummary; // summary of the plot
+    private String plotSummary; // summary of the series plot
     private List<Episode> episodeList; // List of Episodes
 
     /**
@@ -72,16 +72,10 @@ public class SeriesSeason {
      * */
     public SeriesSeason(JSONObject jsonObject){
 
-        this.episodeList = new ArrayList<>();
+        episodeList = new ArrayList<>();
 
         try{
 
-            //go through episode list array
-            JSONArray episodes = jsonObject.getJSONArray("episodes");
-            for (int i = 0; i < episodes.length(); i++) {
-                Episode episode = new Episode(episodes.getJSONObject(i));
-                addToEpisodeList(episode);
-            }
             this.title = jsonObject.getString("title");
             this.seriesSeason = jsonObject.getString("seriesSeason");
             this.imdbRating = jsonObject.getString("imdbRating");
@@ -89,6 +83,12 @@ public class SeriesSeason {
             this.posterLink = jsonObject.getString("poster");
             this.plotSummary = jsonObject.getString("plotSummary");
 
+            //go through episode list array
+            JSONArray episodes = jsonObject.getJSONArray("episodes");
+            for (int i = 0; i < episodes.length(); i++) {
+                Episode episode = new Episode(episodes.getJSONObject(i));
+                this.addToEpisodeList(episode);
+            }
             System.out.println("Added new entry for: " + seriesSeason);
 
         } catch(Exception ex){
@@ -99,10 +99,14 @@ public class SeriesSeason {
     }
 
 
-    /**if series added from JSON file, not URL Search*/
+    /**
+     * Check if series added from JSON file, or URL Search.  Pass accordingly
+     * @param jsonObject :  object to be added to seriesSeason class
+     * @param actionOption : check is URL "search" or JSON file "add".
+     * */
     public SeriesSeason(JSONObject jsonObject, String actionOption){
 
-        if(actionOption.equalsIgnoreCase("search")){
+        if(actionOption.equalsIgnoreCase("add")){  //TODO---
             new SeriesSeason(jsonObject);
         } else {
             addFromURL(jsonObject);
@@ -194,7 +198,7 @@ public class SeriesSeason {
 
         if (episodeList.isEmpty()) {
             episodeList.add(episode);
-            System.out.println(episode.getName() + " added to the Episode list for " + title);
+            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
             return;
         }
 
@@ -209,7 +213,7 @@ public class SeriesSeason {
             System.out.println("Episode already included in the Episode list.");
         } else {
             episodeList.add(episode);
-            System.out.println(episode.getName() + " added to the Episode list for " + title);
+            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
         }
     }
 

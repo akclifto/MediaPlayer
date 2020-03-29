@@ -31,8 +31,6 @@ import java.util.List;
  */
 public interface Library {
 
-    //from original interface
-    boolean add(SeriesSeason ss);
 
     boolean remove(String mediaTitle);
 
@@ -40,14 +38,28 @@ public interface Library {
 
     String[] getTitles();
 
-    /*get TV show names and seasons available in the library*/
-    public List<SeriesSeason> getSeriesSeason();
+    /**
+     * Method toget TV show names and seasons available in the library
+     * @return String list of names of season series titles
+     * */
+    public String getSeriesSeason();
 
-    /*get seriesSeason based on title of the series */
+    /**
+     *  Method to get seriesSeason List
+     * @return seriesSeasonList
+     * */
+    public List<SeriesSeason> getSeriesSeasonList();
+
+
+    /**
+     * get seriesSeason based on title of the series.
+     * @param title : title of series to search and retrieve.
+     * @return seriesSeason object.
+     * */
     SeriesSeason getSeriesSeason(String title);
 
-    /*add new seriesSeason*/
-    void addSeriesSeason();
+    /**Methods to add new seriesSeason*/
+    void addSeriesSeason(SeriesSeason ss);
 
     /*remove a series season*/
     void removeSeriesSeason(String title);
