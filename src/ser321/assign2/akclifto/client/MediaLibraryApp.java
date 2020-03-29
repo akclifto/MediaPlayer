@@ -487,15 +487,14 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	public static void main(String[] args) {
 
-
 		SeasonLibrary sl  = SeasonLibrary.getInstance();
-		sl.loadHistory("Test.json");
+		sl.restoreLibraryFromFile("test_output.json");
 
-		System.out.println("libraryMap size: " + sl.getlibrarySize());
-		System.out.println("seasonlist size: " + sl.getSeriesSeason().size());
-
-		boolean flag = sl.loadHistory("Test.json");
+		boolean flag = sl.saveLibraryToFile("test.json");
 		System.out.println(flag);
+
+
+
 
 
 //		String name = "first.last";
@@ -540,5 +539,15 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		sl.addSeriesSeason(series2);
 		sl.add(series);
 		sl.add(series2);
+		sl.saveLibraryToFile("test.json");
+
+		boolean flag = sl.restoreLibraryFromFile("test.json");
+		System.out.println(flag);
+		System.out.println("libraryMap size: " + sl.getlibrarySize());
+		System.out.println("seasonlist size: " + sl.getSeriesSeason().size());
+		sl.printAll();
+		sl.saveLibraryToFile("test_output.json");
+
+
 	}
 }

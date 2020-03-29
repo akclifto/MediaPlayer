@@ -52,7 +52,7 @@ public class Episode implements JSONString, Serializable {
     public Episode(JSONObject jsonObj){
 
         epData = jsonObj;
-        this.name = epData.getString("title");
+        this.name = epData.getString("name");
         this.imdbRating= epData.getString("imdbRating");
     }
 
