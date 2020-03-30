@@ -267,7 +267,7 @@ public class SeasonLibrary implements Library {
      * @param fileName : path-to or name-of JSON file
      * @return true if JSON initialized correctly, false otherwise.
      * */
-    private boolean initialize(String fileName){
+    public boolean initialize(String fileName){
 
         try{
 
@@ -288,6 +288,54 @@ public class SeasonLibrary implements Library {
         }
         return true;
     }
+
+
+    public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
+
+        String seriesSeason, plotSummary;
+
+        JSONObject seriesRoot = new JSONObject(jsonSeries);
+        JSONObject epiRoot = new JSONObject(jsonEpisodes);
+
+        JSONObject seriesObj = new JSONObject();
+        JSONArray epiArray = new JSONArray();
+        JSONObject epiObj = new JSONObject();
+
+        //add shared information
+        seriesSeason  = epiRoot.getString("Season");
+        plotSummary = seriesRoot.getString("Plot");
+
+        //add series information
+        seriesObj.put("title", seriesRoot.getString("Title"));
+        seriesObj.put("genre", seriesRoot.getString("Genre"));
+        seriesObj.put("plotSummary", seriesRoot.getString("Plot"));
+        seriesObj.put("poster", seriesRoot.getString("Poster"));
+        seriesObj.put("imdbRating", seriesRoot.getJSONArray("Ratings").getJSONObject(0).getString("Value"));
+        seriesObj.put("seriesSeason", seriesSeason);
+
+
+        //add episode information
+        epiObj.put("epSummary", plotSummary);
+
+        JSONArray epiIter = epiRoot.getJSONArray("Episodes");
+        for(int i = 0; i < epiIter.length(); i++) {
+
+            JSONObject epi = epiIter.getJSONObject(i);
+            epiObj.put("name", epi.getString("Title"));
+            epiObj.put("imdbRating", epi.getString("imdbRating"));
+            epiArray.put(epiObj);
+        }
+        seriesObj.put("episodes", epiArray);
+        JSONObject series = new JSONObject();
+        series.put("series", seriesObj);
+        JSONArray libraryArr = new JSONArray();
+        libraryArr.put(series);
+        JSONObject master = new JSONObject().put("library", libraryArr);
+        System.out.println(master.toString());
+
+    }
+
+
 
     /**
      * Helper method to clear the library and list

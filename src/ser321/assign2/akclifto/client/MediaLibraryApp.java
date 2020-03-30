@@ -452,15 +452,16 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			// fetch series info
 			String searchReqURL = urlOMBD + seriesSearchJTF.getText().replace(" ", "%20");
 			System.out.println("calling fetch with url: " + searchReqURL);
-			String json = fetchURL(searchReqURL);
-			System.out.println("Fetch result just season: " + json);
+			String jsonSeries = fetchURL(searchReqURL);
+			System.out.println("Fetch result just season: " + jsonSeries);
 
 			// fetch season info
-			String searchReqURL2 = urlOMBD + seriesSearchJTF.getText().replace(" ", "%20") + "&season=" + seasonSearchJTF.getText();
+			String searchReqURL2 = urlOMBD + seriesSearchJTF.getText().replace(" ", "%20")
+					+ "&season=" + seasonSearchJTF.getText();
 			String jsonEpisodes = fetchURL(searchReqURL2);
 			System.out.println("Fetch result episodes: " + jsonEpisodes);
 
-			
+			actionFetchResults(jsonSeries, jsonEpisodes);
 
 			/* TODO: implement here that this json will be used to create a Season object with the episodes included
 			 * This should also then build the tree and display the info in the left side bar (so the new tree with its episodes)
@@ -551,6 +552,18 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 }
 		 }
 	 }
+
+
+	 private void actionFetchResults(String jsonSeries, String jsonEpisodes) {
+
+
+	 	library.parseURLtoJSON(jsonSeries, jsonEpisodes);
+
+
+	 }
+
+
+
 
 
 	/**
