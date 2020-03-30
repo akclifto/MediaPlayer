@@ -241,8 +241,6 @@ public class SeasonLibrary implements Library {
         boolean flag;
         try {
             clearLibrary();
-            this.libraryMap = new HashMap<>();
-            this.seriesSeasonList = new ArrayList<>();
             flag = initialize(filename);
         } catch(Exception ex){
             System.out.println("Exception restoring library: " + ex.getMessage());
@@ -288,7 +286,7 @@ public class SeasonLibrary implements Library {
 
         JSONObject seriesObj = new JSONObject();
         JSONArray epiArray = new JSONArray();
-        JSONObject epiObj = new JSONObject();
+
 
         //add shared information
         seriesSeason  = epiRoot.getString("Season");
@@ -302,36 +300,32 @@ public class SeasonLibrary implements Library {
         seriesObj.put("imdbRating", seriesRoot.getJSONArray("Ratings").getJSONObject(0).getString("Value"));
         seriesObj.put("seriesSeason", seriesSeason);
 
-
         //add episode information
-        epiObj.put("epSummary", plotSummary);
-
         JSONArray epiIter = epiRoot.getJSONArray("Episodes");
         for(int i = 0; i < epiIter.length(); i++) {
 
+            JSONObject epiObj = new JSONObject();
             JSONObject epi = epiIter.getJSONObject(i);
+            epiObj.put("epSummary", plotSummary);
             epiObj.put("name", epi.getString("Title"));
             epiObj.put("imdbRating", epi.getString("imdbRating"));
             epiArray.put(epiObj);
         }
+
         seriesObj.put("episodes", epiArray);
-        JSONObject series = new JSONObject();
-        series.put("series", seriesObj);
-        JSONArray libraryArr = new JSONArray();
-        libraryArr.put(series);
-        JSONObject master = new JSONObject().put("library", libraryArr);
-        System.out.println(master.toString());
-
-        try(PrintWriter out = new PrintWriter("outtest.json")){
-            out.println(master.toString(4));
-
-//        System.out.println(jsonSeries.toString(4));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        refreshLibrary(seriesObj);
 
     }
 
+    /**
+     * Private helper methods to update library after adding new series Season from API search.
+     * @param jsonObject : JSONObject containing seriesSeason data
+     * */
+    private void refreshLibrary(JSONObject jsonObject){
+
+        SeriesSeason ss = new SeriesSeason(jsonObject);
+        addSeriesSeason(ss);
+    }
 
 
     /**
@@ -342,6 +336,9 @@ public class SeasonLibrary implements Library {
 
         libraryMap.clear();
         seriesSeasonList.clear();
+        this.libraryMap = new HashMap<>();
+        this.seriesSeasonList = new ArrayList<>();
+
     }
 
 

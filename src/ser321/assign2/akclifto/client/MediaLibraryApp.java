@@ -462,7 +462,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			System.out.println("Fetch result episodes: " + jsonEpisodes);
 
 			actionFetchResults(jsonSeries, jsonEpisodes);
-
+			refreshTree();
 			/* TODO: implement here that this json will be used to create a Season object with the episodes included
 			 * This should also then build the tree and display the info in the left side bar (so the new tree with its episodes)
 			 * right hand should display the Series information
@@ -504,7 +504,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 	boolean flag;
 
 		 try {
-			 flag = library.restoreLibraryFromFile("SavedLibrary.json");
+		 	flag = library.restoreLibraryFromFile("SavedLibrary.json");
 
 			 if (!flag) {
 				 flag = library.restoreLibraryFromFile("series.json");
