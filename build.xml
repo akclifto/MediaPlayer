@@ -9,8 +9,8 @@
    <property name="build" value="./classes" />
    <property name="docs" value="./docs" />
    <property name="lib" value="./lib" />
-   <property name="userId" value="akclifto" />
-   <property name="omdbkey" value="ccff33de" />
+   <property name="userId" value="first.lastname" />
+   <property name="omdbkey" value="your-omdb-api-key" />
    <property name="parentDir" value="${user.dir}${file.separator}" />
    <property name="javafxhome" value="javafx-sdk-13.0.1/"/>
    <property name="javafx-lib-home" value="${javafxhome}lib"/>
@@ -38,7 +38,7 @@
 
    <target name="targets">
       <echo message="targets are clean, prepare, setup.javafx, compile, and sample. "/>
-      <echo message="to run enter: ant sample -DuserId=${userId} -Domdbkey=${omdbkey}"/>
+      <echo message="to run enter: ant execute -DuserId=${userId} -Domdbkey=${omdbkey}"/>
    </target>
 
 
@@ -114,8 +114,8 @@
 
 
 
-   <target name="sample" depends="compile"
-           description="execute the sample mail client">
+   <target name="execute" depends="compile"
+           description="execute the media player client">
       <java classname="ser321.assign2.akclifto.client.MediaLibraryApp"
             fork="yes">
             
