@@ -81,7 +81,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
-		urlOMBD = pre + authorKey + "&t=";
+		urlOMBD = pre + omdbKey + "&t=";
 		library = SeasonLibrary.getInstance();	//initialize library
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -112,8 +112,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 			// set poster image here-----default poster image
-//			setPosterImage(posterImg);
-			setAlbumImage(posterImg);
+			setPosterImage(posterImg);
+//			setAlbumImage(posterImg);
 		} catch (Exception ex) {
 			System.out.println("unable to open image");
 		}
@@ -201,8 +201,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	}
 
 	/**
-	 * TODO--------------------
-	 *
 	 * method to build the JTree of media shown in the left panel of the UI. The
 	 * field tree is a JTree as defined and initialized by MediaLibraryGui class.
 	 * It is defined to be protected so it can be accessed by extending classes.
@@ -222,7 +220,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();  //bases structure
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot(); //root tree node (named as "author")
-		clearTree(root, model);
+		clearTree(root, model); //clear the tree
 
 		// put nodes in the tree for all registered with the library
 		DefaultMutableTreeNode libraryNode = new DefaultMutableTreeNode("Library");
@@ -234,6 +232,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 			setTreeSeriesNodes(model, libraryNode, title);
 		}
+
 		// expand all the nodes in the JTree
 		for (int r = 0; r < tree.getRowCount(); r++) {
 			tree.expandRow(r);
@@ -242,6 +241,12 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	}
 
 
+	/**
+	 * Helper method to set Series Nodes within the DefaultTreeModel structure.
+	 * @param model : DefaultTreeModel used in GUI
+	 * @param root : root tree where series node will be linked.
+	 * @param title : title of series to add to the tree.
+	 * */
 	private void setTreeSeriesNodes(DefaultTreeModel model, DefaultMutableTreeNode root, String title) {
 
 		SeriesSeason ss = library.getSeriesSeason(title);
@@ -251,22 +256,25 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
 		DefaultMutableTreeNode subNode = getSubLabelled(root, ss.getTitle());  // sub nodes to seriesToAdd
 
-		if(subNode != null) { //
+		if(subNode != null) { //if series exists.
+
 			debug("seriesSeason exists: " + ss.getTitle());
 			model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
+
 			if(ss.checkEpisodes()){
 
-				setTreeEpisodeNodes(model, subNode, ss, epTitles);
+				setTreeEpisodeNodes(model, subNode, epTitles);
 			}
 
-		} else {
+		} else {  // if series does not exist.
+
 			DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode(seriesName);
 			debug("No series, so adding one with name: " + seriesName);
 			model.insertNodeInto(seriesNode, root, model.getChildCount(root));
 
 			if(ss.checkEpisodes())
 			{
-				setTreeEpisodeNodes(model, seriesNode, ss, epTitles);
+				setTreeEpisodeNodes(model, seriesNode, epTitles);
 			}
 		}
 	}
@@ -274,20 +282,17 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	/**
 	 * Helper method to set Episode Nodes in the Tree structure under their proper series.
-	 * @param model : tree model used in GUI
-	 * @param root : root tree node where episode will be placed
-	 * @param ss : parent series associated with episodes
+	 * @param model : DefaultTreeModel used in GUI
+	 * @param root : root tree node where episode will be linked.
 	 * @param epTitles : array of episode titles to add labels for each episode sub-node
 	 * @return void.
 	 * */
 	private void setTreeEpisodeNodes(DefaultTreeModel model, DefaultMutableTreeNode root,
-									 SeriesSeason ss, String[] epTitles) {
+									 String[] epTitles) {
 
 		for (String name : epTitles) {
 
-			Episode epi = ss.getEpisode(name);
 			DefaultMutableTreeNode episodeNode = new DefaultMutableTreeNode(name);
-
 			model.insertNodeInto(episodeNode, root, model.getChildCount(root));
 		}
 	}
@@ -332,9 +337,13 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	// the My Series, the Series/Season, and Episode nodes are selected
 	public void valueChanged(TreeSelectionEvent e) {
 
+		int series = 2;
+		int episode = 3;
+
 		try {
 
 			tree.removeTreeSelectionListener(this);
+
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 					tree.getLastSelectedPathComponent();
 
@@ -342,7 +351,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 				String nodeLabel = (String) node.getUserObject();
 				debug("In valueChanged. Selected node labelled: " + nodeLabel);
-				// is this a terminal node?
 
 				// All fields empty to start with
 				seriesSeasonJTF.setText("");
@@ -352,37 +360,58 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				episodeJTF.setText("");
 				summaryJTA.setText("");
 
+				SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
+				SeriesSeason ssParent;
+				Episode epi;
 
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot(); // get the root
 				// First (and only) child of the root (username) node is 'My Series' node.
-				DefaultMutableTreeNode mySeries = (DefaultMutableTreeNode) root.getChildAt(0); // mySeries node
+				DefaultMutableTreeNode rootLibrary = (DefaultMutableTreeNode) root.getNextNode(); // Library node
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 
+				System.out.println("node level is ---------------: " + node.getLevel());
 				// TODO when it is an episode change the episode to something and set the rating to the episode rating
-				if (node.getChildCount() == 0 &&
-						(node != (DefaultMutableTreeNode) tree.getModel().getRoot())) {
 
+				if(node.getLevel() == series){
 					SeriesSeason ss = library.getSeriesSeason(nodeLabel);
-					//set text to panels to displayed selected node information
-					episodeJTF.setText(nodeLabel);                // name of the episode
-					ratingJTF.setText(ss.getImdbRating());    // change to rating of the episode
+					int episodeCount = ssCurrent.getEpisodeList().size();
+
+					if(episodeCount == 1){
+						episodeJTF.setText(" " + episodeCount + " Episode in library");            // name of the episode
+					} else {
+						//set text to panels to displayed selected node information
+						episodeJTF.setText(" " + episodeCount + " Episodes in library");            // name of the episode
+						ratingJTF.setText(ss.getImdbRating());        // change to rating of the episode
+						genreJTF.setText(ss.getGenre());
+						setPosterImage(ss.getPosterLink());
+						summaryJTA.setText(ss.getPlotSummary());
+						seriesSeasonJTF.setText(ss.getTitle());      // Change to season name
+					}
+				} else if (node.getLevel() == episode && node != tree.getModel().getRoot()){
+
 					String parentLabel = (String) parent.getUserObject();
-					genreJTF.setText(ss.getGenre());
-					setPosterImage(ss.getPosterLink());
-					summaryJTA.setText(ss.getPlotSummary());
-					seriesSeasonJTF.setText(parentLabel);        // Change to season name
+					ssParent = library.getSeriesSeason(parentLabel);
+					epi = ssParent.getEpisode(nodeLabel);
 
-				} else if (parent == root) {                    // should be the series/season
+					//set text to panels to displayed selected node information
+					episodeJTF.setText(epi.getName());            // name of the episode
+					ratingJTF.setText(epi.getImdbRating());        // change to rating of the episode
+					genreJTF.setText(ssParent.getGenre());
+					setPosterImage(ssParent.getPosterLink());
+					summaryJTA.setText(epi.getEpSummary());
+					seriesSeasonJTF.setText(ssParent.getTitle());      // Change to season name
 
+				} else if (parent == root || node.getLevel() == 0) {                     // root directory "Library"
 
-					seriesSeasonJTF.setText(nodeLabel);            // season name
-					genreJTF.setText("Genre");                    // genre of the series from library
-					ratingJTF.setText("IMDB Rating");            // rating of the season get from library
-					episodeJTF.setText("Episode Name");            // nothing in here since not an episode
-					summaryJTA.setText("Plot Summary");         // plot summary
+					seriesSeasonJTF.setText("Season Name and Number");    // season name
+					genreJTF.setText("Genre");                   // genre of the series from library
+					ratingJTF.setText("IMDB Rating");       	 // rating of the season get from library
+					episodeJTF.setText("Episode Name");          // nothing in here since not an episode
+					summaryJTA.setText("Plot Summary");			 // Plot Summary
 				}
-			}
 
+
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -536,7 +565,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 * */
 	public static void main(String[] args) {
 
-
 		String name = "first.last";
 		String key = "use-your-last.ombd-key";
 		if (args.length >= 2) {
@@ -551,7 +579,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 
