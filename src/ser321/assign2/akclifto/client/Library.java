@@ -31,8 +31,7 @@ import java.util.List;
 public interface Library {
 
     /*From original sample files*/
-    SeriesSeason get(String mediaTitle);
-    String[] getTitles();
+    String[] getSeriesSeasonTitles();
 
     /**
      * Method toget TV show names and seasons available in the library
@@ -47,12 +46,19 @@ public interface Library {
     List<SeriesSeason> getSeriesSeasonList();
 
     /**
-     * get seriesSeason based on title of the series.
+     * get seriesSeason based on title and season of the series.
      * @param title : title of series to search and retrieve.
      * @param season : season to search if multiple seasons in file.
      * @return seriesSeason object.
      * */
     SeriesSeason getSeriesSeason(String title, String season);
+
+    /**
+     * get seriesSeason based on title of the series.
+     * @param title : title of series to search and retrieve.
+     * @return seriesSeason object.
+     * */
+    SeriesSeason getSeriesSeason(String title);
 
     /**
      * Method to add new seriesSeason to the library.
@@ -70,10 +76,8 @@ public interface Library {
 
     /**
      * Method to serialize and save library to a JSON file.
-     * @param fileName : name of JSON file to be saved.
-     * @return true if save JSON file to directory, false otherwise
-     * */
-    boolean saveLibraryToFile(String fileName);
+     * @param fileName : name of JSON file to be saved. */
+    void saveLibraryToFile(String fileName);
 
     /*load JSON file and initialize in library*/
     /**

@@ -13,7 +13,7 @@
     },
     {
       "series": {
-        "title": "The Big Bang Theory ",
+        "title": "The Big Bang Theory - Season 11",
         "seriesSeason": "Season 11",
         "imdbRating": "7.5",
         "genre": "Comedy, Sitcom",
@@ -21,7 +21,7 @@
         "plotSummary": "",
         "episodes": [
           {
-            "name": "The Geology Methodology:",
+            "name": "The Geology Methodology",
             "imdbRating": "7.5",
             "epSummary": "When Bert asks Sheldon to collaborate on a project with him, Sheldon becomes worried about others finding out because he thinks geology is beneath him. Raj seeks advice after reconnecting with Ruchi."
           }
@@ -30,7 +30,7 @@
     },
     {
       "series": {
-        "title": "The IT Crowd",
+        "title": "The IT Crowd - Season 4",
         "seriesSeason": "Season 4",
         "imdbRating": "8.5",
         "genre": "Comedy, Sitcom",
@@ -47,10 +47,10 @@
     },
     {
       "series": {
-        "title": "The IT Crowd",
+        "title": "The IT Crowd - Season 2",
         "seriesSeason": "Season 2",
         "imdbRating": "8.5",
-        "genre": "Comedy,Sitcom",
+        "genre": "Comedy, Sitcom",
         "poster": "https://m.media-amazon.com/images/M/MV5BY2FmZTY5YTktOWRlYy00NmIyLWE0ZmQtZDg2YjlmMzczZDZiXkEyXkFqcGdeQXVyNjg4NzAyOTA@._V1_SX300.jpg",
         "plotSummary": "The comedic misadventures of Roy, Moss and their grifting supervisor Jen, a rag-tag team of IT support workers at a large corporation headed by a hotheaded yuppie.",
         "episodes": [

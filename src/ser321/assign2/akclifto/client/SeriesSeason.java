@@ -125,11 +125,9 @@ public class SeriesSeason {
         return this.title;
     }
 
-
     public String getSeason() {
         return this.seriesSeason;
     }
-
 
     public String getImdbRating() {
         return this.imdbRating;
@@ -143,7 +141,6 @@ public class SeriesSeason {
         return this.posterLink;
     }
 
-
     public List<Episode> getEpisodeList() {
         return this.episodeList;
     }
@@ -153,20 +150,39 @@ public class SeriesSeason {
     }
 
     /**
-     * Helper method to check if episode is already included
-     * in the series
-     * @param name : name of the episode
-     * @return true if episode included in list, false otherwise.
+     * Method to get list of of Episode title names.
+     * @return String array of title names for a given series.
      * */
-    public boolean checkEpisode(String name) {
+    public String[] getEpisodeTitles(){
 
-        for(Episode epi : episodeList){
-            if(epi.getName().equalsIgnoreCase(name)){
-                return true;
-            }
+        if(episodeList.isEmpty()){
+
+            return null;
         }
-        return false;
+
+        String[] result = new String[episodeList.size()];
+        try {
+
+            for(int i = 0; i < episodeList.size(); i++) {
+
+                result[i] = episodeList.get(i).getName();
+            }
+        } catch (Exception ex) {
+            System.out.println("exception in getTitles: " + ex.getMessage());
+        }
+        return result;
     }
+
+    /**
+     * Helper method to check if episode list is empty
+     * @return true if episode list is not empty, false otherwise.
+     * */
+    public boolean checkEpisodes() {
+
+        return(!episodeList.isEmpty());
+    }
+
+
 
     /**
      * Method to retrieve an episode from the episodeList

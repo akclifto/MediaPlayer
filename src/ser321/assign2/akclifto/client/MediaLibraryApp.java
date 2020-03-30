@@ -82,7 +82,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + authorKey + "&t=";
-		library = SeasonLibrary.getInstance();
+		library = SeasonLibrary.getInstance();	//initialize library
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// register this object as an action listener for menu item clicks. This will cause
@@ -217,37 +217,47 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 * getSubLabelled which is defined in the GUI/view class.
 	 **/
 	public void rebuildTree() {
+
 		tree.removeTreeSelectionListener(this);
-		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
+		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();  //bases structure
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot(); //root tree node (named as "author")
 		clearTree(root, model);
 
 		// put nodes in the tree for all registered with the library
-		DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode("Series");
-		model.insertNodeInto(seriesNode, root, model.getChildCount(root));
+		DefaultMutableTreeNode libraryNode = new DefaultMutableTreeNode("Library");
+		model.insertNodeInto(libraryNode, root, model.getChildCount(root));
 
-		String[] titleList = library.getTitles();
-		for (String s : titleList) {
-			SeriesSeason aSS = library.get(s);
-			String aMTitle = aSS.getTitle();
-			debug("Adding episode with title: " + aSS.getTitle());
-			DefaultMutableTreeNode toAdd = new DefaultMutableTreeNode(aMTitle);
-			DefaultMutableTreeNode subNode = getSubLabelled(root, aSS.getSeason());
-			if (subNode != null) { // if seriesSeason subnode already exists
-				debug("seriesSeason exists: " + aSS.getSeason());
-				model.insertNodeInto(toAdd, subNode,
-						model.getChildCount(subNode));
-			} else { // album node does not exist
-				DefaultMutableTreeNode anAlbumNode =
-						new DefaultMutableTreeNode(aSS.getSeason());
-				debug("No Series, so add one with name: " + aSS.getSeason());
-				model.insertNodeInto(anAlbumNode, root,
-						model.getChildCount(root));
-				DefaultMutableTreeNode aSubCatNode =
-						new DefaultMutableTreeNode("aSubCat");
-				debug("Adding subcat labelled: " + aSubCatNode);
-				model.insertNodeInto(toAdd, anAlbumNode,
-						model.getChildCount(anAlbumNode));
+		String[] seriesTitles = library.getSeriesSeasonTitles();  //array of all titles in the library
+
+		for(String title : seriesTitles){
+
+			SeriesSeason ss = library.getSeriesSeason(title);
+			String seriesName = ss.getTitle();
+			String[] epTitles = ss.getEpisodeTitles();
+
+			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
+			DefaultMutableTreeNode subNode = getSubLabelled(libraryNode, ss.getTitle());  // sub nodes to seriesToAdd
+
+			if(subNode != null) { //
+				debug("seriesSeason exists: " + ss.getTitle());
+				model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
+
+				if(ss.checkEpisodes()){
+
+					setTreeEpisodeNodes(model, subNode, ss, epTitles);
+				}
+
+			} else {
+
+				DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode(seriesName);
+				debug("No series, so adding one with name: " + seriesName);
+				model.insertNodeInto(seriesNode, libraryNode, model.getChildCount(libraryNode));
+
+				if(ss.checkEpisodes()) {
+
+					setTreeEpisodeNodes(model, seriesNode, ss, epTitles);
+				}
 			}
 		}
 		// expand all the nodes in the JTree
@@ -255,6 +265,62 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			tree.expandRow(r);
 		}
 		tree.addTreeSelectionListener(this);
+	}
+
+
+	private void setTreeSeriesNodes(DefaultTreeModel model, DefaultMutableTreeNode root, String title) {
+
+		SeriesSeason ss = library.getSeriesSeason(title);
+		String seriesName = ss.getTitle();
+		String[] epTitles = ss.getEpisodeTitles();
+
+		DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
+		DefaultMutableTreeNode subNode = getSubLabelled(root, ss.getTitle());  // sub nodes to seriesToAdd
+
+		if(subNode != null) { //
+			debug("seriesSeason exists: " + ss.getTitle());
+			model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
+			if(ss.checkEpisodes()){
+
+				setTreeEpisodeNodes(model, subNode, ss, epTitles);
+			}
+
+		} else {
+			DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode(seriesName);
+			debug("No series, so adding one with name: " + seriesName);
+			model.insertNodeInto(seriesNode, root, model.getChildCount(root));
+
+			if(ss.checkEpisodes())
+			{
+				for (String name : epTitles) {
+
+					DefaultMutableTreeNode episodeNode = new DefaultMutableTreeNode(name);
+
+					model.insertNodeInto(episodeNode, seriesNode, model.getChildCount(seriesNode));
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Helper method to set Episode Nodes in the Tree structure under their proper series.
+	 * @param model : tree model used in GUI
+	 * @param root : root tree node where episode will be placed
+	 * @param ss : parent series associated with episodes
+	 * @param epTitles : array of episode titles to add labels for each episode sub-node
+	 * @return void.
+	 * */
+	private void setTreeEpisodeNodes(DefaultTreeModel model, DefaultMutableTreeNode root,
+									 SeriesSeason ss, String[] epTitles) {
+
+		for (String name : epTitles) {
+
+			Episode epi = ss.getEpisode(name);
+			DefaultMutableTreeNode episodeNode = new DefaultMutableTreeNode(name);
+
+			model.insertNodeInto(episodeNode, root, model.getChildCount(root));
+		}
 	}
 
 	/**
@@ -265,12 +331,13 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 * @return void
 	 */
 	private void clearTree(DefaultMutableTreeNode root, DefaultTreeModel model) {
+
 		try {
-			DefaultMutableTreeNode next = null;
+			DefaultMutableTreeNode next;
 			int subs = model.getChildCount(root);
 			for (int k = subs - 1; k >= 0; k--) {
 				next = (DefaultMutableTreeNode) model.getChild(root, k);
-				debug("removing node labelled:" + (String) next.getUserObject());
+				debug("removing node labelled:" + next.getUserObject());
 				model.removeNodeFromParent(next);
 			}
 		} catch (Exception ex) {
@@ -326,7 +393,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				if (node.getChildCount() == 0 &&
 						(node != (DefaultMutableTreeNode) tree.getModel().getRoot())) {
 
-					SeriesSeason ss = library.get(nodeLabel);
+					SeriesSeason ss = library.getSeriesSeason(nodeLabel);
 					//set text to panels to displayed selected node information
 					episodeJTF.setText(nodeLabel);                // name of the episode
 					ratingJTF.setText(ss.getImdbRating());    // change to rating of the episode

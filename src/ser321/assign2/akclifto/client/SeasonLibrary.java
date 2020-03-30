@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -76,24 +75,28 @@ public class SeasonLibrary implements Library {
         return libraryMap.size();
     }
 
-    @Override
-    public SeriesSeason get(String mediaTitle) {
-        SeriesSeason result = null;
-        try {
-            result = libraryMap.get(mediaTitle);
-        } catch (Exception ex) {
-            System.out.println("exception in get: " + ex.getMessage());
-        }
-        return result;
-    }
+//    @Override
+//    public SeriesSeason get(String mediaTitle) {
+//        SeriesSeason result = null;
+//        try {
+//            result = libraryMap.get(mediaTitle);
+//        } catch (Exception ex) {
+//            System.out.println("exception in get: " + ex.getMessage());
+//        }
+//        return result;
+//    }
 
 
     @Override
-    public String[] getTitles() {
-        String[] result = null;
+    public String[] getSeriesSeasonTitles() {
+
+        String[] result = new String[seriesSeasonList.size()];
         try {
-            Set<String> vec = libraryMap.keySet();
-            result = vec.toArray(new String[]{});
+
+            for(int i = 0; i < seriesSeasonList.size(); i++) {
+
+                result[i] = seriesSeasonList.get(i).getTitle();
+            }
         } catch (Exception ex) {
             System.out.println("exception in getTitles: " + ex.getMessage());
         }
@@ -131,6 +134,19 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
+                System.out.println(title + " was found in the SeriesSeason list and returned.");
+                return series;
+            }
+        }
+        System.out.println(title + " was not found in the SeriesSeason list!");
+        return null;
+    }
+
+    @Override
+    public SeriesSeason getSeriesSeason(String title){
+
+        for (SeriesSeason series : seriesSeasonList) {
+            if (series.getTitle().equalsIgnoreCase(title)) {
                 System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
@@ -191,7 +207,7 @@ public class SeasonLibrary implements Library {
     }
 
     @Override
-    public boolean saveLibraryToFile(String fileName) {
+    public void saveLibraryToFile(String fileName) {
 
         System.out.println("\nSaving current library to file: " + fileName);
         JSONObject jsonSeries = constructJSON();
@@ -201,9 +217,7 @@ public class SeasonLibrary implements Library {
        // System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     /**
