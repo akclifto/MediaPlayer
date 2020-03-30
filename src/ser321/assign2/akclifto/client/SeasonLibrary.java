@@ -156,7 +156,8 @@ public class SeasonLibrary implements Library {
             }
             boolean flag = false;
             for (SeriesSeason value : seriesSeasonList) {
-                if (value.getSeason().equals(seriesSeason.getSeason())) {
+                if (value.getSeason().equalsIgnoreCase(seriesSeason.getSeason())
+                        && value.getTitle().equalsIgnoreCase(seriesSeason.getTitle())) {
                     flag = true;
                     break;
                 }
@@ -277,43 +278,58 @@ public class SeasonLibrary implements Library {
     }
 
 
+    /**
+     * Method to parse URL string data into JSON files for SeriesSeason and Episode, then creates new
+     * SeriesSeason objects with the data.
+     * @param jsonSeries :  string of series json data
+     * @param jsonEpisodes : string of episode json data
+     * @return void
+     * */
     public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
-        String seriesSeason, plotSummary;
 
-        JSONObject seriesRoot = new JSONObject(jsonSeries);
-        JSONObject epiRoot = new JSONObject(jsonEpisodes);
+        try {
+            //shared or cross-data points
+            String seriesSeason, plotSummary;
 
-        JSONObject seriesObj = new JSONObject();
-        JSONArray epiArray = new JSONArray();
+            //set root objects
+            JSONObject seriesRoot = new JSONObject(jsonSeries);
+            JSONObject epiRoot = new JSONObject(jsonEpisodes);
+
+            //set objects to store information
+            JSONObject seriesObj = new JSONObject();
+            JSONArray epiArray = new JSONArray();
 
 
-        //add shared information
-        seriesSeason  = epiRoot.getString("Season");
-        plotSummary = seriesRoot.getString("Plot");
+            //add shared information
+            seriesSeason = epiRoot.getString("Season");
+            plotSummary = seriesRoot.getString("Plot");
 
-        //add series information
-        seriesObj.put("title", seriesRoot.getString("Title") + " - Season " + seriesSeason);
-        seriesObj.put("genre", seriesRoot.getString("Genre"));
-        seriesObj.put("plotSummary", seriesRoot.getString("Plot"));
-        seriesObj.put("poster", seriesRoot.getString("Poster"));
-        seriesObj.put("imdbRating", seriesRoot.getJSONArray("Ratings").getJSONObject(0).getString("Value"));
-        seriesObj.put("seriesSeason", seriesSeason);
+            //add series information
+            seriesObj.put("title", seriesRoot.getString("Title") + " - Season " + seriesSeason);
+            seriesObj.put("genre", seriesRoot.getString("Genre"));
+            seriesObj.put("plotSummary", seriesRoot.getString("Plot"));
+            seriesObj.put("poster", seriesRoot.getString("Poster"));
+            seriesObj.put("imdbRating", seriesRoot.getJSONArray("Ratings").getJSONObject(0).getString("Value"));
+            seriesObj.put("seriesSeason", seriesSeason);
 
-        //add episode information
-        JSONArray epiIter = epiRoot.getJSONArray("Episodes");
-        for(int i = 0; i < epiIter.length(); i++) {
+            //add episode information
+            JSONArray epiIter = epiRoot.getJSONArray("Episodes");
+            for (int i = 0; i < epiIter.length(); i++) {
 
-            JSONObject epiObj = new JSONObject();
-            JSONObject epi = epiIter.getJSONObject(i);
-            epiObj.put("epSummary", plotSummary);
-            epiObj.put("name", epi.getString("Title"));
-            epiObj.put("imdbRating", epi.getString("imdbRating"));
-            epiArray.put(epiObj);
+                JSONObject epiObj = new JSONObject();
+                JSONObject epi = epiIter.getJSONObject(i);
+                epiObj.put("epSummary", plotSummary);
+                epiObj.put("name", epi.getString("Title"));
+                epiObj.put("imdbRating", epi.getString("imdbRating"));
+                epiArray.put(epiObj);
+            }
+
+            seriesObj.put("episodes", epiArray);
+            refreshLibrary(seriesObj);
+        } catch(Exception ex){
+            System.out.println("Exception in parseURLtoJSON: " + ex.getMessage());
         }
-
-        seriesObj.put("episodes", epiArray);
-        refreshLibrary(seriesObj);
 
     }
 

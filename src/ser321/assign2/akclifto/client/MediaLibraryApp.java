@@ -418,6 +418,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	}
 
 
+
 	public void actionPerformed(ActionEvent e) {
 
 		tree.removeTreeSelectionListener(this);
@@ -441,7 +442,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			System.out.println("Series-SeasonAdd not implemented"); // TODO: implement that the whole season with all episodes currently in tree will be added to library
 
 		} else if (e.getActionCommand().equals("Search")) {
-			// TODO: implement that the search result is used to create new series/season object
 
 			/*
 			 * In the below API(s) the error response should be appropriately handled
@@ -461,12 +461,12 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			String jsonEpisodes = fetchURL(searchReqURL2);
 			System.out.println("Fetch result episodes: " + jsonEpisodes);
 
-			actionFetchResults(jsonSeries, jsonEpisodes);
-			refreshTree();
-			/* TODO: implement here that this json will be used to create a Season object with the episodes included
+			/*
 			 * This should also then build the tree and display the info in the left side bar (so the new tree with its episodes)
 			 * right hand should display the Series information
 			 */
+			actionFetchResults(jsonSeries, jsonEpisodes);
+			refreshTree();
 
 		} else if (e.getActionCommand().equals("Tree Refresh")) {
 
@@ -482,6 +482,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	/**
 	 * Helper method to save library tree bases on user actionPerformed Selection.
+	 * @return true of library displayed in tree saved correctly, false otherwise.
 	 * */
 	private boolean actionSaveTree(){
 
@@ -554,17 +555,25 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 }
 
 
+	 /**
+	  * Helper method to Fetch URL Results and parse to JSON Object files so they
+	  * can be added as SeriesSeason objects to the library.  Tree will be updated
+	  * after successful library addition.
+	  * @param jsonSeries :  string of series json data
+	  * @param jsonEpisodes : string of episode json data
+	  * @return void
+	  * */
 	 private void actionFetchResults(String jsonSeries, String jsonEpisodes) {
 
+	 	try{
 
-	 	library.parseURLtoJSON(jsonSeries, jsonEpisodes);
-	 	refreshTree();
-
-
+			library.parseURLtoJSON(jsonSeries, jsonEpisodes);
+			refreshTree();
+			
+		} catch(Exception ex){
+			System.out.println("Exception in actionFetchResults: " + ex.getMessage());
+		}
 	 }
-
-
-
 
 
 	/**
