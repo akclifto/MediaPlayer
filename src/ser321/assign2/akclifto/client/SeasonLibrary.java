@@ -75,17 +75,6 @@ public class SeasonLibrary implements Library {
         return libraryMap.size();
     }
 
-//    @Override
-//    public SeriesSeason get(String mediaTitle) {
-//        SeriesSeason result = null;
-//        try {
-//            result = libraryMap.get(mediaTitle);
-//        } catch (Exception ex) {
-//            System.out.println("exception in get: " + ex.getMessage());
-//        }
-//        return result;
-//    }
-
 
     @Override
     public String[] getSeriesSeasonTitles() {
@@ -306,7 +295,7 @@ public class SeasonLibrary implements Library {
         plotSummary = seriesRoot.getString("Plot");
 
         //add series information
-        seriesObj.put("title", seriesRoot.getString("Title"));
+        seriesObj.put("title", seriesRoot.getString("Title") + " - Season " + seriesSeason);
         seriesObj.put("genre", seriesRoot.getString("Genre"));
         seriesObj.put("plotSummary", seriesRoot.getString("Plot"));
         seriesObj.put("poster", seriesRoot.getString("Poster"));
@@ -332,6 +321,14 @@ public class SeasonLibrary implements Library {
         libraryArr.put(series);
         JSONObject master = new JSONObject().put("library", libraryArr);
         System.out.println(master.toString());
+
+        try(PrintWriter out = new PrintWriter("outtest.json")){
+            out.println(master.toString(4));
+
+//        System.out.println(jsonSeries.toString(4));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 

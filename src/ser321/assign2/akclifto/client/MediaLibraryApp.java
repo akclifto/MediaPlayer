@@ -558,6 +558,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 
 	 	library.parseURLtoJSON(jsonSeries, jsonEpisodes);
+	 	refreshTree();
 
 
 	 }
