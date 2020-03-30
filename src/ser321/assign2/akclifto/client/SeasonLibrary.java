@@ -134,7 +134,7 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
-                System.out.println(title + " was found in the SeriesSeason list and returned.");
+            //    System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
         }
@@ -147,7 +147,7 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println(title + " was found in the SeriesSeason list and returned.");
+             //   System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
         }
@@ -162,7 +162,7 @@ public class SeasonLibrary implements Library {
         try {
             if (seriesSeasonList.isEmpty()) {
                 seriesSeasonList.add(seriesSeason);
-                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+//                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
                 return;
             }
             boolean flag = false;
@@ -177,7 +177,7 @@ public class SeasonLibrary implements Library {
             } else {
                 libraryMap.put(seriesSeason.getTitle(), seriesSeason);
                 seriesSeasonList.add(seriesSeason);
-                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+//                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
             }
         } catch(Exception ex){
             System.out.println("Exception adding series to library: " + ex.getMessage());
@@ -214,7 +214,7 @@ public class SeasonLibrary implements Library {
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));
 
-       // System.out.println(jsonSeries.toString(4));
+//        System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -256,7 +256,7 @@ public class SeasonLibrary implements Library {
             initialize(filename);
             return true;
         } catch(Exception ex){
-            ex.printStackTrace();
+            System.out.println("Exception restoring library: " + ex.getMessage());
             return false;
         }
 
@@ -284,7 +284,7 @@ public class SeasonLibrary implements Library {
             }
         } catch(Exception ex) {
             System.out.println("Exception loading JSON file: " +ex.getMessage());
-            ex.printStackTrace();
+
         }
     }
 

@@ -85,7 +85,7 @@ public class SeriesSeason {
                 Episode episode = new Episode(episodes.getJSONObject(i));
                 this.addToEpisodeList(episode);
             }
-            System.out.println("Added new entry for: " + seriesSeason);
+            System.out.println("Added new entry for: " + title);
 
         } catch(Exception ex){
             System.out.println("Exception importing from JSON file: " + ex.getMessage());
@@ -210,7 +210,7 @@ public class SeriesSeason {
 
         if (episodeList.isEmpty()) {
             episodeList.add(episode);
-            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
+//            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
             return;
         }
 
@@ -225,7 +225,7 @@ public class SeriesSeason {
             System.out.println("Episode already included in the Episode list.");
         } else {
             episodeList.add(episode);
-            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
+//            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
         }
     }
 

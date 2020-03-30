@@ -112,8 +112,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 			// set poster image here-----default poster image
-			setPosterImage(posterImg);
-//			setAlbumImage(posterImg);
+//			setPosterImage(posterImg);
+			setAlbumImage(posterImg);
 		} catch (Exception ex) {
 			System.out.println("unable to open image");
 		}
@@ -355,14 +355,13 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				// All fields empty to start with
 				seriesSeasonJTF.setText("");
 				genreJTF.setText("");
-				setPosterImage(posterImg);
+				setAlbumImage(posterImg);
+		//		setPosterImage(posterImg);
 				ratingJTF.setText("");
 				episodeJTF.setText("");
 				summaryJTA.setText("");
 
-				SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
-				SeriesSeason ssParent;
-				Episode epi;
+
 
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot(); // get the root
 				// First (and only) child of the root (username) node is 'My Series' node.
@@ -370,10 +369,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 
 				System.out.println("node level is ---------------: " + node.getLevel());
-				// TODO when it is an episode change the episode to something and set the rating to the episode rating
-
+				// TODO BROKEN IMAGE NOT UPDATING WHEN MOVING THROUGH TREE, not updating when selecting some series, episodes work
 				if(node.getLevel() == series){
-					SeriesSeason ss = library.getSeriesSeason(nodeLabel);
+					SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
 					int episodeCount = ssCurrent.getEpisodeList().size();
 
 					if(episodeCount == 1){
@@ -381,27 +379,29 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 					} else {
 						//set text to panels to displayed selected node information
 						episodeJTF.setText(" " + episodeCount + " Episodes in library");            // name of the episode
-						ratingJTF.setText(ss.getImdbRating());        // change to rating of the episode
-						genreJTF.setText(ss.getGenre());
-						setPosterImage(ss.getPosterLink());
-						summaryJTA.setText(ss.getPlotSummary());
-						seriesSeasonJTF.setText(ss.getTitle());      // Change to season name
+						ratingJTF.setText(ssCurrent.getImdbRating());        // change to rating of the episode
+						genreJTF.setText(ssCurrent.getGenre());
+		//				setPosterImage(ssCurrent.getPosterLink());
+						setAlbumImage(ssCurrent.getPosterLink());
+						summaryJTA.setText(ssCurrent.getPlotSummary());
+						seriesSeasonJTF.setText(ssCurrent.getTitle());      // Change to season name
 					}
-				} else if (node.getLevel() == episode && node != tree.getModel().getRoot()){
+				} else if (node.getLevel() == episode){
 
 					String parentLabel = (String) parent.getUserObject();
-					ssParent = library.getSeriesSeason(parentLabel);
-					epi = ssParent.getEpisode(nodeLabel);
+					SeriesSeason ssParent = library.getSeriesSeason(parentLabel);
+					Episode epi = ssParent.getEpisode(nodeLabel);
 
 					//set text to panels to displayed selected node information
 					episodeJTF.setText(epi.getName());            // name of the episode
 					ratingJTF.setText(epi.getImdbRating());        // change to rating of the episode
 					genreJTF.setText(ssParent.getGenre());
-					setPosterImage(ssParent.getPosterLink());
+		//			setPosterImage(ssParent.getPosterLink());
+					setAlbumImage(ssParent.getPosterLink());
 					summaryJTA.setText(epi.getEpSummary());
 					seriesSeasonJTF.setText(ssParent.getTitle());      // Change to season name
 
-				} else if (parent == root || node.getLevel() == 0) {                     // root directory "Library"
+				} else if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
 
 					seriesSeasonJTF.setText("Season Name and Number");    // season name
 					genreJTF.setText("Genre");                   // genre of the series from library
@@ -409,44 +409,41 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 					episodeJTF.setText("Episode Name");          // nothing in here since not an episode
 					summaryJTA.setText("Plot Summary");			 // Plot Summary
 				}
-
-
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		tree.addTreeSelectionListener(this);
 	}
 
-	// TODO: this is where you will need to implement a bunch. So when some action is called the correct thing happens
+
 	public void actionPerformed(ActionEvent e) {
+
 		tree.removeTreeSelectionListener(this);
+
 		if (e.getActionCommand().equals("Exit")) {
 			System.exit(0);
-		} else if (e.getActionCommand().equals("Save")) {
-			boolean savRes = false;
-			System.out.println("Save " + ((savRes) ? "successful" : "not implemented")); //TODO implement that current library is saved to JSON file
-		} else if (e.getActionCommand().equals("Restore")) {
-			boolean resRes = false;
-			try {
-				rebuildTree();
-			} catch (Exception ex){
-				System.out.println("Exception trying to rebuild tree: " + ex.getMessage());
-			}
-			this.revalidate(); // recalculate the layout(which is necessary when adding components)
-			this.repaint();	  //repaint the image of the swing window
 
-			System.out.println("Restore " + ((resRes) ? "successful" : "not implemented")); // TODO: implement that tree is restored to library
+		} else if (e.getActionCommand().equals("Save")) {
+			boolean savRes = actionSaveTree();
+			System.out.println("Save " + ((savRes) ? "successful" : "not implemented"));
+
+		} else if (e.getActionCommand().equals("Restore")) {
+			boolean resRes = actionRestoreTree();
+			if(resRes) {
+				refreshTree();
+			}
+			System.out.println("Restore " + ((resRes) ? "successful" : "not implemented"));
+
 		} else if (e.getActionCommand().equals("Series-SeasonAdd")) {
 			System.out.println("Series-SeasonAdd not implemented"); // TODO: implement that the whole season with all episodes currently in tree will be added to library
+
 		} else if (e.getActionCommand().equals("Search")) {
 			// TODO: implement that the search result is used to create new series/season object
 
 			/*
 			 * In the below API(s) the error response should be appropriately handled
 			 */
-
 			// with all episodes only display this new series/season with the episodes in tree
 
 			// Doing a fetch two times so that we only get the full series info (with poster, summary, rating) once
@@ -467,9 +464,11 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 		} else if (e.getActionCommand().equals("Tree Refresh")) {
-			rebuildTree();
 
-		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
+			refreshTree();
+
+		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {   //TODO remove series from library
+
 			int option = JOptionPane.showConfirmDialog(null,
 					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
 					"Remove Series-Season",
@@ -479,14 +478,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 				try {
 					boolean flag = library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
-
 					if(flag){
 						throw new Exception("Selected Series not removed from the list.");
 					}
-
-					rebuildTree();
-					this.revalidate();
-					this.repaint();
+					refreshTree();
 				} catch (Exception ex) {
 					System.out.println("Exception removing Series-Season: " + ex.getMessage());
 					ex.printStackTrace();
@@ -497,10 +492,56 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	}
 
 
+	/**
+	 * Helper method to save library tree bases on user actionPerformed Selection.
+	 * */
+	private boolean actionSaveTree(){
+
+		try{
+			library.saveLibraryToFile("SavedLibrary.json");
+		} catch(Exception ex){
+			System.out.println("Exception saving library to file : " + ex.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+
+	/**
+	 * Helper method to restore Library tree from JSON file based on user actionPerformed selection.
+	 * @return true if library successfully restore, false otherwise.
+	 * */
+	 private boolean actionRestoreTree(){
+
+		 try {
+			 library.restoreLibraryFromFile("SavedLibrary.json");
+		 } catch (Exception firstRestore) {
+			 System.out.println("First restore library failed: " + firstRestore.getMessage());
+		 }
+		 try{
+			 library.restoreLibraryFromFile("series.json");
+		 } catch (Exception defaultRestore){
+			 System.out.println("Exception restoring default library: " + defaultRestore.getMessage());
+			 defaultRestore.printStackTrace();
+			 return false;
+		 }
+		 return true;
+	 }
+
+
+	 /**
+	  * Helper method to refresh, rebuild tree.
+	  * @return void.
+	  * */
+	 private void refreshTree(){
+		 rebuildTree();
+		 revalidate(); 	  // recalculate the layout(which is necessary when adding components)
+		 repaint();       // repaint the image of the swing window
+	 }
+
 
 	/**
 	 * A method to do asynchronous url request printing the result to System.out
-	 *
 	 * @param aUrl the String indicating the query url for the OMDb api search
 	 **/
 	public void fetchAsyncURL(String aUrl) {
@@ -518,6 +559,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			System.out.println("Exception in fetchAsyncUrl request: " + ex.getMessage());
 		}
 	}
+
 
 	/**
 	 * a method to make a web request. Note that this method will block execution
@@ -575,7 +617,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		}
 		try {
 			//System.out.println("calling constructor name "+name);
-			MediaLibraryApp mla = new MediaLibraryApp(name, key);
+			new MediaLibraryApp(name, key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -596,7 +638,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				"Action", "https://fakelink.com", "The plot thickens...");
 		series.addToEpisodeList(epi);
 		series.addToEpisodeList(ep2);
-		System.out.println("");
+		System.out.println();
 		SeriesSeason series2 = new SeriesSeason("Shows", "season 4", "5.5",
 				"comedy", "weblinke.co", "some plot lines");
 		Episode ep3 = new Episode("Epi 1", "8.0", "epSummary1");
