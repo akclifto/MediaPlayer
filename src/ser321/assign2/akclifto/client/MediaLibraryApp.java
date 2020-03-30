@@ -136,7 +136,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			int imgHeight = 360;
 			BufferedImage resized = resize(image, imgHeight, imgWidth);
 			ImageIcon poster = new ImageIcon(resized);
-	//		displayPane.setVerticalAlignment(50);
 			displayPane.setIcon(poster);
 
 		} catch (IOException ex) {
@@ -355,8 +354,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				// All fields empty to start with
 				seriesSeasonJTF.setText("");
 				genreJTF.setText("");
-				setAlbumImage(posterImg);
-		//		setPosterImage(posterImg);
+				setPosterImage(posterImg);
 				ratingJTF.setText("");
 				episodeJTF.setText("");
 				summaryJTA.setText("");
@@ -441,8 +439,18 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		} else if (e.getActionCommand().equals("Series-SeasonAdd")) {
 			System.out.println("Series-SeasonAdd not implemented"); // TODO: implement that the whole season with all episodes currently in tree will be added to library
 
-		} else if (e.getActionCommand().equals("Search")) {
+		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
 
+			actionRemoveSeries();
+			refreshTree();
+		} else if(e.getActionCommand().equalsIgnoreCase("EpisodeAdd")) {
+			System.out.println("NOT IMPLEMENTED");
+		} else if (e.getActionCommand().equalsIgnoreCase("EpisodeRemove")){
+
+			actionRemoveEpisode();
+			refreshTree();
+
+		} else if (e.getActionCommand().equals("Search")) {
 			/*
 			 * In the below API(s) the error response should be appropriately handled
 			 */
@@ -471,10 +479,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		} else if (e.getActionCommand().equals("Tree Refresh")) {
 
 			refreshTree();
-
-		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
-
-			actionRemoveSeries();
 		}
 		tree.addTreeSelectionListener(this);
 	}
@@ -546,9 +550,29 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 			 try {
 				 library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
-				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Series-Season: " + ex.getMessage());
+				 ex.printStackTrace();
+			 }
+		 }
+	 }
+
+
+
+	 private void actionRemoveEpisode(){
+
+		 int option = JOptionPane.showConfirmDialog(null,
+				 "Remove Selected Episode? \n" + episodeJTF.getText(),
+				 "Remove Episode",
+				 JOptionPane.YES_NO_OPTION);
+
+		 if(option == JOptionPane.YES_OPTION) {
+
+			 try {
+				 library.getSeasonLibrary().getSeriesSeason(seriesSeasonJTF.getText()).
+						 removeEpisode(episodeJTF.getText());
+			 } catch (Exception ex) {
+				 System.out.println("Exception removing Episode: " + ex.getMessage());
 				 ex.printStackTrace();
 			 }
 		 }
@@ -569,7 +593,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 			library.parseURLtoJSON(jsonSeries, jsonEpisodes);
 			refreshTree();
-			
+
 		} catch(Exception ex){
 			System.out.println("Exception in actionFetchResults: " + ex.getMessage());
 		}

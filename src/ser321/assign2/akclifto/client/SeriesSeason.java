@@ -183,7 +183,6 @@ public class SeriesSeason {
     }
 
 
-
     /**
      * Method to retrieve an episode from the episodeList
      * @param name : name of the episode
@@ -227,6 +226,30 @@ public class SeriesSeason {
             episodeList.add(episode);
 //            System.out.println(episode.getName() + " added to the Episode list for " + title + ", " + seriesSeason);
         }
+    }
+
+
+    /**
+     * Method to remove episode from list of series episodes.
+     * @param title : title of episode to remove.
+     * @return true if episode is remove from list, false otherwise.
+     * */
+    public boolean removeEpisode(String title){
+
+        if(episodeList.isEmpty()){
+            System.out.println("Episode List is empty.");
+            return false;
+        }
+
+        for (Episode epi : episodeList) {
+            if (epi.getName().equalsIgnoreCase(title)) {
+                System.out.println(title + " was found and removed from the list.");
+                episodeList.remove(epi);
+                return true;
+            }
+        }
+        System.out.println(title + " was not found in the list!");
+        return false;
     }
 
     /**
