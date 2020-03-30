@@ -369,23 +369,26 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				DefaultMutableTreeNode rootLibrary = (DefaultMutableTreeNode) root.getNextNode(); // Library node
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 
-				System.out.println("node level is ---------------: " + node.getLevel());
-				// TODO BROKEN IMAGE NOT UPDATING WHEN MOVING THROUGH TREE, not updating when selecting some series, episodes work
+				//System.out.println("node level is ---------------: " + node.getLevel());
+
 				if(node.getLevel() == series){
+
 					int episodeCount = ssCurrent.getEpisodeList().size();
 
+					// Change to season name
+					// change to rating of the episode
 					if(episodeCount == 1){
 						episodeJTF.setText(" " + episodeCount + " Episode in library");            // name of the episode
 					} else {
 						//set text to panels to displayed selected node information
 						episodeJTF.setText(" " + episodeCount + " Episodes in library");            // name of the episode
-						ratingJTF.setText(ssCurrent.getImdbRating());        // change to rating of the episode
-						genreJTF.setText(ssCurrent.getGenre());
-						setPosterImage(ssCurrent.getPosterLink());
-						summaryJTA.setText(ssCurrent.getPlotSummary());
-						seriesSeasonJTF.setText(ssCurrent.getTitle());      // Change to season name
 					}
-				} if (node.getLevel() == episode){
+					ratingJTF.setText(ssCurrent.getImdbRating());        // change to rating of the episode
+					genreJTF.setText(ssCurrent.getGenre());
+					setPosterImage(ssCurrent.getPosterLink());
+					summaryJTA.setText(ssCurrent.getPlotSummary());
+					seriesSeasonJTF.setText(ssCurrent.getTitle());      // Change to season name
+				} else if (node.getLevel() == episode){
 
 					String parentLabel = (String) parent.getUserObject();
 					SeriesSeason ssParent = library.getSeriesSeason(parentLabel);
@@ -399,7 +402,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 					summaryJTA.setText(epi.getEpSummary());
 					seriesSeasonJTF.setText(ssParent.getTitle());      // Change to season name
 
-				} if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
+				} else if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
 
 					seriesSeasonJTF.setText("Season Name and Number");    // season name
 					genreJTF.setText("Genre");                   // genre of the series from library
