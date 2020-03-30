@@ -249,25 +249,25 @@ public class SeasonLibrary implements Library {
     @Override
     public boolean restoreLibraryFromFile(String filename) {
 
+        boolean flag;
         try {
             clearLibrary();
             this.libraryMap = new HashMap<>();
             this.seriesSeasonList = new ArrayList<>();
-            initialize(filename);
-            return true;
+            flag = initialize(filename);
         } catch(Exception ex){
             System.out.println("Exception restoring library: " + ex.getMessage());
-            return false;
+            flag =  false;
         }
-
+        return flag;
     }
 
     /**
      * Helper method to load JSON file from libraryMap.
      * @param fileName : path-to or name-of JSON file
-     * @return void
+     * @return true if JSON initialized correctly, false otherwise.
      * */
-    private void initialize(String fileName){
+    private boolean initialize(String fileName){
 
         try{
 
@@ -284,8 +284,9 @@ public class SeasonLibrary implements Library {
             }
         } catch(Exception ex) {
             System.out.println("Exception loading JSON file: " +ex.getMessage());
-
+            return false;
         }
+        return true;
     }
 
     /**

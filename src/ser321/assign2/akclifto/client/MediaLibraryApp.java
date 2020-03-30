@@ -112,8 +112,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 */
 
 			// set poster image here-----default poster image
-//			setPosterImage(posterImg);
-			setAlbumImage(posterImg);
+			setPosterImage(posterImg);
+
 		} catch (Exception ex) {
 			System.out.println("unable to open image");
 		}
@@ -131,9 +131,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		try {
 			BufferedImage image = ImageIO.read(new URL(posterLink));
 			// resize width
-			int imgWidth = 290;
+			int imgWidth = 260;
 			// resize height
-			int imgHeight = 366;
+			int imgHeight = 360;
 			BufferedImage resized = resize(image, imgHeight, imgWidth);
 			ImageIcon poster = new ImageIcon(resized);
 	//		displayPane.setVerticalAlignment(50);
@@ -329,7 +329,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		debug("In treeWillExpand with path: " + tee.getPath());
 	}
 
-	// TODO:
+
 	// this will be called when you click on a node.
 	// It will update the node based on the information stored in the library
 	// this will need to change since your library will be of course totally different
@@ -362,6 +362,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				summaryJTA.setText("");
 
 
+				SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
 
 				DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot(); // get the root
 				// First (and only) child of the root (username) node is 'My Series' node.
@@ -371,7 +372,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				System.out.println("node level is ---------------: " + node.getLevel());
 				// TODO BROKEN IMAGE NOT UPDATING WHEN MOVING THROUGH TREE, not updating when selecting some series, episodes work
 				if(node.getLevel() == series){
-					SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
 					int episodeCount = ssCurrent.getEpisodeList().size();
 
 					if(episodeCount == 1){
@@ -381,12 +381,11 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 						episodeJTF.setText(" " + episodeCount + " Episodes in library");            // name of the episode
 						ratingJTF.setText(ssCurrent.getImdbRating());        // change to rating of the episode
 						genreJTF.setText(ssCurrent.getGenre());
-		//				setPosterImage(ssCurrent.getPosterLink());
-						setAlbumImage(ssCurrent.getPosterLink());
+						setPosterImage(ssCurrent.getPosterLink());
 						summaryJTA.setText(ssCurrent.getPlotSummary());
 						seriesSeasonJTF.setText(ssCurrent.getTitle());      // Change to season name
 					}
-				} else if (node.getLevel() == episode){
+				} if (node.getLevel() == episode){
 
 					String parentLabel = (String) parent.getUserObject();
 					SeriesSeason ssParent = library.getSeriesSeason(parentLabel);
@@ -396,12 +395,11 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 					episodeJTF.setText(epi.getName());            // name of the episode
 					ratingJTF.setText(epi.getImdbRating());        // change to rating of the episode
 					genreJTF.setText(ssParent.getGenre());
-		//			setPosterImage(ssParent.getPosterLink());
-					setAlbumImage(ssParent.getPosterLink());
+					setPosterImage(ssParent.getPosterLink());
 					summaryJTA.setText(epi.getEpSummary());
 					seriesSeasonJTF.setText(ssParent.getTitle());      // Change to season name
 
-				} else if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
+				} if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
 
 					seriesSeasonJTF.setText("Season Name and Number");    // season name
 					genreJTF.setText("Genre");                   // genre of the series from library
@@ -429,6 +427,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			System.out.println("Save " + ((savRes) ? "successful" : "not implemented"));
 
 		} else if (e.getActionCommand().equals("Restore")) {
+
 			boolean resRes = actionRestoreTree();
 			if(resRes) {
 				refreshTree();
@@ -458,6 +457,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			String jsonEpisodes = fetchURL(searchReqURL2);
 			System.out.println("Fetch result episodes: " + jsonEpisodes);
 
+			
+
 			/* TODO: implement here that this json will be used to create a Season object with the episodes included
 			 * This should also then build the tree and display the info in the left side bar (so the new tree with its episodes)
 			 * right hand should display the Series information
@@ -467,26 +468,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 			refreshTree();
 
-		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {   //TODO remove series from library
+		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
 
-			int option = JOptionPane.showConfirmDialog(null,
-					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
-					"Remove Series-Season",
-					JOptionPane.YES_NO_OPTION);
-
-			if(option == JOptionPane.YES_OPTION) {
-
-				try {
-					boolean flag = library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
-					if(flag){
-						throw new Exception("Selected Series not removed from the list.");
-					}
-					refreshTree();
-				} catch (Exception ex) {
-					System.out.println("Exception removing Series-Season: " + ex.getMessage());
-					ex.printStackTrace();
-				}
-			}
+			actionRemoveSeries();
 		}
 		tree.addTreeSelectionListener(this);
 	}
@@ -509,24 +493,26 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	/**
 	 * Helper method to restore Library tree from JSON file based on user actionPerformed selection.
-	 * @return true if library successfully restore, false otherwise.
+	 * @return true if library successfully restored, false otherwise.
 	 * */
-	 private boolean actionRestoreTree(){
+	 private boolean actionRestoreTree() {
+
+	 	boolean flag;
 
 		 try {
-			 library.restoreLibraryFromFile("SavedLibrary.json");
-		 } catch (Exception firstRestore) {
-			 System.out.println("First restore library failed: " + firstRestore.getMessage());
-		 }
-		 try{
-			 library.restoreLibraryFromFile("series.json");
-		 } catch (Exception defaultRestore){
-			 System.out.println("Exception restoring default library: " + defaultRestore.getMessage());
+			 flag = library.restoreLibraryFromFile("SavedLibrary.json");
+
+			 if (!flag) {
+				 flag = library.restoreLibraryFromFile("series.json");
+			 }
+		 } catch (Exception defaultRestore) {
+			 System.out.println("Exception restoring library: " + defaultRestore.getMessage());
 			 defaultRestore.printStackTrace();
 			 return false;
 		 }
-		 return true;
+		 return flag;
 	 }
+
 
 
 	 /**
@@ -537,6 +523,30 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		 rebuildTree();
 		 revalidate(); 	  // recalculate the layout(which is necessary when adding components)
 		 repaint();       // repaint the image of the swing window
+	 }
+
+
+	 /**
+	  * Helper method to remove series from library.  Will remove any episdoes associated with it.
+	  * @return void
+	  * */
+	 private void actionRemoveSeries(){
+
+		 int option = JOptionPane.showConfirmDialog(null,
+				 "Remove Selected Series? \n" + seriesSeasonJTF.getText(),
+				 "Remove Series-Season",
+				 JOptionPane.YES_NO_OPTION);
+
+		 if(option == JOptionPane.YES_OPTION) {
+
+			 try {
+				 library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
+				 refreshTree();
+			 } catch (Exception ex) {
+				 System.out.println("Exception removing Series-Season: " + ex.getMessage());
+				 ex.printStackTrace();
+			 }
+		 }
 	 }
 
 
