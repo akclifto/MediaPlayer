@@ -37,7 +37,7 @@
 
 
    <target name="targets">
-      <echo message="targets are clean, prepare, setup.javafx, compile, and sample. "/>
+      <echo message="targets are clean, prepare, setup.javafx, compile, and execute. "/>
       <echo message="to run enter: ant execute -DuserId=${userId} -Domdbkey=${omdbkey}"/>
    </target>
 

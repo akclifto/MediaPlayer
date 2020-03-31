@@ -1,3 +1,30 @@
+
+Included is my application for the mediaPlayer for assignment 2. Here's a little information about the implementation.
+The when using the top menus:
+	
+	To add:
+	- type into the fields for searching for either series or episode, then from the top menu select "Add" from the 
+	appropriate selection to add your typed results to the library (assuming they provide a fetch result).
+
+	To Remove:
+	- select the Episode to remove and select Episode->remove from the top menu. A pop-up window will prompt confirmation to remove.
+	- to remove a series, select anywhere within the series in the tree panel to the left (e.g., any episode, root series directory).
+		Then select Series->remove from the top menu panel and a window will prompt confirmation to remove. 
+
+	The search:
+	- The search function will automatically add whatever series and season you searched to the library (if it is not a duplicate) and tree.
+		To remove a searched item, use the top menu for series and episode panels to remove.
+
+	I believe all other implementation is straightforward :)
+
+
+Thanks!
+Adam Clifton (akclifto@asu.edu)
+
+
+
+------------------------------
+------------------------------
 Author: Tim Lindquist (Tim.Lindquist@asu.edu), ASU Polytechnic, CIDSE, SE
 Version: January 2020
 
