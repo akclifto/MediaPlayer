@@ -523,5 +523,88 @@
         "imdbRating": "8.2"
       }
     ]
+  }},
+  {"series": {
+    "genre": "Comedy",
+    "plotSummary": "The comedic misadventures of Roy, Moss and their grifting supervisor Jen, a rag-tag team of IT support workers at a large corporation headed by a hotheaded yuppie.",
+    "seriesSeason": "5",
+    "imdbRating": "8.5/10",
+    "title": "The IT Crowd - Season 5",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjE5MThjMzAtNWVmNC00YThkLTlmNzktMTM3Yzk4YTZhMTgwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
+    "episodes": [{
+      "name": "The Internet Is Coming",
+      "epSummary": "The comedic misadventures of Roy, Moss and their grifting supervisor Jen, a rag-tag team of IT support workers at a large corporation headed by a hotheaded yuppie.",
+      "imdbRating": "8.6"
+    }]
+  }},
+  {"series": {
+    "genre": "Comedy",
+    "plotSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+    "seriesSeason": "3",
+    "imdbRating": "8.6/10",
+    "title": "Parks and Recreation - Season 3",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjA5MjUxNDgwNF5BMl5BanBnXkFtZTgwMDI5NjMwNDE@._V1_SX300.jpg",
+    "episodes": [
+      {
+        "name": "Time Capsule",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.3"
+      },
+      {
+        "name": "Ron & Tammy: Part Two",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.6"
+      },
+      {
+        "name": "Media Blitz",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.1"
+      },
+      {
+        "name": "Indianapolis",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.2"
+      },
+      {
+        "name": "Harvest Festival",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.8"
+      },
+      {
+        "name": "Camping",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.1"
+      },
+      {
+        "name": "Jerry's Painting",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.8"
+      },
+      {
+        "name": "Eagleton",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.3"
+      },
+      {
+        "name": "The Fight",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.9"
+      },
+      {
+        "name": "Road Trip",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.6"
+      },
+      {
+        "name": "The Bubble",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.2"
+      },
+      {
+        "name": "Li'l Sebastian",
+        "epSummary": "The absurd antics of an Indiana town's public officials as they pursue sundry projects to make their city a better place.",
+        "imdbRating": "8.9"
+      }
+    ]
   }}
 ]}

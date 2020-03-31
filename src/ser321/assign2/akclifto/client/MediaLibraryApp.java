@@ -437,18 +437,20 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			System.out.println("Restore " + ((resRes) ? "successful" : "not implemented"));
 
 		} else if (e.getActionCommand().equals("Series-SeasonAdd")) {
-			System.out.println("Series-SeasonAdd not implemented"); // TODO: implement that the whole season with all episodes currently in tree will be added to library
+
+			actionAddSeries();
 
 		} else if (e.getActionCommand().equals("Series-SeasonRemove")) {
 
 			actionRemoveSeries();
-			refreshTree();
+
 		} else if(e.getActionCommand().equalsIgnoreCase("EpisodeAdd")) {
-			System.out.println("NOT IMPLEMENTED");
+
+			actionAddEpisode();
+
 		} else if (e.getActionCommand().equalsIgnoreCase("EpisodeRemove")){
 
 			actionRemoveEpisode();
-			refreshTree();
 
 		} else if (e.getActionCommand().equals("Search")) {
 			/*
@@ -491,7 +493,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	private boolean actionSaveTree(){
 
 		try{
-			library.saveLibraryToFile("SavedLibrary.json");
+			library.saveLibraryToFile("series.json");
 		} catch(Exception ex){
 			System.out.println("Exception saving library to file : " + ex.getMessage());
 			return false;
@@ -509,10 +511,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 	boolean flag;
 
 		 try {
-		 	flag = library.restoreLibraryFromFile("SavedLibrary.json");
+		 	flag = library.restoreLibraryFromFile("series.json");
 
 			 if (!flag) {
-				 flag = library.restoreLibraryFromFile("series.json");
+				 flag = library.restoreLibraryFromFile("seriesDefault.json");
 			 }
 		 } catch (Exception defaultRestore) {
 			 System.out.println("Exception restoring library: " + defaultRestore.getMessage());
@@ -536,7 +538,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 
 	 /**
-	  * Helper method to remove series from library.  Will remove any episdoes associated with it.
+	  * Helper method to remove series from library.  This will remove any episdoes associated with it.
 	  * @return void
 	  * */
 	 private void actionRemoveSeries(){
@@ -550,6 +552,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 			 try {
 				 library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
+				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Series-Season: " + ex.getMessage());
 				 ex.printStackTrace();
@@ -558,7 +561,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 }
 
 
-
+	/**
+	 * Helper Method to removeEpisode from a episode list of a series.
+	 * @return void.
+	 * */
 	 private void actionRemoveEpisode(){
 
 		 int option = JOptionPane.showConfirmDialog(null,
@@ -571,11 +577,64 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 try {
 				 library.getSeasonLibrary().getSeriesSeason(seriesSeasonJTF.getText()).
 						 removeEpisode(episodeJTF.getText());
+				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
 				 ex.printStackTrace();
 			 }
 		 }
+	 }
+
+
+	 private void actionAddEpisode(){
+
+		 int option = JOptionPane.showConfirmDialog(null,
+				 "Add Episode? \n" + episodeJTF.getText(),
+				 "Add Episode",
+				 JOptionPane.YES_NO_OPTION);
+
+		 if(option == JOptionPane.YES_OPTION) {
+
+			 try {
+				 library.getSeasonLibrary().getSeriesSeason(seriesSeasonJTF.getText()).
+						 removeEpisode(episodeJTF.getText());
+				 refreshTree();
+			 } catch (Exception ex) {
+				 System.out.println("Exception removing Episode: " + ex.getMessage());
+				 ex.printStackTrace();
+			 }
+		 }
+
+	 }
+
+	 private void actionAddSeries(){
+
+		 int option = JOptionPane.showConfirmDialog(null,
+				 "Add Series? \n" + seriesSearchJTF.getText() + " - Season " + seasonSearchJTF.getText(),
+				 "Add Series",
+				 JOptionPane.YES_NO_OPTION);
+
+		 if(option == JOptionPane.YES_OPTION) {
+
+			 try {
+
+			 	 // fetch series info
+				 String searchReqURL = urlOMBD + seriesSearchJTF.getText().replace(" ", "%20");
+				 String jsonSeries = fetchURL(searchReqURL);
+				 // fetch season info
+				 String searchReqURL2 = urlOMBD + seriesSearchJTF.getText().replace(" ", "%20")
+						 + "&season=" + seasonSearchJTF.getText();
+				 String jsonEpisodes = fetchURL(searchReqURL2);
+
+				 actionFetchResults(jsonSeries, jsonEpisodes);
+				 refreshTree();
+
+			 } catch (Exception ex) {
+				 System.out.println("Exception removing Episode: " + ex.getMessage());
+				 ex.printStackTrace();
+			 }
+		 }
+
 	 }
 
 
@@ -592,7 +651,6 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 	try{
 
 			library.parseURLtoJSON(jsonSeries, jsonEpisodes);
-			refreshTree();
 
 		} catch(Exception ex){
 			System.out.println("Exception in actionFetchResults: " + ex.getMessage());
