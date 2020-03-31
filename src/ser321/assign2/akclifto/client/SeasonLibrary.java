@@ -301,11 +301,9 @@ public class SeasonLibrary implements Library {
             JSONObject seriesObj = new JSONObject();
             JSONArray epiArray = new JSONArray();
 
-
             //add shared information
             seriesSeason = epiRoot.getString("Season");
             plotSummary = seriesRoot.getString("Plot");
-
             //add series information
             seriesObj.put("title", seriesRoot.getString("Title") + " - Season " + seriesSeason);
             seriesObj.put("genre", seriesRoot.getString("Genre"));

@@ -75,7 +75,8 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	private SeasonLibrary library;
 	private String omdbKey;
 	private static String posterImg =
-			"http://getdrawings.com/img/black-and-white-tree-silhouette-9.jpg";
+			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
+			//"http://getdrawings.com/img/black-and-white-tree-silhouette-9.jpg";
 
 	public MediaLibraryApp(String author, String authorKey) {
 		// sets the value of 'author' on the title window of the GUI.
@@ -110,8 +111,7 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			 * app's window. setAlbumImage is implemented by MediaLibraryGui class. Call it with a
 			 * string url to a png file as obtained from an album search.
 			 */
-
-			// set poster image here-----default poster image
+			// set poster image here-----default is setAlbumImage.  This is re-done to resize image.
 			setPosterImage(posterImg);
 
 		} catch (Exception ex) {
@@ -362,9 +362,9 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 				SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
 
-				DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot(); // get the root
+				//DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot(); // get the root
 				// First (and only) child of the root (username) node is 'My Series' node.
-				DefaultMutableTreeNode rootLibrary = (DefaultMutableTreeNode) root.getNextNode(); // Library node
+				//DefaultMutableTreeNode rootLibrary = (DefaultMutableTreeNode) root.getNextNode(); // Library node
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 
 				//System.out.println("node level is ---------------: " + node.getLevel());
@@ -586,6 +586,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	 }
 
 
+	 /**
+	  * Helper method to add an episode to a series season
+	  * @return void
+	  * */
 	 private void actionAddEpisode(){
 
 		 int option = JOptionPane.showConfirmDialog(null,
@@ -594,10 +598,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 				 JOptionPane.YES_NO_OPTION);
 
 		 if(option == JOptionPane.YES_OPTION) {
-
 			 try {
-				 library.getSeasonLibrary().getSeriesSeason(seriesSeasonJTF.getText()).
-						 removeEpisode(episodeJTF.getText());
+				 System.out.println("Unsure how to implement.");
+//				 library.getSeasonLibrary().getSeriesSeason(seriesSeasonJTF.getText()).
+//						 removeEpisode(episodeJTF.getText());
 				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
@@ -607,6 +611,11 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 
 	 }
 
+
+	 /**
+	  * Help method to add series to Library based on user season and search input text fields.
+	  * @return void.
+	  * */
 	 private void actionAddSeries(){
 
 		 int option = JOptionPane.showConfirmDialog(null,
@@ -728,13 +737,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 		String name = "first.last";
 		String key = "use-your-last.ombd-key";
 		if (args.length >= 2) {
-			//System.out.println("java -cp classes:lib/json.lib ser321.assign2.lindquist."+
-			//                   "MediaLibraryApp \"Lindquist Music Library\" lastFM-Key");
 			name = args[0];
 			key = args[1];
 		}
 		try {
-			//System.out.println("calling constructor name "+name);
 			new MediaLibraryApp(name, key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
