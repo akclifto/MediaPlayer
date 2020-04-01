@@ -1,5 +1,8 @@
 package ser321.assign2.akclifto.client;
 
+import ser321.assign2.akclifto.server.Episode;
+import ser321.assign2.akclifto.server.SeasonLibrary;
+import ser321.assign2.akclifto.server.SeriesSeason;
 import ser321.assign2.lindquis.MediaLibraryGui;
 
 import javax.imageio.ImageIO;
