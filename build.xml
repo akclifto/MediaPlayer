@@ -42,7 +42,6 @@
         <echo message="start server with: ant server -DhostId=localhost -DregPort=8888"/>
         <echo message="start client 1 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
         <echo message="start client 2 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
-        <echo message="to run standalone: ant execute -DuserId=${userId} -Domdbkey=${omdbkey}"/>
     </target>
 
 

@@ -549,7 +549,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		 if(option == JOptionPane.YES_OPTION) {
 
 			 try {
-				 library.getSeasonLibrary().removeSeriesSeason(seriesSeasonJTF.getText());
+				 library.removeSeriesSeason(seriesSeasonJTF.getText());
 				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Series-Season: " + ex.getMessage());
@@ -573,7 +573,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		 if(option == JOptionPane.YES_OPTION) {
 
 			 try {
-				 library.getSeasonLibrary().getSeriesSeason(seriesSeasonJTF.getText()).
+				 library.getSeriesSeason(seriesSeasonJTF.getText()).
 						 removeEpisode(episodeJTF.getText());
 				 refreshTree();
 			 } catch (Exception ex) {

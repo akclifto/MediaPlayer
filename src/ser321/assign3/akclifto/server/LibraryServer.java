@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +41,7 @@ import java.util.List;
  * Software Engineering, ASU
  * @version March 2020
  */
-public class LibraryServer implements Library {
+public class LibraryServer extends UnicastRemoteObject implements Library {
 
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
@@ -49,7 +51,7 @@ public class LibraryServer implements Library {
     /**
      * Constructor used for tests.
      * */
-    public LibraryServer() {
+    public LibraryServer() throws RemoteException {
 
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
@@ -61,9 +63,14 @@ public class LibraryServer implements Library {
      * */
     public static LibraryServer getInstance() {
 
-        if (sLibrary == null) {
-            sLibrary = new LibraryServer();
-            sLibrary.restoreLibraryFromFile(fileName);
+        try {
+            if (sLibrary == null) {
+                sLibrary = new LibraryServer();
+                sLibrary.restoreLibraryFromFile(fileName);
+            }
+        } catch (Exception ex) {
+            System.out.println("Exception in getInstance(): " + ex.getMessage());
+            ex.printStackTrace();
         }
         return sLibrary;
     }
