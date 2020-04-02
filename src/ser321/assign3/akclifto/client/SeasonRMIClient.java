@@ -1,6 +1,7 @@
 package ser321.assign3.akclifto.client;
 
 import ser321.assign2.lindquis.MediaLibraryGui;
+import ser321.assign3.akclifto.server.Library;
 import ser321.assign3.akclifto.server.LibraryServer;
 
 import javax.imageio.ImageIO;
@@ -26,6 +27,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
+import java.rmi.Naming;
 import java.time.Duration;
 
 /**
@@ -730,13 +732,24 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 * */
 	public static void main(String[] args) {
 
-		String name = "first.last";
-		String key = "use-your-last.ombd-key";
-		if (args.length >= 2) {
-			name = args[0];
-			key = args[1];
-		}
 		try {
+			String hostId = "localhost";
+			String regPort = "8888";
+			String name = "first.last";
+			String key = "use-your-last.ombd-key";
+			if (args.length == 2) {
+				name = args[0];
+				key = args[1];
+			} else if (args.length >= 4) {
+				hostId = args[0];
+				regPort = args[1];
+				name = args[2];
+				key = args[3];
+			}
+			Library server;
+			server = (Library) Naming.lookup("rmi://" + hostId + ":" + regPort + "/LibraryServer");
+			System.out.println("\nClient " + name + " retained  remote object reference to: " +
+					"rmi: " + hostId + ": " + regPort + " LibraryServer\n");
 			new SeasonRMIClient(name, key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
