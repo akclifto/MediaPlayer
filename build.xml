@@ -15,7 +15,7 @@
     <property name="javafxhome" value="javafx-sdk-13.0.1/"/>
     <property name="javafx-lib-home" value="${javafxhome}lib"/>
     <property name="hostId" value="localhost"/>
-    <property name="regPort" value="1099"/>
+    <property name="regPort" value="8888"/>
 
 
     <path id="compile.classpath">
@@ -39,9 +39,9 @@
 
     <target name="targets">
         <echo message="targets are clean, prepare, setup.javafx, compile, server, and client and execute. "/> <!--remove ant execute before turn in -->
-        <echo message="start server with: ant server -DhostId=localhost -DregPort=1099"/>
-        <echo message="start client 1 with: ant client -DhostId=localhost -DregPort=1099 -DuserId=green -Domdbkey=YourOMDBkey"/>
-        <echo message="start client 2 with: ant client -DhostId=localhost -DregPort=1099 -DuserId=orange -Domdbkey=YourOMDBkey"/>
+        <echo message="start server with: ant server -DhostId=localhost -DregPort=8888"/>
+        <echo message="start client 1 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
+        <echo message="start client 2 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
         <echo message="to run standalone: ant execute -DuserId=${userId} -Domdbkey=${omdbkey}"/>
     </target>
 
@@ -82,8 +82,7 @@
     </target>
 
 
-    <target name="setup.javafx"
-            depends="prepare">
+    <target name="setup.javafx" depends="prepare">
         <if>
             <isset property="build.host.ismac"/>
             <then>
@@ -131,7 +130,7 @@
     <target name="client" depends="compile"
             description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
-        <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>
+        <!--        <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>-->
         <java classname="ser321.assign3.akclifto.client.SeasonRMIClient" fork="yes">
             <classpath refid="compile.classpath"/>
             <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->

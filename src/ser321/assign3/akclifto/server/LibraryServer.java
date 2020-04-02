@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -361,7 +362,7 @@ public class LibraryServer implements Library {
      * Helper method to print everything in the library. Used for debugging.
      * @return void.
      * */
-    public void printAll(){
+    private void printAll(){
 
         System.out.println("\nPRINTING SERIES SEASON LIST CONTENTS: ");
         if(seriesSeasonList.isEmpty()){
@@ -373,6 +374,30 @@ public class LibraryServer implements Library {
         for(SeriesSeason ss : seriesSeasonList){
             System.out.print(sep + ss.toJSONString());
             sep = ", ";
+        }
+    }
+
+
+    /**
+     * Main method to initialize server.
+     * @param args : arguments for hostId and regPort number.
+     * */
+    public static void main(String[] args) {
+
+        try{
+            String hostId = "localHost";
+            String regPort = "8888";
+            if(args.length >= 2) {
+                hostId = args[0];
+                regPort= args[1];
+            }
+            Library server = LibraryServer.getInstance();
+            Naming.rebind("rmi://" + hostId + ":" + regPort + "/LibraryServer", server);
+            System.out.println("\nServer bound in registry as: " +
+                    "rmi: " + hostId + ":" + regPort + " LibraryServer\n");
+        } catch (Exception ex) {
+            System.out.println("Exception initializing server: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 

@@ -1,5 +1,7 @@
 package ser321.assign3.akclifto.server;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -28,22 +30,22 @@ import java.util.List;
  * Software Engineering, ASU
  * @version March 2020
  */
-public interface Library {
+public interface Library extends Remote {
 
     /*From original sample files*/
-    String[] getSeriesSeasonTitles();
+    String[] getSeriesSeasonTitles() throws RemoteException;
 
     /**
      * Method toget TV show names and seasons available in the library
      * @return String list of names of season series titles
      * */
-    String getSeriesSeason();
+    String getSeriesSeason() throws RemoteException;
 
     /**
      *  Method to get seriesSeason List
      * @return seriesSeasonList
      * */
-    List<SeriesSeason> getSeriesSeasonList();
+    List<SeriesSeason> getSeriesSeasonList() throws RemoteException;
 
     /**
      * get seriesSeason based on title and season of the series.
@@ -51,33 +53,33 @@ public interface Library {
      * @param season : season to search if multiple seasons in file.
      * @return seriesSeason object.
      * */
-    SeriesSeason getSeriesSeason(String title, String season);
+    SeriesSeason getSeriesSeason(String title, String season) throws RemoteException;
 
     /**
      * get seriesSeason based on title of the series.
      * @param title : title of series to search and retrieve.
      * @return seriesSeason object.
      * */
-    SeriesSeason getSeriesSeason(String title);
+    SeriesSeason getSeriesSeason(String title) throws RemoteException;
 
     /**
      * Method to add new seriesSeason to the library.
      * @param ss : SeriesSeason object to add to thte library
      * @return void
      * */
-    void addSeriesSeason(SeriesSeason ss);
+    void addSeriesSeason(SeriesSeason ss) throws RemoteException;
 
     /**
      * Method to remove SeriesSeason from the library by searching its title.
      * @param title : title of series to remove.
      * @return true if SeriesSeason removed, false otherwise
      * */
-    boolean removeSeriesSeason(String title);
+    boolean removeSeriesSeason(String title) throws RemoteException;
 
     /**
      * Method to serialize and save library to a JSON file.
      * @param fileName : name of JSON file to be saved. */
-    void saveLibraryToFile(String fileName);
+    void saveLibraryToFile(String fileName) throws RemoteException;
 
     /*load JSON file and initialize in library*/
     /**
@@ -86,7 +88,7 @@ public interface Library {
      * @param filename  : name of the file to load the library.
      * @return true if library loaded successfully, false otherwise.
      * */
-    boolean restoreLibraryFromFile(String filename);
+    boolean restoreLibraryFromFile(String filename) throws RemoteException;
 
 
 
