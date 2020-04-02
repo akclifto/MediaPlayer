@@ -740,6 +740,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			name = args[0];
 			key = args[1];
 		}
+
+
 		try {
 			new SeasonRMIClient(name, key);
 		} catch (Exception ex) {

@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.Naming;
+import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,9 +65,38 @@ public class LibraryServer implements Library {
         if (sLibrary == null) {
             sLibrary = new LibraryServer();
             sLibrary.restoreLibraryFromFile(fileName);
+
+
         }
         return sLibrary;
     }
+
+
+
+    /**
+     * Main method to initialize server.
+     * @param args : arguments for hostId and regPort number.
+     * */
+    public static void main(String args[]) {
+
+        try{
+            String hostId = "localHost";
+            String regPort = "8888";
+            if(args.length >= 2) {
+                hostId = args[0];
+                regPort= args[1];
+            }
+            Library server = LibraryServer.getInstance();
+            Naming.rebind("rmi://" + hostId + ":" + regPort + "/LibraryServer", (Remote) server);
+        } catch (Exception e) {
+            System.out.println("Exception initializing server: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+
+    }
+
 
     /*All setters/getters*/
     public LibraryServer getSeasonLibrary(){
