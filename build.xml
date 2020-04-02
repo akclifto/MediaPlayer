@@ -47,7 +47,7 @@
       <!-- Create the time stamp -->
       <tstamp/>
       <!-- Create the build directory structure used by compile -->
-      <echo message="home defined as: ${user.home}" />
+      <echo message="home defined as: ${user.dir}" />
       <mkdir dir="${build}" />
       <!-- Platform identification -->
       <condition property="build.host.islinux">

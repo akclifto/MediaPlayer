@@ -248,7 +248,7 @@ public class SeriesSeason {
                 return true;
             }
         }
-        System.out.println(title + " was not found in the list!");
+        //System.out.println(title + " was not found in the list!");
         return false;
     }
 

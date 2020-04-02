@@ -127,7 +127,7 @@ public class LibraryServer implements Library {
                 return series;
             }
         }
-        System.out.println(title + " was not found in the SeriesSeason list!");
+        //System.out.println(title + " was not found in the SeriesSeason list!");
         return null;
     }
 
@@ -140,7 +140,7 @@ public class LibraryServer implements Library {
                 return series;
             }
         }
-        System.out.println(title + " was not found in the SeriesSeason list!");
+        //System.out.println(title + " was not found in the SeriesSeason list!");
         return null;
     }
 
@@ -192,7 +192,7 @@ public class LibraryServer implements Library {
                 return true;
             }
         }
-        System.out.println(title + "was not found in the list!");
+        //System.out.println(title + "was not found in the list!");
         return false;
     }
 
