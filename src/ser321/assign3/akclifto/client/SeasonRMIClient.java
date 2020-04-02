@@ -1,9 +1,8 @@
-package ser321.assign2.akclifto.client;
+package ser321.assign3.akclifto.client;
 
-import ser321.assign2.akclifto.server.Episode;
-import ser321.assign2.akclifto.server.LibraryServer;
-import ser321.assign2.akclifto.server.SeriesSeason;
+
 import ser321.assign2.lindquis.MediaLibraryGui;
+import ser321.assign3.akclifto.server.LibraryServer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -81,7 +80,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	private String omdbKey;
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
-			//"http://getdrawings.com/img/black-and-white-tree-silhouette-9.jpg";
 
 	public SeasonRMIClient(String author, String authorKey) {
 		// sets the value of 'author' on the title window of the GUI.
@@ -245,6 +243,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	}
 
 
+
 	/**
 	 * Helper method to set Series Nodes within the DefaultTreeModel structure.
 	 * @param model : DefaultTreeModel used in GUI
@@ -253,19 +252,19 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 * */
 	private void setTreeSeriesNodes(DefaultTreeModel model, DefaultMutableTreeNode root, String title) {
 
-		SeriesSeason ss = library.getSeriesSeason(title);
-		String seriesName = ss.getTitle();
-		String[] epTitles = ss.getEpisodeTitles();
+
+		String seriesName = library.getSeriesSeason(title).getTitle();
+		String[] epTitles = library.getSeriesSeason(title).getEpisodeTitles();
 
 		DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
-		DefaultMutableTreeNode subNode = getSubLabelled(root, ss.getTitle());  // sub nodes to seriesToAdd
+		DefaultMutableTreeNode subNode = getSubLabelled(root, library.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
 
 		if(subNode != null) { //if series exists.
 
-			debug("seriesSeason exists: " + ss.getTitle());
+			debug("seriesSeason exists: " + library.getSeriesSeason(title).getTitle());;
 			model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
 
-			if(ss.checkEpisodes()){
+			if(library.getSeriesSeason(title).checkEpisodes()){
 
 				setTreeEpisodeNodes(model, subNode, epTitles);
 			}
@@ -276,7 +275,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			debug("No series, so adding one with name: " + seriesName);
 			model.insertNodeInto(seriesNode, root, model.getChildCount(root));
 
-			if(ss.checkEpisodes())
+			if(library.getSeriesSeason(title).checkEpisodes())
 			{
 				setTreeEpisodeNodes(model, seriesNode, epTitles);
 			}
@@ -365,8 +364,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				summaryJTA.setText("");
 
 
-				SeriesSeason ssCurrent = library.getSeriesSeason(nodeLabel);
-
 				//DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot(); // get the root
 				// First (and only) child of the root (username) node is 'My Series' node.
 				//DefaultMutableTreeNode rootLibrary = (DefaultMutableTreeNode) root.getNextNode(); // Library node
@@ -376,7 +373,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 				if(node.getLevel() == series){
 
-					int episodeCount = ssCurrent.getEpisodeList().size();
+					int episodeCount = library.getSeriesSeason(nodeLabel).getEpisodeList().size();
 
 					// Change to season name
 					// change to rating of the episode
@@ -386,24 +383,22 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 						//set text to panels to displayed selected node information
 						episodeJTF.setText(" " + episodeCount + " Episodes in library");            // name of the episode
 					}
-					ratingJTF.setText(ssCurrent.getImdbRating());        // change to rating of the episode
-					genreJTF.setText(ssCurrent.getGenre());
-					setPosterImage(ssCurrent.getPosterLink());
-					summaryJTA.setText(ssCurrent.getPlotSummary());
-					seriesSeasonJTF.setText(ssCurrent.getTitle());      // Change to season name
+					ratingJTF.setText(library.getSeriesSeason(nodeLabel).getImdbRating());        // change to rating of the episode
+					genreJTF.setText(library.getSeriesSeason(nodeLabel).getGenre());
+					setPosterImage(library.getSeriesSeason(nodeLabel).getPosterLink());
+					summaryJTA.setText(library.getSeriesSeason(nodeLabel).getPlotSummary());
+					seriesSeasonJTF.setText(library.getSeriesSeason(nodeLabel).getSeason());      // Change to season name
 				} else if (node.getLevel() == episode){
 
 					String parentLabel = (String) parent.getUserObject();
-					SeriesSeason ssParent = library.getSeriesSeason(parentLabel);
-					Episode epi = ssParent.getEpisode(nodeLabel);
 
 					//set text to panels to displayed selected node information
-					episodeJTF.setText(epi.getName());            // name of the episode
-					ratingJTF.setText(epi.getImdbRating());        // change to rating of the episode
-					genreJTF.setText(ssParent.getGenre());
-					setPosterImage(ssParent.getPosterLink());
-					summaryJTA.setText(epi.getEpSummary());
-					seriesSeasonJTF.setText(ssParent.getTitle());      // Change to season name
+					episodeJTF.setText(library.getSeriesSeason(parentLabel).getEpisode(nodeLabel).getName()); // name of the episode
+					ratingJTF.setText(library.getSeriesSeason(parentLabel).getEpisode(nodeLabel).getImdbRating()); // change to rating of the episode
+					genreJTF.setText(library.getSeriesSeason(parentLabel).getGenre());
+					setPosterImage(library.getSeriesSeason(parentLabel).getPosterLink());
+					summaryJTA.setText(library.getSeriesSeason(parentLabel).getEpisode(nodeLabel).getEpSummary());
+					seriesSeasonJTF.setText(library.getSeriesSeason(parentLabel).getTitle());      // Change to season name
 
 				} else if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
 

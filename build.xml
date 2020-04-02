@@ -1,4 +1,4 @@
-<project name="Ser321 Spring 2020 Assign2" default="targets" basedir=".">
+<project name="Ser321 Spring 2020 Assign3" default="targets" basedir=".">
 
     <!-- define tasks used in the prepare task for platform identification -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -116,7 +116,7 @@
 
     <target name="execute" depends="compile"
             description="execute the media player client">
-        <java classname="ser321.assign2.akclifto.client.SeasonRMIClient"
+        <java classname="ser321.assign3.akclifto.client.SeasonRMIClient"
               fork="yes">
 
             <arg value="${userId}"/>
@@ -132,7 +132,7 @@
             description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
         <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>
-        <java classname="ser321.assign2.akclifto.client.SeasonRMIClient" fork="yes">
+        <java classname="ser321.assign3.akclifto.client.SeasonRMIClient" fork="yes">
             <classpath refid="compile.classpath"/>
             <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
             <arg value="${hostId}"/>
@@ -151,7 +151,7 @@
             </exec>
             <sequential>
                 <sleep seconds="10"/>
-                <java classname="ser321.assign2.akclifto.server.LibraryServer" fork="yes">
+                <java classname="ser321.assign3.akclifto.server.LibraryServer" fork="yes">
                     <!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
                     <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
                     <arg value="${hostId}"/>
