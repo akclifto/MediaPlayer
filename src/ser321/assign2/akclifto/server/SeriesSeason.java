@@ -64,7 +64,7 @@ public class SeriesSeason {
      * Series Season object.
      * @param jsonObject : JSON object to transmit information about a series/seriesSeason
      * @return void
-     * @see SeasonLibrary
+     * @see LibraryServer
      * */
     public SeriesSeason(JSONObject jsonObject){
 

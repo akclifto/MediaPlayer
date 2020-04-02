@@ -38,17 +38,17 @@ import java.util.List;
  * Software Engineering, ASU
  * @version March 2020
  */
-public class SeasonLibrary implements Library {
+public class LibraryServer implements Library {
 
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
-    private static SeasonLibrary sLibrary = null;
+    private static LibraryServer sLibrary = null;
 
     /**
      * Constructor used for tests.
      * */
-    public SeasonLibrary() {
+    public LibraryServer() {
 
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
@@ -58,17 +58,17 @@ public class SeasonLibrary implements Library {
      * Construct Season Library, Singleton
      * @return SeasonLibrary
      * */
-    public static SeasonLibrary getInstance() {
+    public static LibraryServer getInstance() {
 
         if (sLibrary == null) {
-            sLibrary = new SeasonLibrary();
+            sLibrary = new LibraryServer();
             sLibrary.restoreLibraryFromFile(fileName);
         }
         return sLibrary;
     }
 
     /*All setters/getters*/
-    public SeasonLibrary getSeasonLibrary(){
+    public LibraryServer getSeasonLibrary(){
         return this;
     }
     public int getlibrarySize(){

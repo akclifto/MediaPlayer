@@ -116,7 +116,7 @@
 
    <target name="execute" depends="compile"
            description="execute the media player client">
-      <java classname="ser321.assign2.akclifto.client.MediaLibraryApp"
+      <java classname="ser321.assign2.akclifto.client.SeasonRMIClient"
             fork="yes">
             
          <arg value="${userId}"/> 

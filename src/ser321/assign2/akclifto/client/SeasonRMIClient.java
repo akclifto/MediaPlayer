@@ -1,7 +1,7 @@
 package ser321.assign2.akclifto.client;
 
 import ser321.assign2.akclifto.server.Episode;
-import ser321.assign2.akclifto.server.SeasonLibrary;
+import ser321.assign2.akclifto.server.LibraryServer;
 import ser321.assign2.akclifto.server.SeriesSeason;
 import ser321.assign2.lindquis.MediaLibraryGui;
 
@@ -65,9 +65,11 @@ import java.time.Duration;
  *
  * @author Tim Lindquist (Tim.Linquist@asu.edu),
  * Software Engineering, CIDSE, IAFSE, ASU Poly
+ * @author Adam Clifton (akclifto@asu.edu)
+ * Software Engineering, ASU
  * @version January 2020
  */
-public class MediaLibraryApp extends MediaLibraryGui implements
+public class SeasonRMIClient extends MediaLibraryGui implements
 		TreeWillExpandListener,
 		ActionListener,
 		TreeSelectionListener {
@@ -75,18 +77,18 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 	private static final boolean debugOn = true;
 	private static final String pre = "https://www.omdbapi.com/?apikey=";
 	private static String urlOMBD;
-	private SeasonLibrary library;
+	private LibraryServer library;
 	private String omdbKey;
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 			//"http://getdrawings.com/img/black-and-white-tree-silhouette-9.jpg";
 
-	public MediaLibraryApp(String author, String authorKey) {
+	public SeasonRMIClient(String author, String authorKey) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
-		library = SeasonLibrary.getInstance();	//initialize library
+		library = LibraryServer.getInstance();	//initialize library
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// register this object as an action listener for menu item clicks. This will cause
@@ -744,50 +746,10 @@ public class MediaLibraryApp extends MediaLibraryGui implements
 			key = args[1];
 		}
 		try {
-			new MediaLibraryApp(name, key);
+			new SeasonRMIClient(name, key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-
-	/**
-	 * Method testCase() used for debugging.
-	 * @return void
-	 * */
-	private static void testCase() {
-
-		System.out.println("EPISODE TESTS: ");
-		Episode epi = new Episode("Adam", "10.0", "Things happen");
-		Episode ep2 = new Episode("Adam redux v.2", "11/10", "more things happen");
-		System.out.println("SERIES TESTS: ");
-		SeriesSeason series = new SeriesSeason("The GreatShow", "season 1", "8.5",
-				"Action", "https://fakelink.com", "The plot thickens...");
-		series.addToEpisodeList(epi);
-		series.addToEpisodeList(ep2);
-		System.out.println();
-		SeriesSeason series2 = new SeriesSeason("Shows", "season 4", "5.5",
-				"comedy", "weblinke.co", "some plot lines");
-		Episode ep3 = new Episode("Epi 1", "8.0", "epSummary1");
-		Episode ep4 = new Episode("Epi 2", "5/10", "epSummary2");
-		Episode ep5 = new Episode("Epi 3", "1/10", "epSummary3");
-		series2.addToEpisodeList(ep3);
-		series2.addToEpisodeList(ep4);
-		series2.addToEpisodeList(ep5);
-		series2.printEpisodes();
-
-		SeasonLibrary sl  = SeasonLibrary.getInstance();
-		sl.addSeriesSeason(series);
-		sl.addSeriesSeason(series2);
-		sl.addSeriesSeason(series);
-		sl.addSeriesSeason(series2);
-		sl.printAll();
-		sl.saveLibraryToFile("test.json");
-
-		boolean flag = sl.restoreLibraryFromFile("test.json");
-		System.out.println(flag);
-		System.out.println("libraryMap size: " + sl.getlibrarySize());
-		System.out.println("seasonlist size: " + sl.getSeriesSeasonList().size());
-		sl.saveLibraryToFile("test_output.json");
-	}
 }
