@@ -35,6 +35,8 @@ public interface Library extends Remote {
     /*From original sample files*/
     String[] getSeriesSeasonTitles() throws RemoteException;
 
+    LibraryServer getLibrary() throws RemoteException;
+
     /**
      * Method toget TV show names and seasons available in the library
      * @return String list of names of season series titles

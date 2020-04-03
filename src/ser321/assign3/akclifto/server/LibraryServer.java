@@ -76,8 +76,8 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     }
 
     /*All setters/getters*/
-    public LibraryServer getSeasonLibrary(){
-        return this;
+    public LibraryServer getLibrary(){
+        return sLibrary;
     }
     public int getlibrarySize(){
         return libraryMap.size();
@@ -131,7 +131,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
-            //    System.out.println(title + " was found in the SeriesSeason list and returned.");
+                System.out.println(title + " was found in the SeriesSeason list and returned to client.");
                 return series;
             }
         }
@@ -144,7 +144,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-             //   System.out.println(title + " was found in the SeriesSeason list and returned.");
+                System.out.println(title + " was found in the SeriesSeason list and returned for client.");
                 return series;
             }
         }
@@ -175,7 +175,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
             } else {
                 libraryMap.put(seriesSeason.getTitle(), seriesSeason);
                 seriesSeasonList.add(seriesSeason);
-                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+                System.out.println("for client, " + seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
             }
         } catch(Exception ex){
             System.out.println("Exception adding series to library: " + ex.getMessage());
@@ -194,7 +194,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println(title + " was found and removed from the list.");
+                System.out.println(title + " was found and removed from the list for client.");
                 libraryMap.remove(title);
                 seriesSeasonList.remove(series);
                 return true;
@@ -208,7 +208,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     @Override
     public void saveLibraryToFile(String fileName) {
 
-        System.out.println("\nSaving current library to file: " + fileName);
+        System.out.println("\nSaving current library to file for client: " + fileName);
         JSONObject jsonSeries = constructJSON();
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));

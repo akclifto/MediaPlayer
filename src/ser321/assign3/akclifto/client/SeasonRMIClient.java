@@ -743,11 +743,11 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				name = args[2];
 				key = args[3];
 			}
-			Library server;
-			server = (Library) Naming.lookup("rmi://" + hostId + ":" + regPort + "/LibraryServer");
+
+			Library server = (Library) Naming.lookup("rmi://" + hostId + ":" + regPort + "/LibraryServer");
 			System.out.println("\nClient " + name + " retained  remote object reference to: " +
 					"rmi: " + hostId + ": " + regPort + " LibraryServer\n");
-
+			server.getLibrary();
 			new SeasonRMIClient(name, key, hostId, regPort);
 		} catch (Exception ex) {
 			ex.printStackTrace();
