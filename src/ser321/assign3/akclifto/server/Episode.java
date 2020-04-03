@@ -1,4 +1,4 @@
-package ser321.assign2.akclifto.client;
+package ser321.assign3.akclifto.server;
 
 import org.json.JSONObject;
 import org.json.JSONString;
@@ -27,7 +27,7 @@ import java.io.Serializable;
  *
  * @author Adam Clifton akclifto@asu.edu
  * Software Engineering, ASU
- * @version March 2020
+ * @version April 2020
  */
 public class Episode implements JSONString, Serializable {
 

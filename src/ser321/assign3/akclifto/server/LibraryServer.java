@@ -1,4 +1,4 @@
-package ser321.assign2.akclifto.client;
+package ser321.assign3.akclifto.server;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +30,9 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * <p>
- * Purpose: SeasonLibrary is a class whose properties inidividual episodes from
- * a TV series that pulls information from omdbapi.com
+ * Purpose: LibraryServer server implementation for the media player to manage
+ * TV series information, which it pulls from omdbapi.com.  The Server is designed to
+ * be distributed and used remotely.
  * <p>
  * Ser321 Principles of Distributed Software Systems
  *
@@ -36,43 +40,47 @@ import java.util.List;
  * Software Engineering, CIDSE, IAFSE, ASU Poly
  * @author Adam Clifton akclifto@asu.edu
  * Software Engineering, ASU
- * @version March 2020
+ * @version April 2020
  */
-public class SeasonLibrary implements Library {
+public class LibraryServer extends UnicastRemoteObject implements Library, LibraryHelper {
 
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
-    private static SeasonLibrary sLibrary = null;
+    private static LibraryServer sLibrary = null;
 
     /**
      * Constructor used for tests.
      * */
-    public SeasonLibrary() {
+    public LibraryServer() throws RemoteException {
 
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
+        //this.restoreLibraryFromFile(fileName);
     }
 
     /**
      * Construct Season Library, Singleton
      * @return SeasonLibrary
      * */
-    public static SeasonLibrary getInstance() {
+    public static LibraryServer getInstance() {
 
-        if (sLibrary == null) {
-            sLibrary = new SeasonLibrary();
-            sLibrary.restoreLibraryFromFile(fileName);
+        try {
+            if (sLibrary == null) {
+                sLibrary = new LibraryServer();
+                sLibrary.restoreLibraryFromFile(fileName);
+            }
+        } catch (Exception ex) {
+            System.out.println("Exception in getInstance(): " + ex.getMessage());
+            ex.printStackTrace();
         }
         return sLibrary;
     }
 
     /*All setters/getters*/
-    public SeasonLibrary getSeasonLibrary(){
-        return this;
-    }
-    public int getlibrarySize(){
-        return libraryMap.size();
+    public LibraryServer getLibrary(){
+        System.out.println("The Library has been sent to the client.");
+        return sLibrary;
     }
 
 
@@ -89,6 +97,7 @@ public class SeasonLibrary implements Library {
         } catch (Exception ex) {
             System.out.println("exception in getTitles: " + ex.getMessage());
         }
+        System.out.println("SeriesSeasonTitles request completed for client");
         return result;
     }
 
@@ -102,6 +111,7 @@ public class SeasonLibrary implements Library {
         for (SeriesSeason series : seriesSeasonList) {
             System.out.println(series.getTitle() + " - " + series.getSeason());
         }
+        System.out.println("getSeriesSeasonList request completed for client.");
         return seriesSeasonList;
     }
 
@@ -114,6 +124,7 @@ public class SeasonLibrary implements Library {
             System.out.println(ss.getTitle() + ",  " + ss.getSeason());
             res.append(ss.getTitle()).append(", ").append(ss.getSeason());
         }
+        System.out.println("getSeriesSeason request completed for client.");
         return res.toString();
 
     }
@@ -123,7 +134,6 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
-            //    System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
         }
@@ -136,12 +146,91 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-             //   System.out.println(title + " was found in the SeriesSeason list and returned.");
                 return series;
             }
         }
         System.out.println(title + " was not found in the SeriesSeason list!");
         return null;
+    }
+
+    @Override
+    public int getLibrarySize() {
+        return seriesSeasonList.size();
+    }
+
+    @Override
+    public String getSeriesTitle(String title) {
+
+        //System.out.println("Processed getSeriesTitle for " + title + " for client.");
+        return getSeriesSeason(title).getTitle();
+    }
+
+    @Override
+    public String getSeriesImdbRating(String title) {
+
+        return getSeriesSeason(title).getImdbRating();
+    }
+
+    @Override
+    public String getGenre(String title) {
+
+        return getSeriesSeason(title).getGenre();
+    }
+
+    @Override
+    public String getPosterLink(String title) {
+
+        return getSeriesSeason(title).getPosterLink();
+    }
+
+    @Override
+    public String getSummary(String title) {
+
+        return getSeriesSeason(title).getPlotSummary();
+    }
+
+    @Override
+    public String[] getEpisodeTitles(String title) {
+
+        return getSeriesSeason(title).getEpisodeTitles();
+    }
+
+    @Override
+    public int getEpisodeListSize(String title) {
+
+        return getSeriesSeason(title).getEpisodeList().size();
+
+    }
+
+    @Override
+    public String getEpisodeName(String parent, String node) {
+
+        return getSeriesSeason(parent).getEpisode(node).getName();
+    }
+
+    @Override
+    public String getEpisodeImdbRating(String parent, String node) {
+
+        return getSeriesSeason(parent).getEpisode(node).getImdbRating();
+    }
+
+    @Override
+    public String getEpisodeSummary(String parent, String node) {
+
+        System.out.println("Processed information for " + node + " and " + parent + " for client.");
+        return getSeriesSeason(parent).getEpisode(node).getEpSummary();
+    }
+
+    @Override
+    public boolean removeEpisode(String series, String episode) {
+
+        return getSeriesSeason(series).removeEpisode(episode);
+    }
+
+    @Override
+    public boolean checkEpisodes(String title) {
+
+        return getSeriesSeason(title).checkEpisodes();
     }
 
 
@@ -167,7 +256,8 @@ public class SeasonLibrary implements Library {
             } else {
                 libraryMap.put(seriesSeason.getTitle(), seriesSeason);
                 seriesSeasonList.add(seriesSeason);
-//                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+                System.out.println("Request completed: "
+                        + seriesSeason.getTitle() + " was added to the Library list for ");
             }
         } catch(Exception ex){
             System.out.println("Exception adding series to library: " + ex.getMessage());
@@ -186,7 +276,7 @@ public class SeasonLibrary implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println(title + " was found and removed from the list.");
+              //  System.out.println(title + " was found and removed from the list for client.");
                 libraryMap.remove(title);
                 seriesSeasonList.remove(series);
                 return true;
@@ -198,9 +288,9 @@ public class SeasonLibrary implements Library {
 
 
     @Override
-    public void saveLibraryToFile(String fileName) {
+    public boolean saveLibraryToFile(String fileName) {
 
-        System.out.println("\nSaving current library to file: " + fileName);
+        //System.out.println("\nSaving current library to file for client: " + fileName);
         JSONObject jsonSeries = constructJSON();
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));
@@ -208,7 +298,10 @@ public class SeasonLibrary implements Library {
 //        System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         }
+        System.out.println("Request completed: " + fileName + " saved for client.");
+        return true;
     }
 
     /**
@@ -243,7 +336,8 @@ public class SeasonLibrary implements Library {
         boolean flag;
         try {
             clearLibrary();
-            flag = initialize(filename);
+            flag = initializeLibrary(filename);
+            System.out.println("Request completed: library " + filename + " been restored for client.");
         } catch(Exception ex){
             System.out.println("Exception restoring library: " + ex.getMessage());
             flag =  false;
@@ -256,7 +350,7 @@ public class SeasonLibrary implements Library {
      * @param fileName : path-to or name-of JSON file
      * @return true if JSON initialized correctly, false otherwise.
      * */
-    public boolean initialize(String fileName){
+    private boolean initializeLibrary(String fileName){
 
         try{
 
@@ -279,15 +373,8 @@ public class SeasonLibrary implements Library {
     }
 
 
-    /**
-     * Method to parse URL string data into JSON files for SeriesSeason and Episode, then creates new
-     * SeriesSeason objects with the data.
-     * @param jsonSeries :  string of series json data
-     * @param jsonEpisodes : string of episode json data
-     * @return void
-     * */
+    @Override
     public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
-
 
         try {
             //shared or cross-data points
@@ -326,6 +413,7 @@ public class SeasonLibrary implements Library {
 
             seriesObj.put("episodes", epiArray);
             refreshLibrary(seriesObj);
+
         } catch(Exception ex){
             System.out.println("Exception in parseURLtoJSON: " + ex.getMessage());
         }
@@ -357,10 +445,7 @@ public class SeasonLibrary implements Library {
     }
 
 
-    /**
-     * Helper method to print everything in the library. Used for debugging.
-     * @return void.
-     * */
+    @Override
     public void printAll(){
 
         System.out.println("\nPRINTING SERIES SEASON LIST CONTENTS: ");
@@ -373,6 +458,31 @@ public class SeasonLibrary implements Library {
         for(SeriesSeason ss : seriesSeasonList){
             System.out.print(sep + ss.toJSONString());
             sep = ", ";
+        }
+    }
+
+
+    /**
+     * Main method to initialize server and library.
+     * @param args : arguments for hostId and regPort number.
+     * */
+    public static void main(String[] args) {
+
+        try{
+            String hostId = "localHost";
+            String regPort = "8888";
+            if(args.length >= 2) {
+                hostId = args[0];
+                regPort= args[1];
+            }
+            Library obj = LibraryServer.getInstance();
+            Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
+            System.out.println("Server bound in registry as: "+
+                    "rmi://"+hostId+":"+regPort+"/LibraryServer");
+            System.out.println("Server Ready");
+        } catch (Exception ex) {
+            System.out.println("Exception initializing server: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 

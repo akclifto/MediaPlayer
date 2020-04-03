@@ -1,4 +1,4 @@
-package ser321.assign2.akclifto.client;
+package ser321.assign3.akclifto.server;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * <p>
- * Purpose: Series defines interface for SeriesSeason that pulls information from
- * SeasonLibrary and Episode to display to the user.
+ * Purpose: LibraryHelper is an interface with helper methods used in conjunction with
+ * Library Interface and LibraryServer.
  * <p>
  * Ser321 Principles of Distributed Software Systems
  *
@@ -26,15 +26,12 @@ import java.util.List;
  * Software Engineering, CIDSE, IAFSE, ASU Poly
  * @author Adam Clifton akclifto@asu.edu
  * Software Engineering, ASU
- * @version March 2020
+ * @version April 2020
  */
-public interface Library {
-
-    /*From original sample files*/
-    String[] getSeriesSeasonTitles();
+public interface LibraryHelper {
 
     /**
-     * Method toget TV show names and seasons available in the library
+     * Method to get TV show names and seasons available in the library
      * @return String list of names of season series titles
      * */
     String getSeriesSeason();
@@ -61,6 +58,12 @@ public interface Library {
     SeriesSeason getSeriesSeason(String title);
 
     /**
+     * Method to return the library class object.
+     * @return LibraryServer class object for use in in the client.
+     * */
+    LibraryServer getLibrary();
+
+     /**
      * Method to add new seriesSeason to the library.
      * @param ss : SeriesSeason object to add to thte library
      * @return void
@@ -68,26 +71,9 @@ public interface Library {
     void addSeriesSeason(SeriesSeason ss);
 
     /**
-     * Method to remove SeriesSeason from the library by searching its title.
-     * @param title : title of series to remove.
-     * @return true if SeriesSeason removed, false otherwise
+     * Helper method to print everything in the library. Used for debugging.
+     * @return void.
      * */
-    boolean removeSeriesSeason(String title);
-
-    /**
-     * Method to serialize and save library to a JSON file.
-     * @param fileName : name of JSON file to be saved. */
-    void saveLibraryToFile(String fileName);
-
-    /*load JSON file and initialize in library*/
-    /**
-     * Method to load library from a given JSON file.  JSON file structure must match
-     * JSON file "saveLibraryToFile structure.
-     * @param filename  : name of the file to load the library.
-     * @return true if library loaded successfully, false otherwise.
-     * */
-    boolean restoreLibraryFromFile(String filename);
-
-
+    void printAll();
 
 }

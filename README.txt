@@ -1,6 +1,16 @@
 
-Included is my application for the mediaPlayer for assignment 2. Here's a little information about the implementation.
+Included is my application for the distributed media player for assignment 3. Here's a little information about the implementation.
 The when using the top menus:
+
+	I believe this submission is straighforward with the assignment requirements.  Please let me know if you have any trouble running
+	the client or server applications.  Thanks!
+
+	Adam
+
+
+
+Previous Assignment information-------------------------
+Assignment 2:
 	
 	To add:
 	- type into the fields for searching for either series or episode, then from the top menu select "Add" from the 
