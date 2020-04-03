@@ -41,7 +41,7 @@ import java.util.List;
  * Software Engineering, ASU
  * @version March 2020
  */
-public class LibraryServer extends UnicastRemoteObject implements Library {
+public class LibraryServer extends UnicastRemoteObject implements Library, LibraryHelper {
 
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
@@ -76,24 +76,11 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         return sLibrary;
     }
 
-    @Override
-    public void initializeServer(){
-
-        try {
-            sLibrary = new LibraryServer();
-        }catch (Exception ex){
-            System.out.println("Exception in initializeServer");
-            ex.printStackTrace();
-        }
-    }
-
     /*All setters/getters*/
     public LibraryServer getLibrary(){
         System.out.println("The Library has been sent to the client.");
         return sLibrary;
     }
-
-
 
 
     @Override
@@ -171,89 +158,78 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     }
 
     @Override
-    public String getSeriesTitle(String title) throws RemoteException {
+    public String getSeriesTitle(String title) {
 
-        System.out.println("Processed getSeriesSeasonTitle for " + title + " for client.");
+        System.out.println("Processed getSeriesTitle for " + title + " for client.");
         return getSeriesSeason(title).getTitle();
     }
 
     @Override
-    public String getSeriesImdbRating(String title) throws RemoteException {
+    public String getSeriesImdbRating(String title) {
 
-        System.out.println("Processed getImdbRating for " + title + " for client.");
         return getSeriesSeason(title).getImdbRating();
     }
 
     @Override
-    public String getGenre(String title) throws RemoteException {
+    public String getGenre(String title) {
 
-        System.out.println("Processed getGenre for " + title + " for client.");
         return getSeriesSeason(title).getGenre();
     }
 
     @Override
-    public String getPosterLink(String title) throws RemoteException {
+    public String getPosterLink(String title) {
 
-        System.out.println("Processed getPosterLink for " + title + " for client.");
         return getSeriesSeason(title).getPosterLink();
     }
 
     @Override
-    public String getSummary(String title) throws RemoteException {
+    public String getSummary(String title) {
 
-        System.out.println("Processed getSummary for " + title + " for client.");
         return getSeriesSeason(title).getPlotSummary();
     }
 
     @Override
-    public String[] getEpisodeTitles(String title) throws RemoteException {
+    public String[] getEpisodeTitles(String title) {
 
-        System.out.println("Processed getEpisodeTitles for " + title + " for client.");
         return getSeriesSeason(title).getEpisodeTitles();
     }
 
     @Override
-    public int getEpisodeListSize(String title) throws RemoteException {
+    public int getEpisodeListSize(String title) {
 
-        System.out.println("Processed getEpisodeListSize for " + title + " for client.");
         return getSeriesSeason(title).getEpisodeList().size();
 
     }
 
     @Override
-    public String getEpisodeName(String parent, String node) throws RemoteException {
+    public String getEpisodeName(String parent, String node) {
 
-        System.out.println("Processed getEpisodeName for " + node + " for client.");
         return getSeriesSeason(parent).getEpisode(node).getName();
     }
 
     @Override
-    public String getEpisodeImdbRating(String parent, String node) throws RemoteException {
+    public String getEpisodeImdbRating(String parent, String node) {
 
-        System.out.println("Processed getEpisodeImdbRating for " + node + " for client.");
         return getSeriesSeason(parent).getEpisode(node).getImdbRating();
     }
 
     @Override
-    public String getEpisodeSummary(String parent, String node) throws RemoteException {
+    public String getEpisodeSummary(String parent, String node) {
 
-        System.out.println("Processed getEpisodeSummary for " + node + " for client.");
+        System.out.println("Processed information for " + node + " and " + parent + " for client.");
         return getSeriesSeason(parent).getEpisode(node).getEpSummary();
     }
 
     @Override
     public boolean removeEpisode(String series, String episode) {
 
-        System.out.println("Processed removeEpisode for " + episode + " in " + series + " for client.");
         return getSeriesSeason(series).removeEpisode(episode);
     }
 
     @Override
-    public boolean checkEpisodes(String title) throws RemoteException {
+    public boolean checkEpisodes(String title) {
 
-        System.out.println("Processed checkEpisodes for " + title + " for client");
         return getSeriesSeason(title).checkEpisodes();
-
     }
 
 
@@ -396,13 +372,6 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     }
 
 
-    /**
-     * Method to parse URL string data into JSON files for SeriesSeason and Episode, then creates new
-     * SeriesSeason objects with the data.
-     * @param jsonSeries :  string of series json data
-     * @param jsonEpisodes : string of episode json data
-     * @return void
-     * */
     @Override
     public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
