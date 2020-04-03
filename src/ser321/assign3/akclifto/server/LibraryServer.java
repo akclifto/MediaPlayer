@@ -46,7 +46,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
-    private static LibraryServer sLibrary = null;
+    private static LibraryServer sLibrary;
 
     /**
      * Constructor used for tests.
@@ -55,6 +55,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
+        this.restoreLibraryFromFile(fileName);
     }
 
     /**
@@ -77,6 +78,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
     /*All setters/getters*/
     public LibraryServer getLibrary(){
+        System.out.println("The Library has been sent to the client.");
         return sLibrary;
     }
     public int getlibrarySize(){
@@ -97,6 +99,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         } catch (Exception ex) {
             System.out.println("exception in getTitles: " + ex.getMessage());
         }
+        System.out.println("SeriesSeasonTitles request completed for client");
         return result;
     }
 
@@ -110,6 +113,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         for (SeriesSeason series : seriesSeasonList) {
             System.out.println(series.getTitle() + " - " + series.getSeason());
         }
+        System.out.println("getSeriesSeasonList request completed for client.");
         return seriesSeasonList;
     }
 
@@ -122,6 +126,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
             System.out.println(ss.getTitle() + ",  " + ss.getSeason());
             res.append(ss.getTitle()).append(", ").append(ss.getSeason());
         }
+        System.out.println("getSeriesSeason request completed for client.");
         return res.toString();
 
     }
@@ -131,7 +136,8 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
-                System.out.println(title + " was found in the SeriesSeason list and returned to client.");
+                System.out.println("Request Completed: " + title + " was found in the SeriesSeason list " +
+                        "and returned to client.");
                 return series;
             }
         }
@@ -144,7 +150,8 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println(title + " was found in the SeriesSeason list and returned for client.");
+                System.out.println("Request completed: " + title + " was found in the SeriesSeason list " +
+                        "and returned for client.");
                 return series;
             }
         }
@@ -175,7 +182,8 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
             } else {
                 libraryMap.put(seriesSeason.getTitle(), seriesSeason);
                 seriesSeasonList.add(seriesSeason);
-                System.out.println("for client, " + seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+                System.out.println("Request completed: "
+                        + seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
             }
         } catch(Exception ex){
             System.out.println("Exception adding series to library: " + ex.getMessage());
@@ -194,7 +202,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println(title + " was found and removed from the list for client.");
+              //  System.out.println(title + " was found and removed from the list for client.");
                 libraryMap.remove(title);
                 seriesSeasonList.remove(series);
                 return true;
@@ -206,9 +214,9 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
 
     @Override
-    public void saveLibraryToFile(String fileName) {
+    public boolean saveLibraryToFile(String fileName) {
 
-        System.out.println("\nSaving current library to file for client: " + fileName);
+        //System.out.println("\nSaving current library to file for client: " + fileName);
         JSONObject jsonSeries = constructJSON();
         try(PrintWriter out = new PrintWriter(fileName)){
             out.println(jsonSeries.toString(4));
@@ -216,7 +224,10 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 //        System.out.println(jsonSeries.toString(4));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         }
+        System.out.println("Request completed: " + fileName + " saved for client.");
+        return true;
     }
 
     /**
@@ -252,6 +263,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         try {
             clearLibrary();
             flag = initialize(filename);
+            System.out.println("Request completed: library " + filename + " been restored for client.");
         } catch(Exception ex){
             System.out.println("Exception restoring library: " + ex.getMessage());
             flag =  false;
@@ -399,8 +411,8 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
                 hostId = args[0];
                 regPort= args[1];
             }
-            Library server = LibraryServer.getInstance();
-            Naming.rebind("rmi://" + hostId + ":" + regPort + "/LibraryServer", server);
+            Library obj = new LibraryServer();
+            Naming.rebind("rmi://" + hostId + ":" + regPort + "/LibraryServer", obj);
             System.out.println("\nServer bound in registry as: " +
                     "rmi: " + hostId + ":" + regPort + " LibraryServer\n");
         } catch (Exception ex) {

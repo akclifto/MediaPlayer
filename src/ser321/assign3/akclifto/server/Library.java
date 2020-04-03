@@ -81,7 +81,7 @@ public interface Library extends Remote {
     /**
      * Method to serialize and save library to a JSON file.
      * @param fileName : name of JSON file to be saved. */
-    void saveLibraryToFile(String fileName) throws RemoteException;
+    boolean saveLibraryToFile(String fileName) throws RemoteException;
 
     /*load JSON file and initialize in library*/
     /**
