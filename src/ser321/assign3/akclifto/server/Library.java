@@ -35,9 +35,15 @@ public interface Library extends Remote {
      * Method to send serialized series title information to the client from the server.
      * Used to construct JTree on the client-side
      * @return array of series titles for a given library.
+     * @throws RemoteException
      * */
     String[] getSeriesSeasonTitles() throws RemoteException;
 
+    /**
+     * Method to get the number of seriesSeasons in a library.
+     * @return size of seriesSeasonList
+     * @throws RemoteException
+     * */
     int getLibrarySize() throws RemoteException;
 
     /**
@@ -45,6 +51,7 @@ public interface Library extends Remote {
      * Used to construct JTree on the client-side
      * @param title : title of the series requested
      * @return array of episode titles for a given series.
+     * @throws RemoteException
      * */
     String[] getEpisodeTitles(String title) throws  RemoteException;
 
@@ -52,6 +59,7 @@ public interface Library extends Remote {
      * Method to send serialized Episode list size information to the client from the server.
      * @param title : title of the series requested
      * @return size of the episode list for the given series.
+     * @throws RemoteException
      * */
     int getEpisodeListSize(String title) throws RemoteException;
 
@@ -59,6 +67,7 @@ public interface Library extends Remote {
      * Method to check if episode is already in the library and send to the client from the server.
      * @param title : title of the series requested
      * @return true if not in the episode list for the selected series, false otherwise.
+     * @throws RemoteException
      * */
     boolean checkEpisodes(String title) throws  RemoteException;
 
@@ -67,6 +76,7 @@ public interface Library extends Remote {
      * @param parent : title of the series requested
      * @param node : name of the episode node requested
      * @return name of the Episode requested.
+     * @throws RemoteException
      * */
     String getEpisodeName(String parent, String node) throws RemoteException;
 
@@ -75,6 +85,7 @@ public interface Library extends Remote {
      * @param parent : title of the series requested
      * @param node : title of episode requested
      * @return IMDB Rating for requested episode.
+     * @throws RemoteException
      * */
     String getEpisodeImdbRating(String parent, String node) throws RemoteException;
 
@@ -83,6 +94,7 @@ public interface Library extends Remote {
      * @param parent : title of the parent series requested
      * @param node  : title of the episode requested
      * @return summary information for episode.
+     * @throws RemoteException
      * */
     String getEpisodeSummary(String parent, String node) throws RemoteException;
 
@@ -91,6 +103,7 @@ public interface Library extends Remote {
      * @param series : title of the series requested
      * @param episode : title of the episode to remove
      * @return true if the title is removed, false otherwise.
+     * @throws RemoteException
      * */
     boolean removeEpisode(String series, String episode) throws RemoteException;
 
@@ -98,6 +111,7 @@ public interface Library extends Remote {
      * Method to send serialized series title information to the client from the server.
      * @param title : title of the nodeLabel requested
      * @return title for series.
+     * @throws RemoteException
      * */
     String getSeriesTitle(String title) throws RemoteException;
 
@@ -105,6 +119,7 @@ public interface Library extends Remote {
      * Method to send serialized IMDB Rating information to the client from the server.
      * @param title : title of the series requested
      * @return IMDB Rating for series.
+     * @throws RemoteException
      * */
     String getSeriesImdbRating(String title) throws  RemoteException;
 
@@ -112,6 +127,7 @@ public interface Library extends Remote {
      * Method to send serialized genre information to the client from the server.
      * @param title : title of the series requested
      * @return genre for series.
+     * @throws RemoteException
      * */
     String getGenre(String title) throws RemoteException;
 
@@ -119,6 +135,7 @@ public interface Library extends Remote {
      * Method to send serialized poster url information to the client from the server.
      * @param title : title of the series requested
      * @return url address to poster for series.
+     * @throws RemoteException
      * */
     String getPosterLink(String title) throws RemoteException;
 
@@ -126,6 +143,7 @@ public interface Library extends Remote {
      * Method to send serialized summary information to the client from the server.
      * @param title : title of the series requested
      * @return summary information for series
+     * @throws RemoteException
      * */
     String getSummary(String title) throws RemoteException;
 
@@ -133,12 +151,16 @@ public interface Library extends Remote {
      * Method to remove SeriesSeason from the library by searching its title.
      * @param title : title of series to remove.
      * @return true if SeriesSeason removed, false otherwise
+     * @throws RemoteException
      * */
     boolean removeSeriesSeason(String title) throws RemoteException;
 
     /**
      * Method to serialize and save library to a JSON file.
-     * @param fileName : name of JSON file to be saved. */
+     * @param fileName : name of JSON file to be saved.
+     * @return true if library saved to file correctly, false otherwise.
+     * @throws RemoteException
+     * */
     boolean saveLibraryToFile(String fileName) throws RemoteException;
 
     /**
@@ -146,6 +168,7 @@ public interface Library extends Remote {
      * JSON file "saveLibraryToFile structure.
      * @param filename  : name of the file to load the library.
      * @return true if library loaded successfully, false otherwise.
+     * @throws RemoteException
      * */
     boolean restoreLibraryFromFile(String filename) throws RemoteException;
 
@@ -155,6 +178,7 @@ public interface Library extends Remote {
      * @param jsonSeries :  string of series json data
      * @param jsonEpisodes : string of episode json data
      * @return void
+     * @throws RemoteException
      * */
     void parseURLtoJSON(String jsonSeries, String jsonEpisodes) throws RemoteException;
 

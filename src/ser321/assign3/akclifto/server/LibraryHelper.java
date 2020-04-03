@@ -57,6 +57,10 @@ public interface LibraryHelper {
      * */
     SeriesSeason getSeriesSeason(String title);
 
+    /**
+     * Method to return the library class object.
+     * @return LibraryServer class object for use in in the client.
+     * */
     LibraryServer getLibrary();
 
      /**
@@ -70,6 +74,6 @@ public interface LibraryHelper {
      * Helper method to print everything in the library. Used for debugging.
      * @return void.
      * */
-    public void printAll();
+    void printAll();
 
 }

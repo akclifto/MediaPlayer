@@ -56,7 +56,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
-        this.restoreLibraryFromFile(fileName);
+        //this.restoreLibraryFromFile(fileName);
     }
 
     /**
@@ -161,7 +161,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     @Override
     public String getSeriesTitle(String title) {
 
-        System.out.println("Processed getSeriesTitle for " + title + " for client.");
+        //System.out.println("Processed getSeriesTitle for " + title + " for client.");
         return getSeriesSeason(title).getTitle();
     }
 
@@ -463,7 +463,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     /**
-     * Main method to initialize server.
+     * Main method to initialize server and library.
      * @param args : arguments for hostId and regPort number.
      * */
     public static void main(String[] args) {
@@ -475,10 +475,11 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
                 hostId = args[0];
                 regPort= args[1];
             }
-            Library obj = new LibraryServer();
+            Library obj = LibraryServer.getInstance();
             Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
             System.out.println("Server bound in registry as: "+
                     "rmi://"+hostId+":"+regPort+"/LibraryServer");
+            System.out.println("Server Ready");
         } catch (Exception ex) {
             System.out.println("Exception initializing server: " + ex.getMessage());
             ex.printStackTrace();

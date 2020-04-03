@@ -606,8 +606,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 //						 removeEpisode(episodeJTF.getText());
 				 boolean flag = libraryServer.removeEpisode(seriesSeasonJTF.getText(), episodeJTF.getText());
 				 if(flag){
-
-					 System.out.println("From server, removes " + episodeJTF.getText() + " from the library.");
+					 refreshTree();
+					 System.out.println("From server, removed episode, " + episodeJTF.getText() + ", from the library.");
 				 }
 
 			 } catch (Exception ex) {
@@ -764,7 +764,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 	/**
 	 * main method: Program entry point.
-	 * @param args :  taken default args or CLI user input.
+	 * @param args :  taken default args or CLI user input: hostId, regPort, username, omdbkey.
 	 * @return void
 	 * */
 	public static void main(String[] args) {
