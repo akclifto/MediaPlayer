@@ -65,6 +65,13 @@ public interface Library extends Remote {
      * */
     SeriesSeason getSeriesSeason(String title) throws RemoteException;
 
+
+    String getSeriesSeasonsTitle(String title) throws RemoteException;
+
+    String[] getEpisodeTitles(String title) throws  RemoteException;
+
+    boolean checkEpisodes(String title) throws  RemoteException;
+
     /**
      * Method to add new seriesSeason to the library.
      * @param ss : SeriesSeason object to add to thte library
@@ -93,7 +100,8 @@ public interface Library extends Remote {
      * */
     boolean restoreLibraryFromFile(String filename) throws RemoteException;
 
-    public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) throws RemoteException;
+    void parseURLtoJSON(String jsonSeries, String jsonEpisodes) throws RemoteException;
+
 
 
 

@@ -3,7 +3,6 @@ package ser321.assign3.akclifto.client;
 import ser321.assign2.lindquis.MediaLibraryGui;
 import ser321.assign3.akclifto.server.Library;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -76,14 +75,15 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeasonRMIClient(String author, String authorKey, Library libraryServer) {
+	public SeasonRMIClient(String author, String authorKey, Library server) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
-		this.libraryServer = libraryServer;
+		libraryServer = server;
 		try {
-			libraryServer.initializeServer();
+	//		libraryServer.printAll();
+			//libraryServer.initializeServer();
 		} catch (Exception ex){
 			System.out.println("Exception in SeasonRMIClient library: " + ex.getMessage());
 		}
@@ -260,18 +260,23 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 		try{
 
-			String seriesName = libraryServer.getSeriesSeason(title).getTitle();
-			String[] epTitles = libraryServer.getSeriesSeason(title).getEpisodeTitles();
+//			String seriesName = libraryServer.getSeriesSeason(title).getTitle();
+//			String[] epTitles = libraryServer.getSeriesSeason(title).getEpisodeTitles();
+			String seriesName = libraryServer.getSeriesSeasonsTitle(title);
+			String[] epTitles = libraryServer.getEpisodeTitles(title);
+
 
 			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
-			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
+//			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
+			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeasonsTitle(title));  // sub nodes to seriesToAdd
 
 			if(subNode != null) { //if series exists.
 
-				debug("seriesSeason exists: " + libraryServer.getSeriesSeason(title).getTitle());
+				debug("seriesSeason exists: " + libraryServer.getSeriesSeasonsTitle(title));
 				model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
 
-				if(libraryServer.getSeriesSeason(title).checkEpisodes()){
+//				if(libraryServer.getSeriesSeason(title).checkEpisodes()){
+				if(libraryServer.checkEpisodes(title)){
 
 					setTreeEpisodeNodes(model, subNode, epTitles);
 				}
@@ -282,12 +287,14 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				debug("No series, so adding one with name: " + seriesName);
 				model.insertNodeInto(seriesNode, root, model.getChildCount(root));
 
-				if(libraryServer.getSeriesSeason(title).checkEpisodes())
+//				if(libraryServer.getSeriesSeason(title).checkEpisodes())
+				if(libraryServer.checkEpisodes(title))
 				{
 					setTreeEpisodeNodes(model, seriesNode, epTitles);
 				}
 			}
-			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeason(title).getTitle());
+//			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeason(title).getTitle());
+			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeasonsTitle(title));
 		} catch(Exception ex){
 			System.out.println("Exception in setTreeSeriesNodes: " + ex.getMessage());
 			ex.printStackTrace();
@@ -780,7 +787,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 					"rmi://"+hostId+":"+regPort+"/LibraryServer");
 			System.out.println("Client obtained remote object reference to" +
 					" the LibraryServer");
-			SeasonRMIClient client = new SeasonRMIClient(name, key, libraryServer);
+			new SeasonRMIClient(name, key, libraryServer);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -46,14 +46,13 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
-    private LibraryServer sLibrary;
+    private static LibraryServer sLibrary = null;
 
     /**
      * Constructor used for tests.
      * */
     public LibraryServer() throws RemoteException {
 
-        super();
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
         this.restoreLibraryFromFile(fileName);
@@ -63,19 +62,19 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
      * Construct Season Library, Singleton
      * @return SeasonLibrary
      * */
-//    public static LibraryServer getInstance() {
-//
-//        try {
-//            if (sLibrary == null) {
-//                sLibrary = new LibraryServer();
-//                sLibrary.restoreLibraryFromFile(fileName);
-//            }
-//        } catch (Exception ex) {
-//            System.out.println("Exception in getInstance(): " + ex.getMessage());
-//            ex.printStackTrace();
-//        }
-//        return sLibrary;
-//    }
+    public static LibraryServer getInstance() {
+
+        try {
+            if (sLibrary == null) {
+                sLibrary = new LibraryServer();
+                sLibrary.restoreLibraryFromFile(fileName);
+            }
+        } catch (Exception ex) {
+            System.out.println("Exception in getInstance(): " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return sLibrary;
+    }
 
     @Override
     public void initializeServer(){
@@ -167,6 +166,27 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         }
         System.out.println(title + " was not found in the SeriesSeason list!");
         return null;
+    }
+
+    @Override
+    public String getSeriesSeasonsTitle(String title) throws RemoteException {
+
+        SeriesSeason ss = getSeriesSeason(title);
+        return ss.getTitle();
+    }
+
+    @Override
+    public String[] getEpisodeTitles(String title) throws RemoteException {
+
+        SeriesSeason ss = getSeriesSeason(title);
+        return ss.getEpisodeTitles();
+    }
+
+    @Override
+    public boolean checkEpisodes(String title) throws RemoteException {
+
+        SeriesSeason ss = getSeriesSeason(title);
+        return ss.checkEpisodes();
     }
 
 
@@ -393,7 +413,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
      * Helper method to print everything in the library. Used for debugging.
      * @return void.
      * */
-    private void printAll(){
+    public void printAll(){
 
         System.out.println("\nPRINTING SERIES SEASON LIST CONTENTS: ");
         if(seriesSeasonList.isEmpty()){
