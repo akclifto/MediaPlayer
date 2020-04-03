@@ -81,12 +81,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
 		libraryServer = server;
-		try {
-	//		libraryServer.printAll();
-			//libraryServer.initializeServer();
-		} catch (Exception ex){
-			System.out.println("Exception in SeasonRMIClient library: " + ex.getMessage());
-		}
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

@@ -30,8 +30,9 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * <p>
- * Purpose: SeasonLibrary is a class whose properties inidividual episodes from
- * a TV series that pulls information from omdbapi.com
+ * Purpose: LibraryServer server implementation for the media player to manage
+ * TV series information, which it pulls from omdbapi.com.  The Server is designed to
+ * be distributed and used remotely.
  * <p>
  * Ser321 Principles of Distributed Software Systems
  *
@@ -39,7 +40,7 @@ import java.util.List;
  * Software Engineering, CIDSE, IAFSE, ASU Poly
  * @author Adam Clifton akclifto@asu.edu
  * Software Engineering, ASU
- * @version March 2020
+ * @version April 2020
  */
 public class LibraryServer extends UnicastRemoteObject implements Library, LibraryHelper {
 
@@ -375,7 +376,6 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     @Override
     public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
-
         try {
             //shared or cross-data points
             String seriesSeason, plotSummary;
@@ -445,10 +445,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
 
-    /**
-     * Helper method to print everything in the library. Used for debugging.
-     * @return void.
-     * */
+    @Override
     public void printAll(){
 
         System.out.println("\nPRINTING SERIES SEASON LIST CONTENTS: ");
