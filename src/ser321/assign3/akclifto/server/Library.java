@@ -66,11 +66,27 @@ public interface Library extends Remote {
     SeriesSeason getSeriesSeason(String title) throws RemoteException;
 
 
-    String getSeriesSeasonsTitle(String title) throws RemoteException;
-
     String[] getEpisodeTitles(String title) throws  RemoteException;
 
+    int getEpisodeListSize(String title) throws RemoteException;
+
     boolean checkEpisodes(String title) throws  RemoteException;
+
+    String getEpisodeName(String parent, String node) throws RemoteException;
+
+    String getEpisodeImdbRating(String parent, String node) throws RemoteException;
+
+    String getEpisodeSummary(String parent, String node) throws RemoteException;
+
+    String getSeriesSeasonsTitle(String title) throws RemoteException;
+
+    String getSeriesImdbRating(String title) throws  RemoteException;
+
+    String getGenre(String title) throws RemoteException;
+
+    String getPosterLink(String title) throws RemoteException;
+
+    String getSummary(String title) throws RemoteException;
 
     /**
      * Method to add new seriesSeason to the library.

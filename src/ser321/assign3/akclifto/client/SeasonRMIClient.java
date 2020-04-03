@@ -392,7 +392,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 				if(node.getLevel() == series){
 
-					int episodeCount = libraryServer.getSeriesSeason(nodeLabel).getEpisodeList().size();
+//					int episodeCount = libraryServer.getSeriesSeason(nodeLabel).getEpisodeList().size();
+					int episodeCount = libraryServer.getEpisodeListSize(nodeLabel);
 
 					// Change to season name
 					// change to rating of the episode
@@ -402,22 +403,22 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 						//set text to panels to displayed selected node information
 						episodeJTF.setText(" " + episodeCount + " Episodes in library");            // name of the episode
 					}
-					ratingJTF.setText(libraryServer.getSeriesSeason(nodeLabel).getImdbRating());        // change to rating of the episode
-					genreJTF.setText(libraryServer.getSeriesSeason(nodeLabel).getGenre());
-					setPosterImage(libraryServer.getSeriesSeason(nodeLabel).getPosterLink());
-					summaryJTA.setText(libraryServer.getSeriesSeason(nodeLabel).getPlotSummary());
-					seriesSeasonJTF.setText(libraryServer.getSeriesSeason(nodeLabel).getTitle());      // Change to season name
+					ratingJTF.setText(libraryServer.getSeriesImdbRating(nodeLabel));        // change to rating of the episode
+					genreJTF.setText(libraryServer.getGenre(nodeLabel));
+					setPosterImage(libraryServer.getPosterLink(nodeLabel));
+					summaryJTA.setText(libraryServer.getSummary(nodeLabel));
+					seriesSeasonJTF.setText(libraryServer.getSeriesSeasonsTitle(nodeLabel));      // Change to season name
 				} else if (node.getLevel() == episode){
 
 					String parentLabel = (String) parent.getUserObject();
 
 					//set text to panels to displayed selected node information
-					episodeJTF.setText(libraryServer.getSeriesSeason(parentLabel).getEpisode(nodeLabel).getName());    // name of the episode
-					ratingJTF.setText(libraryServer.getSeriesSeason(parentLabel).getEpisode(nodeLabel).getImdbRating());  // change to rating of the episode
-					genreJTF.setText(libraryServer.getSeriesSeason(parentLabel).getGenre());
-					setPosterImage(libraryServer.getSeriesSeason(parentLabel).getPosterLink());
-					summaryJTA.setText(libraryServer.getSeriesSeason(parentLabel).getEpisode(nodeLabel).getEpSummary());
-					seriesSeasonJTF.setText(libraryServer.getSeriesSeason(parentLabel).getTitle());      // Change to season name
+					episodeJTF.setText(libraryServer.getEpisodeName(parentLabel, nodeLabel));    // name of the episode
+					ratingJTF.setText(libraryServer.getEpisodeImdbRating(parentLabel, nodeLabel));  // change to rating of the episode
+					genreJTF.setText(libraryServer.getGenre(parentLabel));
+					setPosterImage(libraryServer.getPosterLink(parentLabel));
+					summaryJTA.setText(libraryServer.getEpisodeSummary(parentLabel, nodeLabel));
+					seriesSeasonJTF.setText(libraryServer.getSeriesSeasonsTitle(parentLabel));      // Change to season name
 
 				} else if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
 
