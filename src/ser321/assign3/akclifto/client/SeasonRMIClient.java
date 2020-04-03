@@ -2,7 +2,6 @@ package ser321.assign3.akclifto.client;
 
 import ser321.assign2.lindquis.MediaLibraryGui;
 import ser321.assign3.akclifto.server.Library;
-import ser321.assign3.akclifto.server.LibraryServer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -68,24 +67,25 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		ActionListener,
 		TreeSelectionListener {
 
-	private static final boolean debugOn = true;
+	private static final boolean debugOn = false;
 	private static final String pre = "https://www.omdbapi.com/?apikey=";
 	private static String urlOMBD;
-	private LibraryServer libraryServer;
+	private Library libraryServer;
 	private String omdbKey;
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeasonRMIClient(String author, String authorKey, String hostId, String regPort) {
+	public SeasonRMIClient(String author, String authorKey, Library libraryServer) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
-		try {
-			libraryServer = new LibraryServer(); //initialize library
-		} catch (Exception ex){
-			System.out.println("Exception in SeasonRMIClient library: " + ex.getMessage());
-		}
+		this.libraryServer = libraryServer;
+//		try {
+//			libraryServer = new LibraryServer(); //initialize library
+//		} catch (Exception ex){
+//			System.out.println("Exception in SeasonRMIClient library: " + ex.getMessage());
+//		}
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -218,28 +218,34 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 **/
 	public void rebuildTree() {
 
-		tree.removeTreeSelectionListener(this);
+		try {
+			tree.removeTreeSelectionListener(this);
 
-		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();  //bases structure
-		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot(); //root tree node (named as "author")
-		clearTree(root, model); //clear the tree
+			DefaultTreeModel model = (DefaultTreeModel) tree.getModel();  //bases structure
+			DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot(); //root tree node (named as "author")
+			clearTree(root, model); //clear the tree
 
-		// put nodes in the tree for all registered with the library
-		DefaultMutableTreeNode libraryNode = new DefaultMutableTreeNode("Library");
-		model.insertNodeInto(libraryNode, root, model.getChildCount(root));
+			// put nodes in the tree for all registered with the library
+			DefaultMutableTreeNode libraryNode = new DefaultMutableTreeNode("Library");
+			model.insertNodeInto(libraryNode, root, model.getChildCount(root));
 
-		String[] seriesTitles = libraryServer.getSeriesSeasonTitles();  //array of all titles in the library
+			String[] seriesTitles = libraryServer.getSeriesSeasonTitles();  //array of all titles in the library
 
-		for(String title : seriesTitles){
+			for (String title : seriesTitles) {
 
-			setTreeSeriesNodes(model, libraryNode, title);
-		}
+				setTreeSeriesNodes(model, libraryNode, title);
+			}
 
-		// expand all the nodes in the JTree
-		for (int r = 0; r < tree.getRowCount(); r++) {
-			tree.expandRow(r);
+			// expand all the nodes in the JTree
+			for (int r = 0; r < tree.getRowCount(); r++) {
+				tree.expandRow(r);
+			}
+		} catch(Exception ex){
+			System.out.println("Exception in rebuilTree: " + ex.getMessage());
+			ex.printStackTrace();
 		}
 		tree.addTreeSelectionListener(this);
+
 	}
 
 
@@ -251,34 +257,40 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 * */
 	private void setTreeSeriesNodes(DefaultTreeModel model, DefaultMutableTreeNode root, String title) {
 
-		String seriesName = libraryServer.getSeriesSeason(title).getTitle();
-		String[] epTitles = libraryServer.getSeriesSeason(title).getEpisodeTitles();
+		try{
 
-		DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
-		DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
+			String seriesName = libraryServer.getSeriesSeason(title).getTitle();
+			String[] epTitles = libraryServer.getSeriesSeason(title).getEpisodeTitles();
 
-		if(subNode != null) { //if series exists.
+			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
+			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
 
-			debug("seriesSeason exists: " + libraryServer.getSeriesSeason(title).getTitle());
-			model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
+			if(subNode != null) { //if series exists.
 
-			if(libraryServer.getSeriesSeason(title).checkEpisodes()){
+				debug("seriesSeason exists: " + libraryServer.getSeriesSeason(title).getTitle());
+				model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
 
-				setTreeEpisodeNodes(model, subNode, epTitles);
+				if(libraryServer.getSeriesSeason(title).checkEpisodes()){
+
+					setTreeEpisodeNodes(model, subNode, epTitles);
+				}
+
+			} else {  // if series does not exist.
+
+				DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode(seriesName);
+				debug("No series, so adding one with name: " + seriesName);
+				model.insertNodeInto(seriesNode, root, model.getChildCount(root));
+
+				if(libraryServer.getSeriesSeason(title).checkEpisodes())
+				{
+					setTreeEpisodeNodes(model, seriesNode, epTitles);
+				}
 			}
-
-		} else {  // if series does not exist.
-
-			DefaultMutableTreeNode seriesNode = new DefaultMutableTreeNode(seriesName);
-			debug("No series, so adding one with name: " + seriesName);
-			model.insertNodeInto(seriesNode, root, model.getChildCount(root));
-
-			if(libraryServer.getSeriesSeason(title).checkEpisodes())
-			{
-				setTreeEpisodeNodes(model, seriesNode, epTitles);
-			}
+			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeason(title).getTitle());
+		} catch(Exception ex){
+			System.out.println("Exception in setTreeSeriesNodes: " + ex.getMessage());
+			ex.printStackTrace();
 		}
-		System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeason(title).getTitle());
 	}
 
 
@@ -524,7 +536,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			 defaultRestore.printStackTrace();
 			 return false;
 		 }
-		 System.out.println("From server, library restored with " + libraryServer.getlibrarySize() + " series entries.");
+		 int size = libraryServer.getLibrarySize();
+		 System.out.println("From server, library restored with " + size + " series entries.");
 		 return flag;
 	 }
 
@@ -547,22 +560,27 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	  * */
 	 private void actionRemoveSeries(){
 
-		 int option = JOptionPane.showConfirmDialog(null,
-				 "Remove Selected Series? \n" + seriesSeasonJTF.getText(),
-				 "Remove Series-Season",
-				 JOptionPane.YES_NO_OPTION);
+	 	try {
+			String series = libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).getTitle();
+			int option = JOptionPane.showConfirmDialog(null,
+					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
+					"Remove Series-Season",
+					JOptionPane.YES_NO_OPTION);
 
-		 if(option == JOptionPane.YES_OPTION) {
+			if (option == JOptionPane.YES_OPTION) {
 
-			 try {
-				 libraryServer.removeSeriesSeason(seriesSeasonJTF.getText());
-				 refreshTree();
-			 } catch (Exception ex) {
-				 System.out.println("Exception removing Series-Season: " + ex.getMessage());
-				 ex.printStackTrace();
-			 }
-			 System.out.println("From Server, removes " + seriesSearchJTF.getText() + "from the library.");
-		 }
+				try {
+					libraryServer.removeSeriesSeason(seriesSeasonJTF.getText());
+					refreshTree();
+				} catch (Exception ex) {
+					System.out.println("Exception removing Series-Season: " + ex.getMessage());
+					ex.printStackTrace();
+				}
+				System.out.println("From server, removes " + series + " from the library.");
+			}
+		} catch(Exception ex){
+			System.out.println("Exception in actionRemoveSeries: " + ex.getMessage());
+		}
 	 }
 
 
@@ -587,7 +605,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
 				 ex.printStackTrace();
 			 }
-			 System.out.println("from Server, removes " + episodeJTF.getText() + "from the library.");
+			 System.out.println("From server, removes " + episodeJTF.getText() + " from the library.");
 		 }
 	 }
 
@@ -609,14 +627,13 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 //				 library.getLibraryServer().getSeriesSeason(seriesSeasonJTF.getText()).
 //						 removeEpisode(episodeJTF.getText());
 				 refreshTree();
+				 System.out.println("From server, " + libraryServer.getSeriesSeason(episodeJTF.getText()) +
+						 " removed from library.");
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
 				 ex.printStackTrace();
 			 }
-			 System.out.println("From server, " + libraryServer.getSeriesSeason(episodeJTF.getText()) +
-					 " removed from library.");
 		 }
-
 	 }
 
 
@@ -757,10 +774,12 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				key = args[3];
 			}
 
-			Library server = (Library) Naming.lookup("rmi://" + hostId + ":" + regPort + "/LibraryServer");
-			System.out.println("\nClient " + name + " retained  remote object reference to: " +
-					"rmi: " + hostId + ": " + regPort + " LibraryServer\n");
-			new SeasonRMIClient(name, key, hostId, regPort);
+			Library libraryServer;
+			libraryServer = (Library)Naming.lookup(
+					"rmi://"+hostId+":"+regPort+"/LibraryServer");
+			System.out.println("Client obtained remote object reference to" +
+					" the LibraryServer");
+			SeasonRMIClient client = new SeasonRMIClient(name, key, libraryServer);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

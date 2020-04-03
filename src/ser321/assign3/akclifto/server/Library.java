@@ -36,7 +36,7 @@ public interface Library extends Remote {
     String[] getSeriesSeasonTitles() throws RemoteException;
 
     LibraryServer getLibrary() throws RemoteException;
-
+    int getLibrarySize();
     /**
      * Method toget TV show names and seasons available in the library
      * @return String list of names of season series titles
@@ -91,6 +91,8 @@ public interface Library extends Remote {
      * @return true if library loaded successfully, false otherwise.
      * */
     boolean restoreLibraryFromFile(String filename) throws RemoteException;
+
+    public void parseURLtoJSON(String jsonSeries, String jsonEpisodes);
 
 
 

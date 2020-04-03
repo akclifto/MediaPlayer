@@ -81,8 +81,10 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         System.out.println("The Library has been sent to the client.");
         return sLibrary;
     }
-    public int getlibrarySize(){
-        return libraryMap.size();
+
+    @Override
+    public int getLibrarySize() {
+        return seriesSeasonList.size();
     }
 
 
@@ -136,8 +138,6 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title) && series.getSeason().equalsIgnoreCase(season)) {
-                System.out.println("Request Completed: " + title + " was found in the SeriesSeason list " +
-                        "and returned to client.");
                 return series;
             }
         }
@@ -150,8 +150,6 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-                System.out.println("Request completed: " + title + " was found in the SeriesSeason list " +
-                        "and returned for client.");
                 return series;
             }
         }
@@ -183,7 +181,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
                 libraryMap.put(seriesSeason.getTitle(), seriesSeason);
                 seriesSeasonList.add(seriesSeason);
                 System.out.println("Request completed: "
-                        + seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+                        + seriesSeason.getTitle() + " was added to the Library list for ");
             }
         } catch(Exception ex){
             System.out.println("Exception adding series to library: " + ex.getMessage());
@@ -306,6 +304,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
      * @param jsonEpisodes : string of episode json data
      * @return void
      * */
+    @Override
     public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
 
@@ -412,9 +411,9 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
                 regPort= args[1];
             }
             Library obj = new LibraryServer();
-            Naming.rebind("rmi://" + hostId + ":" + regPort + "/LibraryServer", obj);
-            System.out.println("\nServer bound in registry as: " +
-                    "rmi: " + hostId + ":" + regPort + " LibraryServer\n");
+            Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
+            System.out.println("Server bound in registry as: "+
+                    "rmi://"+hostId+":"+regPort+"/LibraryServer");
         } catch (Exception ex) {
             System.out.println("Exception initializing server: " + ex.getMessage());
             ex.printStackTrace();
