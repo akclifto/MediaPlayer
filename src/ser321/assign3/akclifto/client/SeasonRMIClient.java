@@ -262,17 +262,17 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 //			String seriesName = libraryServer.getSeriesSeason(title).getTitle();
 //			String[] epTitles = libraryServer.getSeriesSeason(title).getEpisodeTitles();
-			String seriesName = libraryServer.getSeriesSeasonsTitle(title);
+			String seriesName = libraryServer.getSeriesTitle(title);
 			String[] epTitles = libraryServer.getEpisodeTitles(title);
 
 
 			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
 //			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
-			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeasonsTitle(title));  // sub nodes to seriesToAdd
+			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesTitle(title));  // sub nodes to seriesToAdd
 
 			if(subNode != null) { //if series exists.
 
-				debug("seriesSeason exists: " + libraryServer.getSeriesSeasonsTitle(title));
+				debug("seriesSeason exists: " + libraryServer.getSeriesTitle(title));
 				model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
 
 //				if(libraryServer.getSeriesSeason(title).checkEpisodes()){
@@ -294,7 +294,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				}
 			}
 //			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeason(title).getTitle());
-			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeasonsTitle(title));
+			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesTitle(title));
 		} catch(Exception ex){
 			System.out.println("Exception in setTreeSeriesNodes: " + ex.getMessage());
 			ex.printStackTrace();
@@ -407,7 +407,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 					genreJTF.setText(libraryServer.getGenre(nodeLabel));
 					setPosterImage(libraryServer.getPosterLink(nodeLabel));
 					summaryJTA.setText(libraryServer.getSummary(nodeLabel));
-					seriesSeasonJTF.setText(libraryServer.getSeriesSeasonsTitle(nodeLabel));      // Change to season name
+					seriesSeasonJTF.setText(libraryServer.getSeriesTitle(nodeLabel));      // Change to season name
 				} else if (node.getLevel() == episode){
 
 					String parentLabel = (String) parent.getUserObject();
@@ -418,7 +418,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 					genreJTF.setText(libraryServer.getGenre(parentLabel));
 					setPosterImage(libraryServer.getPosterLink(parentLabel));
 					summaryJTA.setText(libraryServer.getEpisodeSummary(parentLabel, nodeLabel));
-					seriesSeasonJTF.setText(libraryServer.getSeriesSeasonsTitle(parentLabel));      // Change to season name
+					seriesSeasonJTF.setText(libraryServer.getSeriesTitle(parentLabel));      // Change to season name
 
 				} else if (node.getLevel() == 0 || node.getLevel() == 1) {                     // root directory "Library"
 
@@ -570,7 +570,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 private void actionRemoveSeries(){
 
 	 	try {
-			String series = libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).getTitle();
+//			String series = libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).getTitle();
+			String series = libraryServer.getSeriesTitle(seriesSeasonJTF.getText());
 			int option = JOptionPane.showConfirmDialog(null,
 					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
 					"Remove Series-Season",
@@ -607,14 +608,18 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		 if(option == JOptionPane.YES_OPTION) {
 
 			 try {
-				 libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).
-						 removeEpisode(episodeJTF.getText());
-				 refreshTree();
+//				 boolean flag = libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).
+//						 removeEpisode(episodeJTF.getText());
+				 boolean flag = libraryServer.removeEpisode(seriesSeasonJTF.getText(), episodeJTF.getText());
+				 if(flag){
+
+					 System.out.println("From server, removes " + episodeJTF.getText() + " from the library.");
+				 }
+
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
 				 ex.printStackTrace();
 			 }
-			 System.out.println("From server, removes " + episodeJTF.getText() + " from the library.");
 		 }
 	 }
 
@@ -636,7 +641,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 //				 library.getLibraryServer().getSeriesSeason(seriesSeasonJTF.getText()).
 //						 removeEpisode(episodeJTF.getText());
 				 refreshTree();
-				 System.out.println("From server, " + libraryServer.getSeriesSeason(episodeJTF.getText()) +
+				 System.out.println("From server, " + libraryServer.getSeriesTitle(episodeJTF.getText()) +
 						 " removed from library.");
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Episode: " + ex.getMessage());

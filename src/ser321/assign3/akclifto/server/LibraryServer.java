@@ -93,10 +93,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         return sLibrary;
     }
 
-    @Override
-    public int getLibrarySize() {
-        return seriesSeasonList.size();
-    }
+
 
 
     @Override
@@ -169,7 +166,12 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     }
 
     @Override
-    public String getSeriesSeasonsTitle(String title) throws RemoteException {
+    public int getLibrarySize() {
+        return seriesSeasonList.size();
+    }
+
+    @Override
+    public String getSeriesTitle(String title) throws RemoteException {
 
         System.out.println("Processed getSeriesSeasonTitle for " + title + " for client.");
         return getSeriesSeason(title).getTitle();
@@ -237,6 +239,13 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
         System.out.println("Processed getEpisodeSummary for " + node + " for client.");
         return getSeriesSeason(parent).getEpisode(node).getEpSummary();
+    }
+
+    @Override
+    public boolean removeEpisode(String series, String episode) {
+
+        System.out.println("Processed removeEpisode for " + episode + " in " + series + " for client.");
+        return getSeriesSeason(series).removeEpisode(episode);
     }
 
     @Override

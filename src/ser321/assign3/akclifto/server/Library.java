@@ -37,7 +37,7 @@ public interface Library extends Remote {
 
     LibraryServer getLibrary() throws RemoteException;
     int getLibrarySize() throws RemoteException;
-    void initializeServer() throws RemoteException;
+
     /**
      * Method to get TV show names and seasons available in the library
      * @return String list of names of season series titles
@@ -78,7 +78,9 @@ public interface Library extends Remote {
 
     String getEpisodeSummary(String parent, String node) throws RemoteException;
 
-    String getSeriesSeasonsTitle(String title) throws RemoteException;
+    boolean removeEpisode(String series, String episode) throws RemoteException;
+
+    String getSeriesTitle(String title) throws RemoteException;
 
     String getSeriesImdbRating(String title) throws  RemoteException;
 
