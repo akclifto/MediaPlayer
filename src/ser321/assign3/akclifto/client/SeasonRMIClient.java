@@ -3,6 +3,7 @@ package ser321.assign3.akclifto.client;
 import ser321.assign2.lindquis.MediaLibraryGui;
 import ser321.assign3.akclifto.server.Library;
 
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -81,11 +82,11 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
 		this.libraryServer = libraryServer;
-//		try {
-//			libraryServer = new LibraryServer(); //initialize library
-//		} catch (Exception ex){
-//			System.out.println("Exception in SeasonRMIClient library: " + ex.getMessage());
-//		}
+		try {
+			libraryServer.initializeServer();
+		} catch (Exception ex){
+			System.out.println("Exception in SeasonRMIClient library: " + ex.getMessage());
+		}
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -526,18 +527,18 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 	boolean flag;
 
 		 try {
-		 	flag = libraryServer.restoreLibraryFromFile("series.json");
+			 flag = libraryServer.restoreLibraryFromFile("series.json");
 
 			 if (!flag) {
 				 flag = libraryServer.restoreLibraryFromFile("seriesDefault.json");
 			 }
+			 int size = libraryServer.getLibrarySize();
+			 System.out.println("From server, library restored with " + size + " series entries.");
 		 } catch (Exception defaultRestore) {
 			 System.out.println("Exception restoring library: " + defaultRestore.getMessage());
 			 defaultRestore.printStackTrace();
 			 return false;
 		 }
-		 int size = libraryServer.getLibrarySize();
-		 System.out.println("From server, library restored with " + size + " series entries.");
 		 return flag;
 	 }
 

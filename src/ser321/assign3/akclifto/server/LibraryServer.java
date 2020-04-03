@@ -46,13 +46,14 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
     private HashMap<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
-    private static LibraryServer sLibrary;
+    private LibraryServer sLibrary;
 
     /**
      * Constructor used for tests.
      * */
     public LibraryServer() throws RemoteException {
 
+        super();
         this.libraryMap = new HashMap<>();
         this.seriesSeasonList = new ArrayList<>();
         this.restoreLibraryFromFile(fileName);
@@ -62,18 +63,29 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
      * Construct Season Library, Singleton
      * @return SeasonLibrary
      * */
-    public static LibraryServer getInstance() {
+//    public static LibraryServer getInstance() {
+//
+//        try {
+//            if (sLibrary == null) {
+//                sLibrary = new LibraryServer();
+//                sLibrary.restoreLibraryFromFile(fileName);
+//            }
+//        } catch (Exception ex) {
+//            System.out.println("Exception in getInstance(): " + ex.getMessage());
+//            ex.printStackTrace();
+//        }
+//        return sLibrary;
+//    }
+
+    @Override
+    public void initializeServer(){
 
         try {
-            if (sLibrary == null) {
-                sLibrary = new LibraryServer();
-                sLibrary.restoreLibraryFromFile(fileName);
-            }
-        } catch (Exception ex) {
-            System.out.println("Exception in getInstance(): " + ex.getMessage());
+            sLibrary = new LibraryServer();
+        }catch (Exception ex){
+            System.out.println("Exception in initializeServer");
             ex.printStackTrace();
         }
-        return sLibrary;
     }
 
     /*All setters/getters*/
@@ -260,7 +272,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
         boolean flag;
         try {
             clearLibrary();
-            flag = initialize(filename);
+            flag = initializeLibrary(filename);
             System.out.println("Request completed: library " + filename + " been restored for client.");
         } catch(Exception ex){
             System.out.println("Exception restoring library: " + ex.getMessage());
@@ -274,7 +286,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
      * @param fileName : path-to or name-of JSON file
      * @return true if JSON initialized correctly, false otherwise.
      * */
-    public boolean initialize(String fileName){
+    private boolean initializeLibrary(String fileName){
 
         try{
 
