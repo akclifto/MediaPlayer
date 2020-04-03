@@ -53,19 +53,15 @@ import java.time.Duration;
  * You are free add more files and further modularize this class's
  * functionality.
  * <p>
- * Purpose: MediaLibraryApp instructor sample for solving Spring 2020 ser321 assignments.
- * This problem provides a sample for browsing and managing information about
- * tv series. It uses a Swing JTree, and JTextField controls to
- * realize a GUI with a split pane. The left pane contains an expandable
- * JTree of the media library.
- * This program is a sample controller for the non-distributed version of
- * the system.
- * The right pane contains components that allow viewing, modifying and adding
- * albums, tracks, and corresponding files.
+ * Purpose: SeasonRMIClient is the client-side application controller for the tv series
+ * media player.  functionality uses the MediaLibraryGUI to display/search/manage tv show
+ * series library content.
  *
  * @author Tim Lindquist (Tim.Linquist@asu.edu),
  * Software Engineering, CIDSE, IAFSE, ASU Poly
- * @version January 2020
+ * @author Adam Clifton (akclifto@asu.edu)
+ * Software Engineering, ASU
+ * @version April 2020
  */
 public class SeasonRMIClient extends MediaLibraryGui implements
 		TreeWillExpandListener,
@@ -81,7 +77,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 			//"http://getdrawings.com/img/black-and-white-tree-silhouette-9.jpg";
 
-	public SeasonRMIClient(String author, String authorKey) {
+	public SeasonRMIClient(String author, String authorKey, String hostId, String regPort) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
@@ -550,6 +546,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 			 try {
 				 library.removeSeriesSeason(seriesSeasonJTF.getText());
+				 System.out.println("from Server, removes " + seriesSearchJTF.getText() + "from the library.");
 				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Series-Season: " + ex.getMessage());
@@ -575,6 +572,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			 try {
 				 library.getSeriesSeason(seriesSeasonJTF.getText()).
 						 removeEpisode(episodeJTF.getText());
+				 System.out.println("from Server, removes " + episodeJTF.getText() + "from the library.");
 				 refreshTree();
 			 } catch (Exception ex) {
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
@@ -634,6 +632,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				 String jsonEpisodes = fetchURL(searchReqURL2);
 
 				 actionFetchResults(jsonSeries, jsonEpisodes);
+				 System.out.println("From server, " + seriesSearchJTF.getText() + "added to library.");
 				 refreshTree();
 
 			 } catch (Exception ex) {
@@ -737,10 +736,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			String regPort = "8888";
 			String name = "first.last";
 			String key = "use-your-last.ombd-key";
-			if (args.length == 2) {
-				name = args[0];
-				key = args[1];
-			} else if (args.length >= 4) {
+
+			if (args.length >= 4) {
 				hostId = args[0];
 				regPort = args[1];
 				name = args[2];
@@ -750,7 +747,8 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			server = (Library) Naming.lookup("rmi://" + hostId + ":" + regPort + "/LibraryServer");
 			System.out.println("\nClient " + name + " retained  remote object reference to: " +
 					"rmi: " + hostId + ": " + regPort + " LibraryServer\n");
-			new SeasonRMIClient(name, key);
+
+			new SeasonRMIClient(name, key, hostId, regPort);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

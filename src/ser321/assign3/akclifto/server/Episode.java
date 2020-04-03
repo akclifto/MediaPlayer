@@ -27,7 +27,7 @@ import java.io.Serializable;
  *
  * @author Adam Clifton akclifto@asu.edu
  * Software Engineering, ASU
- * @version March 2020
+ * @version April 2020
  */
 public class Episode implements JSONString, Serializable {
 

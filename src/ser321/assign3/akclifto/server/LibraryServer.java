@@ -175,7 +175,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
             } else {
                 libraryMap.put(seriesSeason.getTitle(), seriesSeason);
                 seriesSeasonList.add(seriesSeason);
-//                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
+                System.out.println(seriesSeason.getTitle() + " was added to the Library list for " + seriesSeason.getTitle());
             }
         } catch(Exception ex){
             System.out.println("Exception adding series to library: " + ex.getMessage());
@@ -334,6 +334,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library {
 
             seriesObj.put("episodes", epiArray);
             refreshLibrary(seriesObj);
+
         } catch(Exception ex){
             System.out.println("Exception in parseURLtoJSON: " + ex.getMessage());
         }

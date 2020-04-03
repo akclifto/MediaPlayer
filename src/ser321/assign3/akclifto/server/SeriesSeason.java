@@ -30,7 +30,7 @@ import java.util.List;
  * Software Engineering, CIDSE, IAFSE, ASU Poly
  * @author Adam Clifton akclifto@asu.edu
  * Software Engineering, ASU
- * @version March 2020
+ * @version April 2020
  */
 public class SeriesSeason {
 

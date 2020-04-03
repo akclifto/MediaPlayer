@@ -131,10 +131,15 @@
         <echo message="user.dir is: ${user.dir}"/>
         <!--        <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>-->
         <java classname="ser321.assign3.akclifto.client.SeasonRMIClient" fork="yes">
+
             <classpath refid="compile.classpath"/>
             <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
+
             <arg value="${hostId}"/>
             <arg value="${regPort}"/>
+            <arg value="${userId}"/>
+           <arg value="${omdbkey}"/>
+
         </java>
     </target>
 
@@ -152,8 +157,10 @@
                 <java classname="ser321.assign3.akclifto.server.LibraryServer" fork="yes">
                     <!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
                     <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
+
                     <arg value="${hostId}"/>
                     <arg value="${regPort}"/>
+
                     <classpath refid="compile.classpath"/>
                 </java>
             </sequential>
