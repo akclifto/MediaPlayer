@@ -254,14 +254,11 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 		try{
 
-//			String seriesName = libraryServer.getSeriesSeason(title).getTitle();
-//			String[] epTitles = libraryServer.getSeriesSeason(title).getEpisodeTitles();
 			String seriesName = libraryServer.getSeriesTitle(title);
 			String[] epTitles = libraryServer.getEpisodeTitles(title);
 
 
 			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
-//			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesSeason(title).getTitle());  // sub nodes to seriesToAdd
 			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesTitle(title));  // sub nodes to seriesToAdd
 
 			if(subNode != null) { //if series exists.
@@ -269,7 +266,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				debug("seriesSeason exists: " + libraryServer.getSeriesTitle(title));
 				model.insertNodeInto(seriesToAdd, subNode, model.getChildCount(subNode));
 
-//				if(libraryServer.getSeriesSeason(title).checkEpisodes()){
 				if(libraryServer.checkEpisodes(title)){
 
 					setTreeEpisodeNodes(model, subNode, epTitles);
@@ -281,13 +277,11 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				debug("No series, so adding one with name: " + seriesName);
 				model.insertNodeInto(seriesNode, root, model.getChildCount(root));
 
-//				if(libraryServer.getSeriesSeason(title).checkEpisodes())
 				if(libraryServer.checkEpisodes(title))
 				{
 					setTreeEpisodeNodes(model, seriesNode, epTitles);
 				}
 			}
-//			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesSeason(title).getTitle());
 			System.out.println("From server, Tree Series Nodes Set for " + libraryServer.getSeriesTitle(title));
 		} catch(Exception ex){
 			System.out.println("Exception in setTreeSeriesNodes: " + ex.getMessage());
@@ -386,7 +380,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 				if(node.getLevel() == series){
 
-//					int episodeCount = libraryServer.getSeriesSeason(nodeLabel).getEpisodeList().size();
 					int episodeCount = libraryServer.getEpisodeListSize(nodeLabel);
 
 					// Change to season name
@@ -564,7 +557,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	 private void actionRemoveSeries(){
 
 	 	try {
-//			String series = libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).getTitle();
 			String series = libraryServer.getSeriesTitle(seriesSeasonJTF.getText());
 			int option = JOptionPane.showConfirmDialog(null,
 					"Remove Selected Series? \n" + seriesSeasonJTF.getText(),
@@ -604,8 +596,6 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 		 if(option == JOptionPane.YES_OPTION) {
 
 			 try {
-//				 boolean flag = libraryServer.getSeriesSeason(seriesSeasonJTF.getText()).
-//						 removeEpisode(episodeJTF.getText());
 				 boolean flag = libraryServer.removeEpisode(seriesSeasonJTF.getText(), episodeJTF.getText());
 				 if(flag){
 					 refreshTree();
