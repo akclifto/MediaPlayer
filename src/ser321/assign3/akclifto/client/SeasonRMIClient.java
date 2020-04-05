@@ -675,7 +675,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				 System.out.println("Exception removing Episode: " + ex.getMessage());
 				 ex.printStackTrace();
 			 }
-			 System.out.println("From server, " + seriesSearchJTF.getText() + "added to library.");
+			 System.out.println("From server, " + seriesSearchJTF.getText() + " added to library.");
 		 }
 
 	 }

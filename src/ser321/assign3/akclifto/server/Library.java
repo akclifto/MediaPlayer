@@ -35,7 +35,7 @@ public interface Library extends Remote {
      * Method to send serialized series title information to the client from the server.
      * Used to construct JTree on the client-side
      * @return array of series titles for a given library.
-     * @throws RemoteException
+     * @throws RemoteException 
      * */
     String[] getSeriesSeasonTitles() throws RemoteException;
 
