@@ -574,8 +574,10 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			if (option == JOptionPane.YES_OPTION) {
 
 				try {
-					libraryServer.removeSeriesSeason(seriesSeasonJTF.getText());
-					refreshTree();
+					boolean flag = libraryServer.removeSeriesSeason(seriesSeasonJTF.getText());
+					if(flag) {
+						refreshTree();
+					}
 				} catch (Exception ex) {
 					System.out.println("Exception removing Series-Season: " + ex.getMessage());
 					ex.printStackTrace();

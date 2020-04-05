@@ -77,10 +77,15 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
         return sLibrary;
     }
 
-    /*All setters/getters*/
+    @Override
     public LibraryServer getLibrary(){
         System.out.println("The Library has been sent to the client.");
         return sLibrary;
+    }
+
+    @Override
+    public HashMap<String, SeriesSeason> getLibraryMap() {
+        return libraryMap;
     }
 
 
@@ -312,7 +317,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
         JSONObject master = new JSONObject();
         JSONArray seriesArr = new JSONArray();
-//        System.out.println("List size: " + seriesSeasonList.size());
+
         try{
             JSONObject series;
             for(SeriesSeason ss : seriesSeasonList) {
@@ -356,12 +361,12 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
             String content = Files.readString(Paths.get(fileName));
             JSONObject jsonRoot = new JSONObject(content);
-//            System.out.println(jsonRoot.toString(2));
+            //System.out.println(jsonRoot.toString(2));
 
             JSONArray libArr = jsonRoot.getJSONArray("library");
             for(int i = 0; i < libArr.length(); i++){
                 JSONObject series = libArr.getJSONObject(i).getJSONObject("series");
-//                System.out.println(libArr.getJSONObject(i).toString());
+
                 SeriesSeason ss = new SeriesSeason(series);
                 addSeriesSeason(ss);  //add to library map and list
             }

@@ -117,10 +117,6 @@ public class SeriesSeason {
     }
 
     /* All setters/getters */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTitle() {
         return this.title;
     }

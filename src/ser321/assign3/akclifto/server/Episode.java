@@ -65,9 +65,7 @@ public class Episode implements JSONString, Serializable {
     public String getImdbRating() {
         return imdbRating;
     }
-    public JSONObject getEpData(){
-        return epData;
-    }
+    public JSONObject getEpData(){ return epData; }
     public String getEpSummary() {
         return epSummary;
     }

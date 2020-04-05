@@ -1,9 +1,10 @@
 package ser321.assign3.akclifto.server;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
- * Copyright 2020 Adam Clifton (akclifto@asu.edu),
+ * Copyright 2020 Adam Clifton (akclifto@asu.edu)
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,8 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * <p>
- * Purpose: LibraryHelper is an interface with helper methods used in conjunction with
- * Library Interface and LibraryServer.
+ * Purpose: LibraryHelper is an interface with helper methods (get, add, and print)
+ * used in conjunction with Library Interface and LibraryServer.
  * <p>
  * Ser321 Principles of Distributed Software Systems
  *
@@ -29,6 +30,14 @@ import java.util.List;
  * @version April 2020
  */
 public interface LibraryHelper {
+
+
+    /**
+     * Method to retrieve Hashmap library of library server.
+     * @return Hashmap of libraryMap
+     * */
+    HashMap<String, SeriesSeason> getLibraryMap();
+
 
     /**
      * Method to get TV show names and seasons available in the library
