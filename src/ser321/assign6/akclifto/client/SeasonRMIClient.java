@@ -1,7 +1,7 @@
-package ser321.assign3.akclifto.client;
+package ser321.assign6.akclifto.client;
 
 import ser321.assign2.lindquis.MediaLibraryGui;
-import ser321.assign3.akclifto.server.Library;
+import ser321.assign6.akclifto.server.Library;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
