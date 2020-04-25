@@ -154,20 +154,6 @@
     </target>
 
 
-<!--    <target name="execute" depends="compile"-->
-<!--            description="execute the media player client">-->
-<!--        <java classname="ser321.assign3.akclifto.client.SeasonRMIClient"-->
-<!--              fork="yes">-->
-
-<!--            <arg value="${userId}"/>-->
-<!--            <arg value="${omdbkey}"/>-->
-
-<!--            <classpath refid="compile.classpath"/>-->
-<!--            <jvmarg value="-Djava.library.path=${javafx-lib-home}"/>-->
-<!--        </java>-->
-<!--    </target>-->
-
-
     <target name="clean">
         <!-- Delete the ${build} and ${docs} directory trees -->
         <delete dir="${build}"/>
