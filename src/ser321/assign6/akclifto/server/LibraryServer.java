@@ -226,13 +226,13 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
     @Override
-    public boolean removeEpisode(String series, String episode) {
+    public synchronized boolean removeEpisode(String series, String episode) {
 
         return getSeriesSeason(series).removeEpisode(episode);
     }
 
     @Override
-    public boolean checkEpisodes(String title) {
+    public synchronized boolean checkEpisodes(String title) {
 
         return getSeriesSeason(title).checkEpisodes();
     }
@@ -271,7 +271,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public boolean removeSeriesSeason(String title) {
+    public synchronized boolean removeSeriesSeason(String title) {
 
         if(seriesSeasonList.isEmpty()){
             System.out.println("SeriesSeason List is empty.");
@@ -292,7 +292,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public boolean saveLibraryToFile(String fileName) {
+    public synchronized boolean saveLibraryToFile(String fileName) {
 
         //System.out.println("\nSaving current library to file for client: " + fileName);
         JSONObject jsonSeries = constructJSON();
@@ -335,7 +335,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public boolean restoreLibraryFromFile(String filename) {
+    public synchronized boolean restoreLibraryFromFile(String filename) {
 
         boolean flag;
         try {
@@ -378,7 +378,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
+    public synchronized void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
         try {
             //shared or cross-data points
@@ -466,10 +466,10 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
 
-    /**
-     * Main method to initialize server and library.
-     * @param args : arguments for hostId and regPort number.
-     * */
+//    /**
+//     * Main method to initialize server and library.
+//     * @param args : arguments for hostId and regPort number.
+//     * */
 //    public static void main(String[] args) {
 //
 //        try{

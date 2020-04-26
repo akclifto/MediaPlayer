@@ -33,7 +33,7 @@ import org.json.JSONObject;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class LibraryServerSkeleton extends Object {
+public class LibraryServerSkeleton {
 
     Library sLibrary;
 
@@ -45,7 +45,7 @@ public class LibraryServerSkeleton extends Object {
         JSONObject result = new JSONObject();
         try {
 
-            //TODO:
+            //TODO: once you make the stub
 
         } catch (Exception ex) {
             System.out.println("Exception in Skeleton CallMethod: " + ex.getMessage());
