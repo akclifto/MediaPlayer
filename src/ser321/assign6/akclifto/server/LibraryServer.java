@@ -7,11 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -44,7 +43,7 @@ import java.util.List;
  */
 public class LibraryServer extends UnicastRemoteObject implements Library, LibraryHelper {
 
-    private HashMap<String, SeriesSeason> libraryMap;
+    private Hashtable<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
     private static LibraryServer sLibrary = null;
@@ -54,7 +53,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
      * */
     public LibraryServer() throws RemoteException {
 
-        this.libraryMap = new HashMap<>();
+        this.libraryMap = new Hashtable<>();
         this.seriesSeasonList = new ArrayList<>();
         //this.restoreLibraryFromFile(fileName);
     }
@@ -84,7 +83,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
     @Override
-    public HashMap<String, SeriesSeason> getLibraryMap() {
+    public Hashtable<String, SeriesSeason> getLibraryMap() {
         return libraryMap;
     }
 
@@ -444,7 +443,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
         libraryMap.clear();
         seriesSeasonList.clear();
-        this.libraryMap = new HashMap<>();
+        this.libraryMap = new Hashtable<>();
         this.seriesSeasonList = new ArrayList<>();
 
     }
@@ -471,24 +470,24 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
      * Main method to initialize server and library.
      * @param args : arguments for hostId and regPort number.
      * */
-    public static void main(String[] args) {
-
-        try{
-            String hostId = "localHost";
-            String regPort = "8888";
-            if(args.length >= 2) {
-                hostId = args[0];
-                regPort= args[1];
-            }
-            Library obj = LibraryServer.getInstance();
-            Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
-            System.out.println("Server bound in registry as: "+
-                    "rmi://"+hostId+":"+regPort+"/LibraryServer");
-            System.out.println("Server Ready");
-        } catch (Exception ex) {
-            System.out.println("Exception initializing server: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//
+//        try{
+//            String hostId = "localHost";
+//            String regPort = "8888";
+//            if(args.length >= 2) {
+//                hostId = args[0];
+//                regPort= args[1];
+//            }
+//            Library obj = LibraryServer.getInstance();
+//            Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
+//            System.out.println("Server bound in registry as: "+
+//                    "rmi://"+hostId+":"+regPort+"/LibraryServer");
+//            System.out.println("Server Ready");
+//        } catch (Exception ex) {
+//            System.out.println("Exception initializing server: " + ex.getMessage());
+//            ex.printStackTrace();
+//        }
+//    }
 
 }

@@ -1,6 +1,6 @@
 package ser321.assign6.akclifto.server;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -36,7 +36,7 @@ public interface LibraryHelper {
      * Method to retrieve Hashmap library of library server.
      * @return Hashmap of libraryMap
      * */
-    HashMap<String, SeriesSeason> getLibraryMap();
+    Hashtable<String, SeriesSeason> getLibraryMap();
 
 
     /**

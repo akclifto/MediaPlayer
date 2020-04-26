@@ -44,7 +44,7 @@ public class LibraryServerSkeleton extends Object {
     public String callMethod(String request) {
         JSONObject result = new JSONObject();
         try {
-            
+
             //TODO:
 
         } catch (Exception ex) {

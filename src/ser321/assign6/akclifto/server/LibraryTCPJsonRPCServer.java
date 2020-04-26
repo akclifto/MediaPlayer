@@ -1,5 +1,6 @@
 package ser321.assign6.akclifto.server;
 
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -38,20 +39,62 @@ public class LibraryTCPJsonRPCServer extends Thread {
     private int id;
     private LibraryServerSkeleton skeleton;
 
+    /**
+     * Constructor
+     * @param sock : socket used for thread
+     * @param id : unique id to track thread
+     * @param sLibrary : interface of library to pass to Server
+     * */
     public LibraryTCPJsonRPCServer(Socket sock, int id, Library sLibrary) {
         this.conn = sock;
         this.id = id;
         skeleton = new LibraryServerSkeleton(sLibrary);
     }
 
+    /**
+     *
+     * */
     public void run() {
         //TODO:
 
     }
 
+    /**
+     *  Entry point of server program.  Method will initiate LibraryServer, set up socket and port,
+     *  wait for connection, then send connections to a new thread.
+     * @param args : command line args input
+     * @return void
+     * */
     public static void main(String[] args) {
 
-        //TODO:
+        Socket sock;
+        Library sLibrary = LibraryServer.getInstance();
+        int id = 0;
+        try {
+
+            if(args.length != 1){
+                System.out.println("Usage: java ser321.assign6.akclifto.server.LibraryTCPJsonRPCServer");
+                System.exit(0);
+            }
+
+            int portNum = Integer.parseInt(args[0]);
+            if(portNum <= 8000) {
+                portNum = 8888;
+            }
+            ServerSocket server = new ServerSocket(portNum);
+
+            while(true){
+                System.out.println("Library Server is waiting for connection to port " + portNum);
+                sock = server.accept();  //will wait for connection here
+                System.out.println("Library Server connect to client: " + id);
+                LibraryTCPJsonRPCServer serverThread = new LibraryTCPJsonRPCServer(sock, id++, sLibrary);
+                serverThread.start();
+            }
+        } catch(Exception ex) {
+            System.out.println("Exception in RPCServer Main: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
     }
 
 }
