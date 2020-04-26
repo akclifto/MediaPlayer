@@ -8,7 +8,6 @@ import ser321.assign6.akclifto.server.Library;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,111 +117,121 @@ public class SeriesSeasonTCPProxy implements Library {
     }
 
     @Override
-    public String[] getSeriesSeasonTitles() throws RemoteException {
+    public String[] getSeriesSeasonTitles() {
         //TODO:
         return new String[0];
     }
 
     @Override
-    public int getLibrarySize() throws RemoteException {
+    public int getLibrarySize() {
         //TODO:
         return 0;
     }
 
     @Override
-    public String[] getEpisodeTitles(String title) throws RemoteException {
+    public String[] getEpisodeTitles(String title) {
         //TODO:
         return new String[0];
     }
 
     @Override
-    public int getEpisodeListSize(String title) throws RemoteException {
+    public int getEpisodeListSize(String title) {
         //TODO:
         return 0;
     }
 
     @Override
-    public boolean checkEpisodes(String title) throws RemoteException {
+    public boolean checkSeries(String title) {
+        return false;
+    }
+
+    @Override
+    public boolean checkEpisodes(String title) {
         //TODO:
         return false;
     }
 
     @Override
-    public String getEpisodeName(String parent, String node) throws RemoteException {
+    public String getEpisodeName(String parent, String node) {
         //TODO:
         return null;
     }
 
     @Override
-    public String getEpisodeImdb(String parent, String node) throws RemoteException {
+    public String getEpisodeImdb(String parent, String node) {
         //TODO:
         return null;
     }
 
     @Override
-    public String getEpisodeSummary(String parent, String node) throws RemoteException {
+    public String getEpisodeSummary(String parent, String node) {
         //TODO:
         return null;
     }
 
     @Override
-    public boolean removeEpisode(String series, String episode) throws RemoteException {
+    public boolean addEpisode(String series, String episode) {
+        return false;
+    }
+
+    @Override
+    public boolean removeEpisode(String series, String episode) {
         //TODO:
         return false;
     }
 
     @Override
-    public String getSeriesTitle(String title) throws RemoteException {
+    public String getSeriesTitle(String title) {
         //TODO:
         return null;
     }
 
     @Override
-    public String getSeriesImdbRating(String title) throws RemoteException {
+    public String getSeriesImdbRating(String title) {
         //TODO:
         return null;
     }
 
     @Override
-    public String getGenre(String title) throws RemoteException {
+    public String getGenre(String title) {
         //TODO:
         return null;
     }
 
     @Override
-    public String getPosterLink(String title) throws RemoteException {
+    public String getPosterLink(String title) {
         //TODO:
         return null;
     }
 
     @Override
-    public String getSummary(String title) throws RemoteException {
+    public String getSummary(String title) {
         //TODO:
         return null;
     }
 
     @Override
-    public boolean removeSeriesSeason(String title) throws RemoteException {
+    public boolean removeSeriesSeason(String title) {
         //TODO:
         return false;
     }
 
     @Override
-    public boolean saveLibraryToFile(String fileName) throws RemoteException {
+    public boolean saveLibraryToFile(String fileName) {
         //TODO:
         return false;
     }
 
     @Override
-    public boolean restoreLibraryFromFile(String filename) throws RemoteException {
+    public boolean restoreLibraryFromFile(String filename) {
         //TODO:
         return false;
     }
 
     @Override
-    public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) throws RemoteException {
+    public boolean parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
         //TODO:
-
+        return false;
     }
 
 
