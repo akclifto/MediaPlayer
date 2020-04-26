@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -41,7 +40,7 @@ import java.util.List;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class LibraryServer extends UnicastRemoteObject implements Library, LibraryHelper {
+public class LibraryServer implements Library, LibraryHelper {
 
     private Hashtable<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
