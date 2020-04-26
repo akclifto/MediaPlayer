@@ -62,7 +62,7 @@ import java.time.Duration;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class SeasonRMIClient extends MediaLibraryGui implements
+public class SeriesSeasonRMIClient extends MediaLibraryGui implements
 		TreeWillExpandListener,
 		ActionListener,
 		TreeSelectionListener {
@@ -75,7 +75,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeasonRMIClient(String author, String authorKey, Library server) {
+	public SeriesSeasonRMIClient(String author, String authorKey, Library server) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
@@ -779,7 +779,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 					"rmi://"+hostId+":"+regPort+"/LibraryServer");
 			System.out.println("Client obtained remote object reference to" +
 					" the LibraryServer");
-			new SeasonRMIClient(name, key, libraryServer);
+			new SeriesSeasonRMIClient(name, key, libraryServer);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

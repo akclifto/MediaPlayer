@@ -9,7 +9,7 @@
     <property name="build" value="./classes"/>
     <property name="docs" value="./docs"/>
     <property name="lib" value="./lib"/>
-    <property name="userId" value="first.lastname"/>
+    <property name="userId" value="akclifto"/>
     <property name="omdbkey" value="your-omdb-api-key"/>
     <property name="parentDir" value="${user.dir}${file.separator}"/>
     <property name="javafxhome" value="javafx-sdk-13.0.1/"/>
@@ -126,8 +126,8 @@
     <target name="client" depends="compile"
             description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
-        <!--        <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>-->
-        <java classname="ser321.assign6.akclifto.client.SeasonRMIClient" fork="yes">
+        <!--        <echo message="command line client: java -cp classes -SeriesSeasonRMIClient ${hostId} ${regPort} ${omdbkey}"/>-->
+        <java classname="ser321.assign6.akclifto.client.SeriesSeasonRMIClient" fork="yes">
     
             <classpath refid="compile.classpath"/>
             <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
@@ -151,7 +151,8 @@
             </exec>
             <sequential>
                 <sleep seconds="10"/>
-                <java classname="ser321.assign6.akclifto.server.LibraryServer" fork="yes">
+                <!--        <echo message="command line client: java -cp classes -LibraryTCPJsonRPCServer ${regPort}"/>-->
+                <java classname="ser321.assign6.akclifto.server.LibraryServer" fork="yes">  <!-- TODO: change to LibraryTCPJsonRPCServer-->
                     <!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
                     <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
     
