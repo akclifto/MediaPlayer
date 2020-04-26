@@ -90,6 +90,7 @@
         <echo message="build.host.platform is: ${build.host.platform}"/>
     </target>
 
+
     <!-- Setup javaFX -->
     <target name="setup.javafx" depends="prepare">
         <if>
@@ -111,6 +112,7 @@
         </if>
     </target>
 
+
     <!-- Compile Project -->
     <target name="compile" depends="setup.javafx"
             description="Compile Java sources">
@@ -122,25 +124,7 @@
     </target>
 
 
-    <!-- Setup Client -->
-    <target name="client" depends="compile"
-            description="Start client">
-        <echo message="user.dir is: ${user.dir}"/>
-        <!--        <echo message="command line client: java -cp classes -SeriesSeasonRMIClient ${hostId} ${regPort} ${omdbkey}"/>-->
-        <java classname="ser321.assign6.akclifto.client.SeriesSeasonRMIClient" fork="yes">
-    
-            <classpath refid="compile.classpath"/>
-            <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
-    
-            <arg value="${hostId}"/>
-            <arg value="${regPort}"/>
-            <arg value="${userId}"/>
-           <arg value="${omdbkey}"/>
-    
-        </java>
-    </target>
-    
-    <!-- Setup Server -->
+    <!-- Build/Initiate Server -->
     <target name="server" depends="compile"
             description="Using parallel task, start server and client">
         <parallel>
@@ -151,18 +135,34 @@
             </exec>
             <sequential>
                 <sleep seconds="10"/>
-                <!--        <echo message="command line client: java -cp classes -LibraryTCPJsonRPCServer ${regPort}"/>-->
+                <echo message="command line client: java -cp classes:lib/json.jar -LibraryTCPJsonRPCServer ${regPort}"/>
                 <java classname="ser321.assign6.akclifto.server.LibraryServer" fork="yes">  <!-- TODO: change to LibraryTCPJsonRPCServer-->
                     <!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
                     <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
-    
+
                     <arg value="${hostId}"/>
                     <arg value="${regPort}"/>
-    
+
                     <classpath refid="compile.classpath"/>
                 </java>
             </sequential>
         </parallel>
     </target>
 
+
+    <!-- Build/Initiate Client -->
+    <target name="client" depends="compile"
+            description="Start client">
+        <echo message="user.dir is: ${user.dir}"/>
+        <echo message="command line client: java -cp classes:lib/assign2Gui.jar -SeriesSeasonRMIClient ${hostId} ${regPort} ${omdbkey}"/>
+        <java classname="ser321.assign6.akclifto.client.SeriesSeasonRMIClient" fork="yes">
+            <classpath refid="compile.classpath"/>
+            <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
+            <arg value="${hostId}"/>
+            <arg value="${regPort}"/>
+            <arg value="${userId}"/>
+           <arg value="${omdbkey}"/>
+        </java>
+    </target>
+    
 </project>
