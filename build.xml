@@ -1,4 +1,4 @@
-<project name="Ser321 Spring 2020 Assign3" default="targets" basedir=".">
+<project name="Ser321 Spring 2020 Assign6, akclifto (akclifto@asu.edu)" default="targets" basedir=".">
 
     <!-- define tasks used in the prepare task for platform identification -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -37,6 +37,7 @@
     </path>
 
 
+    <!-- Ant Targets-->
     <target name="targets">
         <echo message="targets are clean, prepare, setup.javafx, compile, server, and client. "/>
         <echo message="start server with: ant server -DhostId=localhost -DregPort=8888"/>
@@ -45,7 +46,16 @@
     </target>
 
 
-    <target name="prepare">
+    <!-- Clean Project -->
+    <target name="clean">
+        <!-- Delete the ${build} and ${docs} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${javafxhome}"/>
+    </target>
+
+
+    <!-- Prepare Project-->
+    <target name="prepare" depends="clean" > <!--TODO: -->
         <!-- Create the time stamp -->
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
@@ -80,7 +90,7 @@
         <echo message="build.host.platform is: ${build.host.platform}"/>
     </target>
 
-
+    <!-- Setup javaFX -->
     <target name="setup.javafx" depends="prepare">
         <if>
             <isset property="build.host.ismac"/>
@@ -101,7 +111,7 @@
         </if>
     </target>
 
-
+    <!-- Compile Project -->
     <target name="compile" depends="setup.javafx"
             description="Compile Java sources">
         <javac srcdir="${src}"
@@ -112,11 +122,12 @@
     </target>
 
 
+    <!-- Setup Client -->
     <target name="client" depends="compile"
             description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
         <!--        <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>-->
-        <java classname="ser321.assign3.akclifto.client.SeasonRMIClient" fork="yes">
+        <java classname="ser321.assign6.akclifto.client.SeasonRMIClient" fork="yes">
     
             <classpath refid="compile.classpath"/>
             <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
@@ -129,7 +140,7 @@
         </java>
     </target>
     
-    
+    <!-- Setup Server -->
     <target name="server" depends="compile"
             description="Using parallel task, start server and client">
         <parallel>
@@ -140,7 +151,7 @@
             </exec>
             <sequential>
                 <sleep seconds="10"/>
-                <java classname="ser321.assign3.akclifto.server.LibraryServer" fork="yes">
+                <java classname="ser321.assign6.akclifto.server.LibraryServer" fork="yes">
                     <!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
                     <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
     
@@ -153,10 +164,4 @@
         </parallel>
     </target>
 
-
-    <target name="clean">
-        <!-- Delete the ${build} and ${docs} directory trees -->
-        <delete dir="${build}"/>
-        <delete dir="${javafxhome}"/>
-    </target>
 </project>
