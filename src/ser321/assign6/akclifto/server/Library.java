@@ -67,6 +67,14 @@ public interface Library extends Remote {
 
     /**
      * Method to check if episode is already in the library and send to the client from the server.
+     * @param title : title of the series requested to check if already in library.
+     * @return true if not in the series list, false otherwise.
+     * @throws RemoteException if error during remote method invocation
+     * */
+    boolean checkSeries(String title) throws RemoteException;
+
+    /**
+     * Method to check if episode is already in the library and send to the client from the server.
      * @param title : title of the series requested
      * @return true if not in the episode list for the selected series, false otherwise.
      * @throws RemoteException if error during remote method invocation

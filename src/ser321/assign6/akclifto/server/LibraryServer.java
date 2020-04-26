@@ -206,6 +206,21 @@ public class LibraryServer implements Library, LibraryHelper {
     }
 
     @Override
+    public boolean checkSeries(String title) {
+
+        try{
+            for(SeriesSeason ss : seriesSeasonList){
+                if(ss.getTitle().equalsIgnoreCase(title)){
+                    return false;
+                }
+            }
+        } catch (Exception ex){
+            System.out.println("Exception in checkSeries: " + ex.getMessage());
+        }
+        return true;
+    }
+
+    @Override
     public String getEpisodeName(String parent, String node) {
 
         return getSeriesSeason(parent).getEpisode(node).getName();
@@ -225,7 +240,7 @@ public class LibraryServer implements Library, LibraryHelper {
     }
 
     @Override
-    public boolean addEpisode(String series, String episode) throws RemoteException {
+    public boolean addEpisode(String series, String episode) {
 
         Episode epi = getSeriesSeason(series).getEpisode(episode);
         try {
