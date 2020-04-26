@@ -1,5 +1,7 @@
 package ser321.assign6.akclifto.server;
 
+import java.net.Socket;
+
 /**
  * Copyright 2020 Adam Clifton, akclifto@asu.edu
  * <p>
@@ -24,11 +26,32 @@ package ser321.assign6.akclifto.server;
  * functionality.
  * <p>
  * Purpose: LibraryTCPJsonRPCServer is the class to create a threaded socket
- * server that implements JsonRPC methods that will be called on the LibraryServer.
+ * server that implements JsonRPC method calls that will be called on the LibraryServer.
  *
  * @author Adam Clifton (akclifto@asu.edu)
  * Software Engineering, ASU
  * @version April 2020
  */
-public class LibraryTCPJsonRPCServer {
+public class LibraryTCPJsonRPCServer extends Thread {
+
+    private Socket conn;
+    private int id;
+    private LibraryServerSkeleton skeleton;
+
+    public LibraryTCPJsonRPCServer(Socket sock, int id, Library sLibrary) {
+        this.conn = sock;
+        this.id = id;
+        skeleton = new LibraryServerSkeleton(sLibrary);
+    }
+
+    public void run() {
+        //TODO:
+
+    }
+
+    public static void main(String[] args) {
+
+        //TODO:
+    }
+
 }

@@ -1,6 +1,8 @@
 package ser321.assign6.akclifto.server;
 
 
+import org.json.JSONObject;
+
 /**
  * Copyright 2020 Adam Clifton, akclifto@asu.edu
  * <p>
@@ -31,5 +33,25 @@ package ser321.assign6.akclifto.server;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class LibraryServerSkeleton {
+public class LibraryServerSkeleton extends Object {
+
+    Library sLibrary;
+
+    public LibraryServerSkeleton(Library sLibrary) {
+        this.sLibrary = sLibrary;
+    }
+
+    public String callMethod(String request) {
+        JSONObject result = new JSONObject();
+        try {
+            
+            //TODO:
+
+        } catch (Exception ex) {
+            System.out.println("Exception in Skeleton CallMethod: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return result.toString();
+    }
+
 }
