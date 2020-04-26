@@ -1,5 +1,7 @@
 package ser321.assign6.akclifto.server;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -52,10 +54,32 @@ public class LibraryTCPJsonRPCServer extends Thread {
     }
 
     /**
-     *
+     * Method to implement input and output streams from socket server connection.
+     * @return void.
      * */
     public void run() {
-        //TODO:
+        try {
+            OutputStream outSock = conn.getOutputStream();
+            InputStream inSock = conn.getInputStream();
+            byte[] clientInput = new byte[4096];
+            int num = inSock.read(clientInput, 0, 4096);
+            if(num != -1) {
+
+                String request = new String(clientInput, 0, num);
+                System.out.println("Request is: " + request);
+
+                String response = skeleton.callMethod(request);
+                byte[] clientOutput = response.getBytes();
+                outSock.write(clientOutput, 0, clientOutput.length);
+                System.out.println("response is: " + response);
+            }
+            inSock.close();
+            outSock.close();
+            conn.close();
+        }catch (Exception ex) {
+            System.out.println("Exception in Server Run: " + ex.getMessage());
+            ex.printStackTrace();
+        }
 
     }
 
@@ -65,6 +89,7 @@ public class LibraryTCPJsonRPCServer extends Thread {
      * @param args : command line args input
      * @return void
      * */
+    @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) {
 
         Socket sock;
@@ -94,7 +119,6 @@ public class LibraryTCPJsonRPCServer extends Thread {
             System.out.println("Exception in RPCServer Main: " + ex.getMessage());
             ex.printStackTrace();
         }
-
     }
 
 }
