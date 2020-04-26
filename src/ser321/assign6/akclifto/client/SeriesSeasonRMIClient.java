@@ -401,7 +401,7 @@ public class SeriesSeasonRMIClient extends MediaLibraryGui implements
 
 					//set text to panels to displayed selected node information
 					episodeJTF.setText(libraryServer.getEpisodeName(parentLabel, nodeLabel));    // name of the episode
-					ratingJTF.setText(libraryServer.getEpisodeImdbRating(parentLabel, nodeLabel));  // change to rating of the episode
+					ratingJTF.setText(libraryServer.getEpisodeImdb(parentLabel, nodeLabel));  // change to rating of the episode
 					genreJTF.setText(libraryServer.getGenre(parentLabel));
 					setPosterImage(libraryServer.getPosterLink(parentLabel));
 					summaryJTA.setText(libraryServer.getEpisodeSummary(parentLabel, nodeLabel));

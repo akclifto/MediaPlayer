@@ -212,7 +212,7 @@ public class LibraryServer implements Library, LibraryHelper {
     }
 
     @Override
-    public String getEpisodeImdbRating(String parent, String node) {
+    public String getEpisodeImdb(String parent, String node) {
 
         return getSeriesSeason(parent).getEpisode(node).getImdbRating();
     }
@@ -222,6 +222,19 @@ public class LibraryServer implements Library, LibraryHelper {
 
         System.out.println("Processed information for " + node + " and " + parent + " for client.");
         return getSeriesSeason(parent).getEpisode(node).getEpSummary();
+    }
+
+    @Override
+    public boolean addEpisode(String series, String episode) throws RemoteException {
+
+        Episode epi = getSeriesSeason(series).getEpisode(episode);
+        try {
+            this.getSeriesSeason(series).addToEpisodeList(epi);
+        }catch(Exception ex){
+            System.out.println("Exception adding episode to series: " + ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -377,7 +390,7 @@ public class LibraryServer implements Library, LibraryHelper {
 
 
     @Override
-    public synchronized void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
+    public synchronized boolean parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
         try {
             //shared or cross-data points
@@ -419,8 +432,9 @@ public class LibraryServer implements Library, LibraryHelper {
 
         } catch(Exception ex){
             System.out.println("Exception in parseURLtoJSON: " + ex.getMessage());
+            return false;
         }
-
+        return true;
     }
 
     /**

@@ -154,7 +154,7 @@ public class SeriesSeasonTCPProxy implements Library {
     }
 
     @Override
-    public String getEpisodeImdbRating(String parent, String node) throws RemoteException {
+    public String getEpisodeImdb(String parent, String node) throws RemoteException {
         //TODO:
         return null;
     }

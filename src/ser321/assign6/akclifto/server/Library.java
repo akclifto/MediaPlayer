@@ -89,7 +89,7 @@ public interface Library extends Remote {
      * @return IMDB Rating for requested episode.
      * @throws RemoteException if error during remote method invocation
      * */
-    String getEpisodeImdbRating(String parent, String node) throws RemoteException;
+    String getEpisodeImdb(String parent, String node) throws RemoteException;
 
     /**
      * Method to send serialized Episode Summary information to the client from the server.
@@ -99,6 +99,16 @@ public interface Library extends Remote {
      * @throws RemoteException if error during remote method invocation
      * */
     String getEpisodeSummary(String parent, String node) throws RemoteException;
+
+
+    /**
+     * Method to remove episode from a series, as request by the client.
+     * @param series : title of the series requested
+     * @param episode : title of the episode to add
+     * @return true if the title is added successfully, false otherwise.
+     * @throws RemoteException if error during remote method invocation
+     * */
+    boolean addEpisode(String series, String episode) throws RemoteException;
 
     /**
      * Method to remove episode from a series, as request by the client.
@@ -179,10 +189,10 @@ public interface Library extends Remote {
      * SeriesSeason objects with the data.
      * @param jsonSeries :  string of series json data
      * @param jsonEpisodes : string of episode json data
-     * @return void
+     * @return true if parsed successfully, false otherwise
      * @throws RemoteException if error during remote method invocation
      * */
-    void parseURLtoJSON(String jsonSeries, String jsonEpisodes) throws RemoteException;
+    boolean parseURLtoJSON(String jsonSeries, String jsonEpisodes) throws RemoteException;
 
 
 
