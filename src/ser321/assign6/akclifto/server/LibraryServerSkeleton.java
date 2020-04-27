@@ -205,6 +205,10 @@ public class LibraryServerSkeleton {
                 debug("Getting episode summary for: " + node + " in " + parent);
                 result.put("result", library.getEpisodeSummary(parent,node));
 
+            } else if (method.equalsIgnoreCase("getLibrarySize")) {
+                debug("Getting library size...");
+                result.put("result", library.getLibrarySize());
+
             } else {
                 debug("Unable to match method: " + method + ". Returning 0.");
                 result.put("result", 0.0);

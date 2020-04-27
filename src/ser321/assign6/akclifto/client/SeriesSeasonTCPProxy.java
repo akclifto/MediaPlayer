@@ -118,43 +118,84 @@ public class SeriesSeasonTCPProxy implements Library {
 
     @Override
     public String[] getSeriesSeasonTitles() {
-        //TODO:
-        return new String[0];
+
+        String result = callMethod("getLibraryTitles", new Object[]{});
+        JSONObject res = new JSONObject(result);
+        JSONArray arr = res.getJSONArray("result");
+        String[] ret = new String[(arr.length())];
+        for(int i = 0; i < arr.length(); i++){
+            ret[i] = arr.getString(i);
+        }
+        return ret;
     }
 
     @Override
     public int getLibrarySize() {
-        //TODO:
-        return 0;
+
+        String result = callMethod("getLibrarySize", new Object[]{});
+        JSONObject res = new JSONObject(result);
+        return res.getInt("result");
+    }
+
+    @Override
+    public String jsonGetSeries(String seriesTitle) {
+
+        String result = callMethod("getSeries", new Object[]{seriesTitle});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
+    }
+
+    @Override
+    public String jsonGetEpisode(String seriesTitle, String episodeName) {
+
+        String result = callMethod("getEpisode", new Object[]{seriesTitle, episodeName});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
     public String[] getEpisodeTitles(String title) {
-        //TODO:
-        return new String[0];
+
+        String result = callMethod("getEpisodeTitles", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        JSONArray arr = res.getJSONArray("result");
+        String[] ret = new String[arr.length()];
+        for(int i = 0; i < arr.length(); i++){
+            ret[i] = arr.getString(i);
+        }
+        return  ret;
     }
 
     @Override
     public int getEpisodeListSize(String title) {
-        //TODO:
-        return 0;
+
+        String result = callMethod("getEpisodeListSize", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.getInt("result");
     }
 
     @Override
     public boolean checkSeries(String title) {
-        return false;
+
+        String result = callMethod("checkSeriesExists", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public boolean checkEpisodes(String title) {
-        //TODO:
-        return false;
+
+        String result = callMethod("checkSeriesExists", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public String getEpisodeName(String parent, String node) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getEpisodeName", new Object[]{parent, node});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
@@ -165,73 +206,99 @@ public class SeriesSeasonTCPProxy implements Library {
 
     @Override
     public String getEpisodeSummary(String parent, String node) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getEpisodeSummary", new Object[]{parent, node});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
     public boolean addEpisode(String series, String episode) {
-        return false;
+
+        String result = callMethod("addEpisode5", new Object[]{series, episode});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public boolean removeEpisode(String series, String episode) {
-        //TODO:
-        return false;
+
+        String result = callMethod("removeEpisode", new Object[]{series, episode});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public String getSeriesTitle(String title) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getSeriesTitle", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
     public String getSeriesImdbRating(String title) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getSeriesImdbRating", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
     public String getGenre(String title) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getSeriesGenre", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
     public String getPosterLink(String title) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getSeriesPoster", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
     }
 
     @Override
     public String getSummary(String title) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getSeriesSummary", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optString("result");
+
     }
 
     @Override
     public boolean removeSeriesSeason(String title) {
-        //TODO:
-        return false;
+
+        String result = callMethod("removeSeries", new Object[]{title});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public boolean saveLibraryToFile(String fileName) {
-        //TODO:
-        return false;
+
+        String result = callMethod("toJsonFile", new Object[]{fileName});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public boolean restoreLibraryFromFile(String filename) {
-        //TODO:
-        return false;
+
+        String result = callMethod("initLibraryFromJsonFile", new Object[]{filename});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
     @Override
     public boolean parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
-        //TODO:
-        return false;
+
+        String result = callMethod("parseURLtoJSON", new Object[]{jsonSeries, jsonEpisodes});
+        JSONObject res = new JSONObject(result);
+        return res.optBoolean("result", false);
     }
 
 

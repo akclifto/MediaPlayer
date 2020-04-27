@@ -98,6 +98,11 @@
         "method": "getEpisodeSummary",
         "params":["seriesName", "episodeName"],
         "returns": "aSummary"
+    },
+    {
+        "method": "getLibrarySize",
+        "params":[],
+        "returns": 3
     }
 
 
