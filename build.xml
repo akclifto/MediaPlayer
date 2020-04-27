@@ -140,7 +140,6 @@
         <echo message="command line client: java -cp classes:lib/assign2Gui.jar SeriesSeasonRMIClient ${hostId} ${regPort} ${omdbkey}"/>
         <java classname="ser321.assign6.akclifto.client.SeriesSeasonRMIClient" fork="yes">
             <classpath refid="compile.classpath"/>
-            <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
             <arg value="${hostId}"/>
             <arg value="${regPort}"/>
             <arg value="${omdbkey}"/>

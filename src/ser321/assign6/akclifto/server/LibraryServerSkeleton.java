@@ -122,13 +122,14 @@ public class LibraryServerSkeleton {
                 assert params != null;
                 String seriesName = params.getString (0);
                 debug("Getting series: " + seriesName);
-                //TODO:  need to make a json object method for this.
+                result.put("result", library.jsonGetSeries(seriesName));
 
             } else if (method.equalsIgnoreCase("getEpisode")) {
                 assert params != null;
                 String seriesTitle = params.getString(0);
                 String episodeName = params.getString(1);
                 debug("Getting episode: " + episodeName + " from " + seriesTitle);
+                result.put("result", library.jsonGetEpisode(seriesTitle, episodeName));
                 //TODO:  need to make a json object method for this.
 
             } else if (method.equalsIgnoreCase("getEpisodeListSize")) {

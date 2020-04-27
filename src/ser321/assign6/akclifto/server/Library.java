@@ -46,8 +46,20 @@ public interface Library extends Remote {
      * */
     int getLibrarySize() throws RemoteException;
 
+    /**
+     * Method to get Episode information in form of Json object
+     * @param seriesTitle : name of the series to retrieve
+     * @return String object containing series information
+     * */
+    String jsonGetSeries(String seriesTitle);
 
-
+    /**
+     * Method to get Episode information in form of Json object
+     * @param seriesTitle : name of the series containing episode
+     * @param episodeName : name of the episode for information
+     * @return String object containing episode information
+     * */
+    String jsonGetEpisode(String seriesTitle, String episodeName);
     /**
      * Method to send serialized Episode title information to the client from the server.
      * Used to construct JTree on the client-side

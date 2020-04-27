@@ -162,6 +162,31 @@ public class LibraryServer implements Library, LibraryHelper {
     }
 
     @Override
+    public String jsonGetSeries(String seriesTitle) {
+
+        for (SeriesSeason ss: seriesSeasonList){
+            if(ss.getTitle().equalsIgnoreCase(seriesTitle)){
+                return ss.toJSONString();
+            }
+        }
+        System.out.println(seriesTitle + " was not found in the SeriesSeason list!");
+        return null;
+    }
+
+    @Override
+    public String jsonGetEpisode(String seriesTitle, String episodeName) {
+
+        List<Episode> epList = getSeriesSeason(seriesTitle).getEpisodeList();
+        for(Episode epi : epList){
+            if(epi.getName().equalsIgnoreCase(episodeName)){
+                return epi.toJSONString();
+            }
+        }
+        System.out.println(episodeName + " was not found in list for " + seriesTitle);
+        return null;
+    }
+
+    @Override
     public String getSeriesTitle(String title) {
 
         //System.out.println("Processed getSeriesTitle for " + title + " for client.");
