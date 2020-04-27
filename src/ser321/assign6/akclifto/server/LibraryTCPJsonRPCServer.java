@@ -98,7 +98,7 @@ public class LibraryTCPJsonRPCServer extends Thread {
         try {
 
             if(args.length != 1){
-                System.out.println("Usage: java ser321.assign6.akclifto.server.LibraryTCPJsonRPCServer");
+                System.out.println("Usage: java ser321.assign6.akclifto.server.LibraryTCPJsonRPCServer {portNum}");
                 System.exit(0);
             }
 
