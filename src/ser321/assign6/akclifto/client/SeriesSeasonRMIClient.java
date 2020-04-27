@@ -1,7 +1,6 @@
 package ser321.assign6.akclifto.client;
 
 import ser321.assign2.lindquis.MediaLibraryGui;
-import ser321.assign6.akclifto.server.Library;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,7 +25,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
-import java.rmi.Naming;
 import java.time.Duration;
 
 /**
@@ -70,17 +68,17 @@ public class SeriesSeasonRMIClient extends MediaLibraryGui implements
 	private static final boolean debugOn = false;
 	private static final String pre = "https://www.omdbapi.com/?apikey=";
 	private static String urlOMBD;
-	private Library libraryServer;
+	private  SeriesSeasonTCPProxy libraryServer;
 	private String omdbKey;
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeriesSeasonRMIClient(String author, String authorKey, Library server) {
+	public SeriesSeasonRMIClient(String author, String authorKey, String hostId, String regPort) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
-		libraryServer = server;
+		libraryServer = new SeriesSeasonTCPProxy(hostId, Integer.parseInt(regPort));
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -774,12 +772,9 @@ public class SeriesSeasonRMIClient extends MediaLibraryGui implements
 				key = args[3];
 			}
 
-			Library libraryServer;
-			libraryServer = (Library)Naming.lookup(
-					"rmi://"+hostId+":"+regPort+"/LibraryServer");
-			System.out.println("Client obtained remote object reference to" +
-					" the LibraryServer");
-			new SeriesSeasonRMIClient(name, key, libraryServer);
+			String connect = "http://" + hostId + ":" + regPort + "/";
+			System.out.println("Opening Connection to: " + connect);
+			new SeriesSeasonRMIClient(name, key, hostId, regPort);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
