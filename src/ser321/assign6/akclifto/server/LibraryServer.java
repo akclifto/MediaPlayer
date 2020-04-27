@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -50,7 +49,7 @@ public class LibraryServer implements Library, LibraryHelper {
     /**
      * Constructor used for tests.
      * */
-    public LibraryServer() throws RemoteException {
+    public LibraryServer() {
 
         this.libraryMap = new Hashtable<>();
         this.seriesSeasonList = new ArrayList<>();

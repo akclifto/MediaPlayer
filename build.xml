@@ -138,7 +138,7 @@
     <target name="client" depends="compile" description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
         <echo message="command line client: java -cp classes:lib/assign2Gui.jar SeriesSeasonRMIClient ${hostId} ${regPort} ${omdbkey}"/>
-        <java classname="ser321.assign6.akclifto.client.SeriesSeasonRMIClient" fork="yes">
+        <java classname="ser321.assign6.akclifto.client.SeriesSeasonClient" fork="yes">
             <classpath refid="compile.classpath"/>
             <arg value="${hostId}"/>
             <arg value="${regPort}"/>

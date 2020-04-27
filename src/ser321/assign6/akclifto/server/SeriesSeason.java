@@ -94,28 +94,6 @@ public class SeriesSeason {
 
     }
 
-
-    /**
-     * Check if series added from JSON file, or URL Search.  Pass accordingly
-     * @param jsonObject :  object to be added to seriesSeason class
-     * @param actionOption : check is URL "search" or JSON file "add".
-     * */
-    public SeriesSeason(JSONObject jsonObject, String actionOption){
-
-        if(actionOption.equalsIgnoreCase("Add")){  //TODO---
-            new SeriesSeason(jsonObject);
-        } else {
-            addFromURL(jsonObject);
-        }
-    }
-
-
-    /**if series added from URL search, not a JSON file*/
-    private void addFromURL(JSONObject jsonObject) {
-
-        //TODO
-    }
-
     /* All setters/getters */
     public String getTitle() {
         return this.title;

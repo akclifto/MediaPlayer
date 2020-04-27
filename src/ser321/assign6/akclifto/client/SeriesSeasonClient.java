@@ -60,7 +60,7 @@ import java.time.Duration;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class SeriesSeasonRMIClient extends MediaLibraryGui implements
+public class SeriesSeasonClient extends MediaLibraryGui implements
 		TreeWillExpandListener,
 		ActionListener,
 		TreeSelectionListener {
@@ -68,12 +68,12 @@ public class SeriesSeasonRMIClient extends MediaLibraryGui implements
 	private static final boolean debugOn = false;
 	private static final String pre = "https://www.omdbapi.com/?apikey=";
 	private static String urlOMBD;
-	private  SeriesSeasonTCPProxy libraryServer;
+	private SeriesSeasonTCPProxy libraryServer;
 	private String omdbKey;
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeriesSeasonRMIClient(String author, String authorKey, String hostId, String regPort) {
+	public SeriesSeasonClient(String author, String authorKey, String hostId, String regPort) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
@@ -774,7 +774,7 @@ public class SeriesSeasonRMIClient extends MediaLibraryGui implements
 
 			String connect = "http://" + hostId + ":" + regPort + "/";
 			System.out.println("Opening Connection to: " + connect);
-			new SeriesSeasonRMIClient(name, key, hostId, regPort);
+			new SeriesSeasonClient(name, key, hostId, regPort);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
