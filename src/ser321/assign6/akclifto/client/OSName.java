@@ -1,6 +1,6 @@
 package ser321.assign6.akclifto.client;
 
-import java.net.*;
+import java.net.InetAddress;
 
 /**
  * Copyright (c) 2020 Tim Lindquist,
@@ -25,20 +25,21 @@ import java.net.*;
  * Purpose: program to print the os.name property and the hostname
  * <p/>
  * Ser321 Principles of Distributed Software Systems
- * @see <a href="http://pooh.poly.asu.edu/Ser321">Ser321 Home Page</a>
+ *
  * @author Tim Lindquist (Tim.Lindquist@asu.edu) CIDSE - Software Engineering
- *                       Ira Fulton Schools of Engineering, ASU Polytechnic
- * @date    February, 2020
+ * Ira Fulton Schools of Engineering, ASU Polytechnic
+ * @date February, 2020
  * @license See above
+ * @see <a href="http://pooh.poly.asu.edu/Ser321">Ser321 Home Page</a>
  */
 public class OSName {
-   public static void main(String args[]) {
-      try {
-         System.out.println(System.getProperty("os.name"));
-         System.out.println(
+    public static void main(String[] args) {
+        try {
+            System.out.println(System.getProperty("os.name"));
+            System.out.println(
                     InetAddress.getLocalHost().getCanonicalHostName());
-      }catch (Exception e) {
-         e.printStackTrace();
-      }
-   }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

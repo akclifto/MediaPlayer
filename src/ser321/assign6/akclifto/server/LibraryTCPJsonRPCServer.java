@@ -43,10 +43,11 @@ public class LibraryTCPJsonRPCServer extends Thread {
 
     /**
      * Constructor
-     * @param sock : socket used for thread
-     * @param id : unique id to track thread
+     *
+     * @param sock     : socket used for thread
+     * @param id       : unique id to track thread
      * @param sLibrary : interface of library to pass to Server
-     * */
+     */
     public LibraryTCPJsonRPCServer(Socket sock, int id, Library sLibrary) {
         this.conn = sock;
         this.id = id;
@@ -55,15 +56,16 @@ public class LibraryTCPJsonRPCServer extends Thread {
 
     /**
      * Method to implement input and output streams from socket server connection.
+     *
      * @return void.
-     * */
+     */
     public void run() {
         try {
             OutputStream outSock = conn.getOutputStream();
             InputStream inSock = conn.getInputStream();
             byte[] clientInput = new byte[4096];
             int num = inSock.read(clientInput, 0, 4096);
-            if(num != -1) {
+            if (num != -1) {
 
                 String request = new String(clientInput, 0, num);
                 System.out.println("Request is: " + request);
@@ -76,7 +78,7 @@ public class LibraryTCPJsonRPCServer extends Thread {
             inSock.close();
             outSock.close();
             conn.close();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception in Server Run: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -84,11 +86,12 @@ public class LibraryTCPJsonRPCServer extends Thread {
     }
 
     /**
-     *  Entry point of server program.  Method will initiate LibraryServer, set up socket and port,
-     *  wait for connection, then send connections to a new thread.
+     * Entry point of server program.  Method will initiate LibraryServer, set up socket and port,
+     * wait for connection, then send connections to a new thread.
+     *
      * @param args : command line args input
      * @return void
-     * */
+     */
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) {
 
@@ -97,25 +100,25 @@ public class LibraryTCPJsonRPCServer extends Thread {
         int id = 0;
         try {
 
-            if(args.length != 1){
+            if (args.length != 1) {
                 System.out.println("Usage: java ser321.assign6.akclifto.server.LibraryTCPJsonRPCServer {portNum}");
                 System.exit(0);
             }
 
             int portNum = Integer.parseInt(args[0]);
-            if(portNum <= 8000) {
+            if (portNum <= 8000) {
                 portNum = 8888;
             }
             ServerSocket server = new ServerSocket(portNum);
 
-            while(true){
+            while (true) {
                 System.out.println("Library Server is waiting for connection to port " + portNum);
                 sock = server.accept();  //will wait for connection here
                 System.out.println("Library Server connect to client: " + id);
                 LibraryTCPJsonRPCServer serverThread = new LibraryTCPJsonRPCServer(sock, id++, sLibrary);
                 serverThread.start();
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception in RPCServer Main: " + ex.getMessage());
             ex.printStackTrace();
         }

@@ -48,7 +48,7 @@ public class LibraryServer implements Library, LibraryHelper {
 
     /**
      * Constructor used for tests.
-     * */
+     */
     public LibraryServer() {
 
         this.libraryMap = new Hashtable<>();
@@ -58,8 +58,9 @@ public class LibraryServer implements Library, LibraryHelper {
 
     /**
      * Construct Season Library, Singleton
+     *
      * @return SeasonLibrary
-     * */
+     */
     public static LibraryServer getInstance() {
 
         try {
@@ -75,7 +76,7 @@ public class LibraryServer implements Library, LibraryHelper {
     }
 
     @Override
-    public LibraryServer getLibrary(){
+    public LibraryServer getLibrary() {
         System.out.println("The Library has been sent to the client.");
         return sLibrary;
     }
@@ -92,7 +93,7 @@ public class LibraryServer implements Library, LibraryHelper {
         String[] result = new String[seriesSeasonList.size()];
         try {
 
-            for(int i = 0; i < seriesSeasonList.size(); i++) {
+            for (int i = 0; i < seriesSeasonList.size(); i++) {
 
                 result[i] = seriesSeasonList.get(i).getTitle();
             }
@@ -120,9 +121,9 @@ public class LibraryServer implements Library, LibraryHelper {
     @Override
     public String getSeriesSeason() {
 
-        StringBuilder res= new StringBuilder();
+        StringBuilder res = new StringBuilder();
         System.out.println("Series in library: ");
-        for(SeriesSeason ss : seriesSeasonList){
+        for (SeriesSeason ss : seriesSeasonList) {
             System.out.println(ss.getTitle() + ",  " + ss.getSeason());
             res.append(ss.getTitle()).append(", ").append(ss.getSeason());
         }
@@ -144,7 +145,7 @@ public class LibraryServer implements Library, LibraryHelper {
     }
 
     @Override
-    public SeriesSeason getSeriesSeason(String title){
+    public SeriesSeason getSeriesSeason(String title) {
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
@@ -163,8 +164,8 @@ public class LibraryServer implements Library, LibraryHelper {
     @Override
     public String jsonGetSeries(String seriesTitle) {
 
-        for (SeriesSeason ss: seriesSeasonList){
-            if(ss.getTitle().equalsIgnoreCase(seriesTitle)){
+        for (SeriesSeason ss : seriesSeasonList) {
+            if (ss.getTitle().equalsIgnoreCase(seriesTitle)) {
                 return ss.toJSONString();
             }
         }
@@ -176,8 +177,8 @@ public class LibraryServer implements Library, LibraryHelper {
     public String jsonGetEpisode(String seriesTitle, String episodeName) {
 
         List<Episode> epList = getSeriesSeason(seriesTitle).getEpisodeList();
-        for(Episode epi : epList){
-            if(epi.getName().equalsIgnoreCase(episodeName)){
+        for (Episode epi : epList) {
+            if (epi.getName().equalsIgnoreCase(episodeName)) {
                 return epi.toJSONString();
             }
         }
@@ -232,13 +233,13 @@ public class LibraryServer implements Library, LibraryHelper {
     @Override
     public boolean checkSeries(String title) {
 
-        try{
-            for(SeriesSeason ss : seriesSeasonList){
-                if(ss.getTitle().equalsIgnoreCase(title)){
+        try {
+            for (SeriesSeason ss : seriesSeasonList) {
+                if (ss.getTitle().equalsIgnoreCase(title)) {
                     return false;
                 }
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception in checkSeries: " + ex.getMessage());
         }
         return true;
@@ -269,7 +270,7 @@ public class LibraryServer implements Library, LibraryHelper {
         Episode epi = getSeriesSeason(series).getEpisode(episode);
         try {
             this.getSeriesSeason(series).addToEpisodeList(epi);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception adding episode to series: " + ex.getMessage());
             return false;
         }
@@ -314,7 +315,7 @@ public class LibraryServer implements Library, LibraryHelper {
                 System.out.println("Request completed: "
                         + seriesSeason.getTitle() + " was added to the Library list for ");
             }
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception adding series to library: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -324,14 +325,14 @@ public class LibraryServer implements Library, LibraryHelper {
     @Override
     public synchronized boolean removeSeriesSeason(String title) {
 
-        if(seriesSeasonList.isEmpty()){
+        if (seriesSeasonList.isEmpty()) {
             System.out.println("SeriesSeason List is empty.");
             return false;
         }
 
         for (SeriesSeason series : seriesSeasonList) {
             if (series.getTitle().equalsIgnoreCase(title)) {
-              //  System.out.println(title + " was found and removed from the list for client.");
+                //  System.out.println(title + " was found and removed from the list for client.");
                 libraryMap.remove(title);
                 seriesSeasonList.remove(series);
                 return true;
@@ -347,7 +348,7 @@ public class LibraryServer implements Library, LibraryHelper {
 
         //System.out.println("\nSaving current library to file for client: " + fileName);
         JSONObject jsonSeries = constructJSON();
-        try(PrintWriter out = new PrintWriter(fileName)){
+        try (PrintWriter out = new PrintWriter(fileName)) {
             out.println(jsonSeries.toString(4));
 
 //        System.out.println(jsonSeries.toString(4));
@@ -361,22 +362,23 @@ public class LibraryServer implements Library, LibraryHelper {
 
     /**
      * Helper method to serialize a file for JSON output.
+     *
      * @return JSONArray for write output.
-     * */
+     */
     private JSONObject constructJSON() {
 
         JSONObject master = new JSONObject();
         JSONArray seriesArr = new JSONArray();
 
-        try{
+        try {
             JSONObject series;
-            for(SeriesSeason ss : seriesSeasonList) {
+            for (SeriesSeason ss : seriesSeasonList) {
                 series = ss.toJson();
                 seriesArr.put(series);
             }
             master.put("library", seriesArr);
 
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception in ConstructJSON: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -393,35 +395,36 @@ public class LibraryServer implements Library, LibraryHelper {
             clearLibrary();
             flag = initializeLibrary(filename);
             System.out.println("Request completed: library " + filename + " been restored for client.");
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception restoring library: " + ex.getMessage());
-            flag =  false;
+            flag = false;
         }
         return flag;
     }
 
     /**
      * Helper method to load JSON file from libraryMap.
+     *
      * @param fileName : path-to or name-of JSON file
      * @return true if JSON initialized correctly, false otherwise.
-     * */
-    private boolean initializeLibrary(String fileName){
+     */
+    private boolean initializeLibrary(String fileName) {
 
-        try{
+        try {
 
             String content = Files.readString(Paths.get(fileName));
             JSONObject jsonRoot = new JSONObject(content);
             //System.out.println(jsonRoot.toString(2));
 
             JSONArray libArr = jsonRoot.getJSONArray("library");
-            for(int i = 0; i < libArr.length(); i++){
+            for (int i = 0; i < libArr.length(); i++) {
                 JSONObject series = libArr.getJSONObject(i).getJSONObject("series");
 
                 SeriesSeason ss = new SeriesSeason(series);
                 addSeriesSeason(ss);  //add to library map and list
             }
-        } catch(Exception ex) {
-            System.out.println("Exception loading JSON file: " +ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("Exception loading JSON file: " + ex.getMessage());
             return false;
         }
         return true;
@@ -469,7 +472,7 @@ public class LibraryServer implements Library, LibraryHelper {
             seriesObj.put("episodes", epiArray);
             refreshLibrary(seriesObj);
 
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception in parseURLtoJSON: " + ex.getMessage());
             return false;
         }
@@ -478,9 +481,10 @@ public class LibraryServer implements Library, LibraryHelper {
 
     /**
      * Private helper methods to update library after adding new series Season from API search.
+     *
      * @param jsonObject : JSONObject containing seriesSeason data
-     * */
-    private void refreshLibrary(JSONObject jsonObject){
+     */
+    private void refreshLibrary(JSONObject jsonObject) {
 
         SeriesSeason ss = new SeriesSeason(jsonObject);
         addSeriesSeason(ss);
@@ -489,9 +493,10 @@ public class LibraryServer implements Library, LibraryHelper {
 
     /**
      * Helper method to clear the library and list
+     *
      * @return void.
-     * */
-    private void clearLibrary(){
+     */
+    private void clearLibrary() {
 
         libraryMap.clear();
         seriesSeasonList.clear();
@@ -502,16 +507,16 @@ public class LibraryServer implements Library, LibraryHelper {
 
 
     @Override
-    public void printAll(){
+    public void printAll() {
 
         System.out.println("\nPRINTING SERIES SEASON LIST CONTENTS: ");
-        if(seriesSeasonList.isEmpty()){
+        if (seriesSeasonList.isEmpty()) {
             System.out.println("List is empty");
             return;
         }
 
         String sep = "";
-        for(SeriesSeason ss : seriesSeasonList){
+        for (SeriesSeason ss : seriesSeasonList) {
             System.out.print(sep + ss.toJSONString());
             sep = ", ";
         }

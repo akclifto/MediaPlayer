@@ -45,7 +45,7 @@ public class SeriesSeason {
 
     /**
      * Explicit constructor call.
-     * */
+     */
     public SeriesSeason(String title, String seriesSeason, String imdbRating, String genre,
                         String posterLink, String plotSummary) {
 
@@ -62,15 +62,16 @@ public class SeriesSeason {
     /**
      * Method used to import JSON file from SeasonLibrary to construct in
      * Series Season object.
+     *
      * @param jsonObject : JSON object to transmit information about a series/seriesSeason
      * @return void
      * @see LibraryServer
-     * */
-    public SeriesSeason(JSONObject jsonObject){
+     */
+    public SeriesSeason(JSONObject jsonObject) {
 
         episodeList = new ArrayList<>();
 
-        try{
+        try {
 
             this.title = jsonObject.getString("title");
             this.seriesSeason = jsonObject.getString("seriesSeason");
@@ -87,7 +88,7 @@ public class SeriesSeason {
             }
             System.out.println("Added new entry for: " + title);
 
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception importing from JSON file: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -125,11 +126,12 @@ public class SeriesSeason {
 
     /**
      * Method to get list of of Episode title names.
+     *
      * @return String array of title names for a given series.
-     * */
-    public String[] getEpisodeTitles(){
+     */
+    public String[] getEpisodeTitles() {
 
-        if(episodeList.isEmpty()){
+        if (episodeList.isEmpty()) {
 
             return null;
         }
@@ -137,7 +139,7 @@ public class SeriesSeason {
         String[] result = new String[episodeList.size()];
         try {
 
-            for(int i = 0; i < episodeList.size(); i++) {
+            for (int i = 0; i < episodeList.size(); i++) {
 
                 result[i] = episodeList.get(i).getName();
             }
@@ -149,36 +151,39 @@ public class SeriesSeason {
 
     /**
      * Helper method to check if episode list is empty
+     *
      * @return true if episode list is not empty, false otherwise.
-     * */
+     */
     public boolean checkEpisodes() {
 
-        return(!episodeList.isEmpty());
+        return (!episodeList.isEmpty());
     }
 
 
     /**
      * Method to retrieve an episode from the episodeList
+     *
      * @param name : name of the episode
      * @return Episode if found, null if not found.
-     * */
+     */
     public Episode getEpisode(String name) {
 
-        for(Episode epi : episodeList) {
-            if(epi.getName().equalsIgnoreCase(name)){
+        for (Episode epi : episodeList) {
+            if (epi.getName().equalsIgnoreCase(name)) {
                 return epi;
             }
         }
-            System.out.println("Episode " + name + " not found in list");
-            return null;
+        System.out.println("Episode " + name + " not found in list");
+        return null;
     }
 
 
     /**
      * Methods to add a series episode to the episode list.
+     *
      * @param episode : episodes to be added to the list.
      * @return void
-     * */
+     */
     public void addToEpisodeList(Episode episode) {
 
         if (episodeList.isEmpty()) {
@@ -205,12 +210,13 @@ public class SeriesSeason {
 
     /**
      * Method to remove episode from list of series episodes.
+     *
      * @param title : title of episode to remove.
      * @return true if episode is remove from list, false otherwise.
-     * */
-    public boolean removeEpisode(String title){
+     */
+    public boolean removeEpisode(String title) {
 
-        if(episodeList.isEmpty()){
+        if (episodeList.isEmpty()) {
             System.out.println("Episode List is empty.");
             return false;
         }
@@ -228,8 +234,9 @@ public class SeriesSeason {
 
     /**
      * Methods to display String data in JSON file format for write output.
+     *
      * @return String of formatted SeriesSeason data.
-     * */
+     */
     public String toJSONString() {
 
         String ret = "{}";
@@ -243,8 +250,9 @@ public class SeriesSeason {
 
     /**
      * Methods to serialize data to JSON file.
+     *
      * @return void
-     * */
+     */
     public JSONObject toJson() {
 
         JSONObject series = new JSONObject();
@@ -259,7 +267,7 @@ public class SeriesSeason {
             series.put("plotSummary", plotSummary);
 
             JSONArray episodes = new JSONArray();
-            for(int i = 0; i < episodeList.size(); i++) {
+            for (int i = 0; i < episodeList.size(); i++) {
                 episodes.put(i, episodeList.get(i).toJson());
             }
             series.put("episodes", episodes);
@@ -275,12 +283,13 @@ public class SeriesSeason {
 
     /**
      * Debugging method to print out the list of episodes.
+     *
      * @return void
-     * */
-    public void printEpisodes(){
+     */
+    public void printEpisodes() {
 
         System.out.println("\n" + title + ": ");
-        for(Episode e : getEpisodeList()) {
+        for (Episode e : getEpisodeList()) {
             System.out.println(e.toString());
         }
         System.out.println();
@@ -289,8 +298,9 @@ public class SeriesSeason {
 
     /**
      * Override method to output String data to console
+     *
      * @return String of formatted console output.
-     * */
+     */
     @Override
     public String toString() {
 

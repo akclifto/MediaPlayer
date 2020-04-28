@@ -37,6 +37,7 @@ import java.util.List;
  * <p>
  * Purpose: SeasonTCPProxy is the client-side TCP/IP stub used to communicate with the
  * server-side TCP/IP skeleton to implement JsonRPC requests and responses.
+ *
  * @author Tim Lindquist (Tim.Linquist@asu.edu),
  * Software Engineering, CIDSE, IAFSE, ASU Poly
  * @author Adam Clifton (akclifto@asu.edu)
@@ -53,9 +54,10 @@ public class SeriesSeasonTCPProxy implements Library {
 
     /**
      * Constructor
+     *
      * @param host : server host
      * @param port : port number used for connection
-     * */
+     */
     public SeriesSeasonTCPProxy(String host, int port) {
         this.host = host;
         this.port = port;
@@ -63,11 +65,12 @@ public class SeriesSeasonTCPProxy implements Library {
 
     /**
      * Method used for debugging purposes
+     *
      * @param message : message to be displayed during debugging
      * @return void
-     * */
+     */
     private void debug(String message) {
-        if(debugOn) {
+        if (debugOn) {
             System.out.println("debug: " + message);
         }
     }
@@ -75,15 +78,16 @@ public class SeriesSeasonTCPProxy implements Library {
     /**
      * Method to send/received call information using jsonRPC when communicating
      * with Library TCP JsonRPC server.
+     *
      * @param method : method request invoked on server
      * @param params : object containing information related to method call
      * @return string styled for json objects.
-     * */
-    public String callMethod(String method, Object[] params){
+     */
+    public String callMethod(String method, Object[] params) {
         JSONObject theCall = new JSONObject();
         String ret = "{}";
 
-        try{
+        try {
             debug("Request is: " + theCall.toString());
             theCall.put("method", method);
             theCall.put("id", id);
@@ -101,7 +105,7 @@ public class SeriesSeasonTCPProxy implements Library {
             String strToSend = theCall.toString();
             byte[] byteRecd = new byte[buffSize];
             byte[] byteSend = strToSend.getBytes();
-            out.write(byteSend, 0,byteSend.length);
+            out.write(byteSend, 0, byteSend.length);
 
             int numBytesRecd = in.read(byteRecd, 0, bufLen);
             ret = new String(byteRecd, 0, numBytesRecd);
@@ -109,7 +113,7 @@ public class SeriesSeasonTCPProxy implements Library {
             out.close();
             in.close();
             sock.close();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Exception in the Client Proxy callMethod: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -123,7 +127,7 @@ public class SeriesSeasonTCPProxy implements Library {
         JSONObject res = new JSONObject(result);
         JSONArray arr = res.getJSONArray("result");
         String[] ret = new String[(arr.length())];
-        for(int i = 0; i < arr.length(); i++){
+        for (int i = 0; i < arr.length(); i++) {
             ret[i] = arr.getString(i);
         }
         return ret;
@@ -160,11 +164,11 @@ public class SeriesSeasonTCPProxy implements Library {
         JSONObject res = new JSONObject(result);
         JSONArray arr = res.getJSONArray("result");
         String[] ret = new String[arr.length()];
-        for(int i = 0; i < arr.length(); i++){
+        for (int i = 0; i < arr.length(); i++) {
             ret[i] = arr.getString(i);
 //            System.out.println(ret[i]);
         }
-        return  ret;
+        return ret;
     }
 
     @Override
@@ -204,7 +208,7 @@ public class SeriesSeasonTCPProxy implements Library {
 
         String result = callMethod("getEpisodeImdb", new Object[]{parent, node});
         JSONObject res = new JSONObject(result);
-        return  res.optString("result");
+        return res.optString("result");
     }
 
     @Override

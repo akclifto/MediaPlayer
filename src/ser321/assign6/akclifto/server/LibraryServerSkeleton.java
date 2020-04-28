@@ -30,6 +30,7 @@ import org.json.JSONObject;
  * Purpose: LibraryServerSkeleton is the server-side TCP/IP skeleton used to communicate with the
  * client-side TCP/IP stub to implement JsonRPC requests and responses.
  * <p>
+ *
  * @author Tim Lindquist (Tim.Linquist@asu.edu),
  * Software Engineering, CIDSE, IAFSE, ASU Poly
  * @author Adam Clifton (akclifto@asu.edu)
@@ -47,11 +48,12 @@ public class LibraryServerSkeleton {
 
     /**
      * Method used for debugging purposes
+     *
      * @param message : message to be displayed during debugging
      * @return void
-     * */
-    private void debug(String message){
-        if(debugOn){
+     */
+    private void debug(String message) {
+        if (debugOn) {
             System.out.println("debug: " + message);
         }
     }
@@ -59,9 +61,10 @@ public class LibraryServerSkeleton {
     /**
      * Method to send/received call information using jsonRPC when communicating
      * with Library client proxy.
+     *
      * @param request : method request invoked on server
      * @return string styled for json objects in response to request received.
-     * */
+     */
     public String callMethod(String request) {
         JSONObject result = new JSONObject();
         try {
@@ -72,19 +75,19 @@ public class LibraryServerSkeleton {
             String method = theCall.getString("method");
             int id = theCall.getInt("id");
             JSONArray params = null;
-            if(!theCall.isNull("params")){
+            if (!theCall.isNull("params")) {
                 params = theCall.getJSONArray("params");
             }
             result.put("id", id);
             result.put("jsonrpc", "2.0");
 
-            if(method.equalsIgnoreCase("toJsonFile")){
+            if (method.equalsIgnoreCase("toJsonFile")) {
                 assert params != null;
                 String filename = params.getString(0);
                 debug("Saving library to file: " + filename);
                 result.put("result", library.saveLibraryToFile(filename));
 
-            } else if(method.equalsIgnoreCase("initLibraryFromJsonFile")){
+            } else if (method.equalsIgnoreCase("initLibraryFromJsonFile")) {
                 assert params != null;
                 String filename = params.getString(0);
                 debug("Restoring library from file: " + filename);
@@ -109,18 +112,18 @@ public class LibraryServerSkeleton {
                 String seriesTitle = params.getString(0);
                 String episodeName = params.getString(1);
                 debug("Adding episode: " + episodeName + " from " + seriesTitle);
-                result.put("result", library.addEpisode(seriesTitle,episodeName));
+                result.put("result", library.addEpisode(seriesTitle, episodeName));
 
             } else if (method.equalsIgnoreCase("removeEpisode")) {
                 assert params != null;
                 String seriesTitle = params.getString(0);
                 String episodeName = params.getString(1);
                 debug("Removing episode: " + episodeName + " from " + seriesTitle);
-                result.put("result", library.removeEpisode(seriesTitle,episodeName));
+                result.put("result", library.removeEpisode(seriesTitle, episodeName));
 
             } else if (method.equalsIgnoreCase("getSeries")) {
                 assert params != null;
-                String seriesName = params.getString (0);
+                String seriesName = params.getString(0);
                 debug("Getting series: " + seriesName);
                 result.put("result", library.jsonGetSeries(seriesName));
 
@@ -130,7 +133,6 @@ public class LibraryServerSkeleton {
                 String episodeName = params.getString(1);
                 debug("Getting episode: " + episodeName + " from " + seriesTitle);
                 result.put("result", library.jsonGetEpisode(seriesTitle, episodeName));
-                //TODO:  need to make a json object method for this.
 
             } else if (method.equalsIgnoreCase("getEpisodeListSize")) {
                 assert params != null;
@@ -154,56 +156,56 @@ public class LibraryServerSkeleton {
                 debug("Getting SeriesTitle for label: " + seriesLabel);
                 result.put("result", library.getSeriesTitle(seriesLabel));
 
-            }else if (method.equalsIgnoreCase("getSeriesPoster")) {
+            } else if (method.equalsIgnoreCase("getSeriesPoster")) {
                 assert params != null;
                 String seriesName = params.getString(0);
                 debug("Getting Series poster for series: " + seriesName);
                 result.put("result", library.getPosterLink(seriesName));
 
-            }else if (method.equalsIgnoreCase("getSeriesGenre")) {
+            } else if (method.equalsIgnoreCase("getSeriesGenre")) {
                 assert params != null;
                 String seriesName = params.getString(0);
                 debug("Getting series genre for: " + seriesName);
                 result.put("result", library.getGenre(seriesName));
 
-            }else if (method.equalsIgnoreCase("checkSeriesExists")) {
+            } else if (method.equalsIgnoreCase("checkSeriesExists")) {
                 assert params != null;
                 String seriesName = params.getString(0);
                 debug("Checking if Series: " + seriesName + " is in library...");
                 result.put("result", library.checkSeries(seriesName));
 
-            }else if (method.equalsIgnoreCase("getSeriesImdbRating")) {
+            } else if (method.equalsIgnoreCase("getSeriesImdbRating")) {
                 assert params != null;
                 String seriesName = params.getString(0);
                 debug("Geting series imbd Rating for: " + seriesName);
                 result.put("result", library.getSeriesImdbRating(seriesName));
 
-            }else if (method.equalsIgnoreCase("getSeriesSummary")) {
+            } else if (method.equalsIgnoreCase("getSeriesSummary")) {
                 assert params != null;
                 String seriesName = params.getString(0);
-                debug("Getting summary for: " +seriesName);
+                debug("Getting summary for: " + seriesName);
                 result.put("result", library.getSummary(seriesName));
 
-            }else if (method.equalsIgnoreCase("getEpisodeName")) {
+            } else if (method.equalsIgnoreCase("getEpisodeName")) {
                 assert params != null;
                 String parent = params.getString(0);
                 String node = params.getString(1);
-                debug("Getting episode name for series label: "+ parent + " and node label: " + node);
+                debug("Getting episode name for series label: " + parent + " and node label: " + node);
                 result.put("result", library.getEpisodeName(parent, node));
 
-            }else if (method.equalsIgnoreCase("getEpisodeImdb")) {
+            } else if (method.equalsIgnoreCase("getEpisodeImdb")) {
                 assert params != null;
                 String parent = params.getString(0);
                 String node = params.getString(1);
                 debug("Getting episode imdb rating for: " + node + " in " + parent);
                 result.put("result", library.getEpisodeImdb(parent, node));
 
-            }else if (method.equalsIgnoreCase("getEpisodeSummary")) {
+            } else if (method.equalsIgnoreCase("getEpisodeSummary")) {
                 assert params != null;
-                String parent= params.getString(0);
+                String parent = params.getString(0);
                 String node = params.getString(1);
                 debug("Getting episode summary for: " + node + " in " + parent);
-                result.put("result", library.getEpisodeSummary(parent,node));
+                result.put("result", library.getEpisodeSummary(parent, node));
 
             } else if (method.equalsIgnoreCase("getLibrarySize")) {
                 debug("Getting library size...");
