@@ -1,0 +1,112 @@
+[
+    {
+        "method": "toJsonFile",
+        "params":["fileName"],
+        "returns": true
+    },
+    {
+        "method": "initLibraryFromJsonFile",
+        "params":["fileName"],
+        "returns": true
+    },
+    {
+        "method": "parseURLtoJSON",
+        "params":["seriesInfo", "seasonInfo"],
+        "returns": true
+    },
+    {
+        "method": "removeSeries",
+        "params":["seriesName"],
+        "returns": true
+    },
+    {
+        "method": "addEpisode",
+        "params":["seriesName", "episodeName"],
+        "returns": true
+    },
+    {
+        "method": "removeEpisode",
+        "params":["seriesName", "episodeName"],
+        "returns": true
+    },
+    {
+        "method": "getSeries",
+        "params":["seriesName"],
+        "returns": { } 
+    },
+    {
+        "method": "getEpisode",
+        "params":["seriesName", "episodeName"],
+        "returns": { }
+    },
+    {
+        "method": "getEpisodeListSize",
+        "params":["seriesName"],
+        "returns": 2
+    },
+    {
+        "method": "getLibraryTitles",
+        "params":[],
+        "returns": [ ]
+    },
+    {
+        "method": "getEpisodeTitles",
+        "params":["seriesName"],
+        "returns": [ ]
+    },
+    {
+        "method": "getSeriesTitle",
+        "params":["itemLabel"],
+        "returns": "aTitle"
+    },
+    {
+        "method": "getSeriesPoster",
+        "params":["seriesName"],
+        "returns": "posterLink"
+    },
+    {
+        "method": "getSeriesGenre",
+        "params":["seriesName"],
+        "returns": "genreName"
+    },
+    {
+        "method": "checkSeriesExists",
+        "params":["itemLabel"],
+        "returns": true
+    },
+    {
+        "method": "checkEpisodes",
+        "params":["itemLabel"],
+        "returns": true
+    },
+    {
+        "method": "getSeriesImdbRating",
+        "params":["itemLabel"],
+        "returns": "aRating"
+    },
+    {
+        "method": "getSeriesSummary",
+        "params":["itemLabel"],
+        "returns": "aSummary"
+    },
+    {
+        "method": "getEpisodeName",
+        "params":["seriesName", "episodeName"],
+        "returns": "aName"
+    },
+    {
+        "method": "getEpisodeImdb",
+        "params":["seriesName", "episodeName"],
+        "returns": "aRating"
+    },
+    {
+        "method": "getEpisodeSummary",
+        "params":["seriesName", "episodeName"],
+        "returns": "aSummary"
+    },
+    {
+        "method": "getLibrarySize",
+        "params":[],
+        "returns": 3
+    }
+]

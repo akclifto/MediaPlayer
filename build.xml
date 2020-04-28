@@ -1,4 +1,4 @@
-<project name="Ser321 Spring 2020 Assign3" default="targets" basedir=".">
+<project name="Ser321 Spring 2020 Assign6, akclifto (akclifto@asu.edu)" default="targets" basedir=".">
 
     <!-- define tasks used in the prepare task for platform identification -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -9,13 +9,13 @@
     <property name="build" value="./classes"/>
     <property name="docs" value="./docs"/>
     <property name="lib" value="./lib"/>
-    <property name="userId" value="first.lastname"/>
+    <property name="userId" value="akclifto"/>
     <property name="omdbkey" value="your-omdb-api-key"/>
     <property name="parentDir" value="${user.dir}${file.separator}"/>
     <property name="javafxhome" value="javafx-sdk-13.0.1/"/>
     <property name="javafx-lib-home" value="${javafxhome}lib"/>
-    <property name="hostId" value="localhost"/>
-    <property name="regPort" value="8888"/>
+    <property name="host" value="localhost"/>
+    <property name="port" value="8888"/>
 
 
     <path id="compile.classpath">
@@ -37,15 +37,25 @@
     </path>
 
 
+    <!-- Ant Targets-->
     <target name="targets">
         <echo message="targets are clean, prepare, setup.javafx, compile, server, and client. "/>
-        <echo message="start server with: ant server -DhostId=localhost -DregPort=8888"/>
-        <echo message="start client 1 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
-        <echo message="start client 2 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
+        <echo message="start server with: ant server -Dport=8888"/>
+        <echo message="start client 1 with: ant client -Dhost=localhost -Dport=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
+        <echo message="start client 2 with: ant client -Dhost=localhost -Dport=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
     </target>
 
 
-    <target name="prepare">
+    <!-- Clean Project -->
+    <target name="clean">
+        <!-- Delete the ${build} and ${docs} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${javafxhome}"/>
+    </target>
+
+
+    <!-- Prepare Project-->
+    <target name="prepare" depends="clean" > <!--TODO: -->
         <!-- Create the time stamp -->
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
@@ -81,6 +91,7 @@
     </target>
 
 
+    <!-- Setup javaFX -->
     <target name="setup.javafx" depends="prepare">
         <if>
             <isset property="build.host.ismac"/>
@@ -102,6 +113,7 @@
     </target>
 
 
+    <!-- Compile Project -->
     <target name="compile" depends="setup.javafx"
             description="Compile Java sources">
         <javac srcdir="${src}"
@@ -112,65 +124,27 @@
     </target>
 
 
-    <target name="client" depends="compile"
-            description="Start client">
+    <!-- Build/Initiate Server -->
+    <target name="server" depends="compile" description="Start server">
+                <echo message="command line server: java -cp classes:lib/json.jar LibraryTCPJsonRPCServer ${port}"/>
+                <java classname="ser321.assign6.akclifto.server.LibraryTCPJsonRPCServer" fork="yes">
+                    <arg value="${port}"/>
+                    <classpath refid="compile.classpath"/>
+                </java>
+    </target>
+
+
+    <!-- Build/Initiate Client -->
+    <target name="client" depends="compile" description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
-        <!--        <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}"/>-->
-        <java classname="ser321.assign3.akclifto.client.SeasonRMIClient" fork="yes">
-    
+        <echo message="command line client: java -cp classes:lib/assign2Gui.jar SeriesSeasonRMIClient ${host} ${port} ${omdbkey}"/>
+        <java classname="ser321.assign6.akclifto.client.SeriesSeasonClient" fork="yes">
             <classpath refid="compile.classpath"/>
-            <!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
-    
-            <arg value="${hostId}"/>
-            <arg value="${regPort}"/>
+            <arg value="${host}"/>
+            <arg value="${port}"/>
             <arg value="${userId}"/>
-           <arg value="${omdbkey}"/>
-    
+            <arg value="${omdbkey}"/>
         </java>
     </target>
     
-    
-    <target name="server" depends="compile"
-            description="Using parallel task, start server and client">
-        <parallel>
-            <exec dir="${basedir}"
-                  executable="rmiregistry">
-                <arg value="${regPort}"/>
-                <env key="CLASSPATH" path="${basedir}/${build}"/>
-            </exec>
-            <sequential>
-                <sleep seconds="10"/>
-                <java classname="ser321.assign3.akclifto.server.LibraryServer" fork="yes">
-                    <!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
-                    <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
-    
-                    <arg value="${hostId}"/>
-                    <arg value="${regPort}"/>
-    
-                    <classpath refid="compile.classpath"/>
-                </java>
-            </sequential>
-        </parallel>
-    </target>
-
-
-<!--    <target name="execute" depends="compile"-->
-<!--            description="execute the media player client">-->
-<!--        <java classname="ser321.assign3.akclifto.client.SeasonRMIClient"-->
-<!--              fork="yes">-->
-
-<!--            <arg value="${userId}"/>-->
-<!--            <arg value="${omdbkey}"/>-->
-
-<!--            <classpath refid="compile.classpath"/>-->
-<!--            <jvmarg value="-Djava.library.path=${javafx-lib-home}"/>-->
-<!--        </java>-->
-<!--    </target>-->
-
-
-    <target name="clean">
-        <!-- Delete the ${build} and ${docs} directory trees -->
-        <delete dir="${build}"/>
-        <delete dir="${javafxhome}"/>
-    </target>
 </project>

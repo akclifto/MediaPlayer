@@ -1,4 +1,4 @@
-package ser321.assign3.akclifto.server;
+package ser321.assign6.akclifto.server;
 
 import org.json.JSONObject;
 import org.json.JSONString;
@@ -33,7 +33,6 @@ public class Episode implements JSONString, Serializable {
 
     private String name;        // name of episode
     private String imdbRating;  // imdb rating
-    private JSONObject epData;  // store JSONObject information
     private String epSummary;   // episode summary
     public Episode(){}
 
@@ -52,10 +51,9 @@ public class Episode implements JSONString, Serializable {
      * */
     public Episode(JSONObject jsonObj){
 
-        epData = jsonObj;
-        this.name = epData.getString("name");
-        this.imdbRating = epData.getString("imdbRating");
-        this.epSummary = epData.getString("epSummary");
+        this.name = jsonObj.getString("name");
+        this.imdbRating = jsonObj.getString("imdbRating");
+        this.epSummary = jsonObj.getString("epSummary");
     }
 
     /*All setters/getters*/
@@ -65,7 +63,6 @@ public class Episode implements JSONString, Serializable {
     public String getImdbRating() {
         return imdbRating;
     }
-    public JSONObject getEpData(){ return epData; }
     public String getEpSummary() {
         return epSummary;
     }
@@ -113,4 +110,3 @@ public class Episode implements JSONString, Serializable {
     }
 
 }
-

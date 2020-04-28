@@ -1,4 +1,4 @@
-package ser321.assign3.akclifto.server;
+package ser321.assign6.akclifto.server;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,11 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 
@@ -42,9 +39,9 @@ import java.util.List;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class LibraryServer extends UnicastRemoteObject implements Library, LibraryHelper {
+public class LibraryServer implements Library, LibraryHelper {
 
-    private HashMap<String, SeriesSeason> libraryMap;
+    private Hashtable<String, SeriesSeason> libraryMap;
     private static final String fileName = "series.json";
     private List<SeriesSeason> seriesSeasonList; // List of SeriesSeason objects
     private static LibraryServer sLibrary = null;
@@ -52,9 +49,9 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     /**
      * Constructor used for tests.
      * */
-    public LibraryServer() throws RemoteException {
+    public LibraryServer() {
 
-        this.libraryMap = new HashMap<>();
+        this.libraryMap = new Hashtable<>();
         this.seriesSeasonList = new ArrayList<>();
         //this.restoreLibraryFromFile(fileName);
     }
@@ -84,7 +81,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
     @Override
-    public HashMap<String, SeriesSeason> getLibraryMap() {
+    public Hashtable<String, SeriesSeason> getLibraryMap() {
         return libraryMap;
     }
 
@@ -164,6 +161,31 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
     @Override
+    public String jsonGetSeries(String seriesTitle) {
+
+        for (SeriesSeason ss: seriesSeasonList){
+            if(ss.getTitle().equalsIgnoreCase(seriesTitle)){
+                return ss.toJSONString();
+            }
+        }
+        System.out.println(seriesTitle + " was not found in the SeriesSeason list!");
+        return null;
+    }
+
+    @Override
+    public String jsonGetEpisode(String seriesTitle, String episodeName) {
+
+        List<Episode> epList = getSeriesSeason(seriesTitle).getEpisodeList();
+        for(Episode epi : epList){
+            if(epi.getName().equalsIgnoreCase(episodeName)){
+                return epi.toJSONString();
+            }
+        }
+        System.out.println(episodeName + " was not found in list for " + seriesTitle);
+        return null;
+    }
+
+    @Override
     public String getSeriesTitle(String title) {
 
         //System.out.println("Processed getSeriesTitle for " + title + " for client.");
@@ -208,13 +230,28 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
     @Override
+    public boolean checkSeries(String title) {
+
+        try{
+            for(SeriesSeason ss : seriesSeasonList){
+                if(ss.getTitle().equalsIgnoreCase(title)){
+                    return false;
+                }
+            }
+        } catch (Exception ex){
+            System.out.println("Exception in checkSeries: " + ex.getMessage());
+        }
+        return true;
+    }
+
+    @Override
     public String getEpisodeName(String parent, String node) {
 
         return getSeriesSeason(parent).getEpisode(node).getName();
     }
 
     @Override
-    public String getEpisodeImdbRating(String parent, String node) {
+    public String getEpisodeImdb(String parent, String node) {
 
         return getSeriesSeason(parent).getEpisode(node).getImdbRating();
     }
@@ -227,13 +264,26 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
     @Override
-    public boolean removeEpisode(String series, String episode) {
+    public boolean addEpisode(String series, String episode) {
+
+        Episode epi = getSeriesSeason(series).getEpisode(episode);
+        try {
+            this.getSeriesSeason(series).addToEpisodeList(epi);
+        }catch(Exception ex){
+            System.out.println("Exception adding episode to series: " + ex.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public synchronized boolean removeEpisode(String series, String episode) {
 
         return getSeriesSeason(series).removeEpisode(episode);
     }
 
     @Override
-    public boolean checkEpisodes(String title) {
+    public synchronized boolean checkEpisodes(String title) {
 
         return getSeriesSeason(title).checkEpisodes();
     }
@@ -272,7 +322,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public boolean removeSeriesSeason(String title) {
+    public synchronized boolean removeSeriesSeason(String title) {
 
         if(seriesSeasonList.isEmpty()){
             System.out.println("SeriesSeason List is empty.");
@@ -293,7 +343,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public boolean saveLibraryToFile(String fileName) {
+    public synchronized boolean saveLibraryToFile(String fileName) {
 
         //System.out.println("\nSaving current library to file for client: " + fileName);
         JSONObject jsonSeries = constructJSON();
@@ -336,7 +386,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public boolean restoreLibraryFromFile(String filename) {
+    public synchronized boolean restoreLibraryFromFile(String filename) {
 
         boolean flag;
         try {
@@ -379,7 +429,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
 
     @Override
-    public void parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
+    public synchronized boolean parseURLtoJSON(String jsonSeries, String jsonEpisodes) {
 
         try {
             //shared or cross-data points
@@ -421,8 +471,9 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
         } catch(Exception ex){
             System.out.println("Exception in parseURLtoJSON: " + ex.getMessage());
+            return false;
         }
-
+        return true;
     }
 
     /**
@@ -444,7 +495,7 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
 
         libraryMap.clear();
         seriesSeasonList.clear();
-        this.libraryMap = new HashMap<>();
+        this.libraryMap = new Hashtable<>();
         this.seriesSeasonList = new ArrayList<>();
 
     }
@@ -467,28 +518,28 @@ public class LibraryServer extends UnicastRemoteObject implements Library, Libra
     }
 
 
-    /**
-     * Main method to initialize server and library.
-     * @param args : arguments for hostId and regPort number.
-     * */
-    public static void main(String[] args) {
-
-        try{
-            String hostId = "localHost";
-            String regPort = "8888";
-            if(args.length >= 2) {
-                hostId = args[0];
-                regPort= args[1];
-            }
-            Library obj = LibraryServer.getInstance();
-            Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
-            System.out.println("Server bound in registry as: "+
-                    "rmi://"+hostId+":"+regPort+"/LibraryServer");
-            System.out.println("Server Ready");
-        } catch (Exception ex) {
-            System.out.println("Exception initializing server: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
+//    /**
+//     * Main method to initialize server and library.
+//     * @param args : arguments for hostId and regPort number.
+//     * */
+//    public static void main(String[] args) {
+//
+//        try{
+//            String hostId = "localHost";
+//            String regPort = "8888";
+//            if(args.length >= 2) {
+//                hostId = args[0];
+//                regPort= args[1];
+//            }
+//            Library obj = LibraryServer.getInstance();
+//            Naming.rebind("rmi://"+hostId+":"+regPort+"/LibraryServer", obj);
+//            System.out.println("Server bound in registry as: "+
+//                    "rmi://"+hostId+":"+regPort+"/LibraryServer");
+//            System.out.println("Server Ready");
+//        } catch (Exception ex) {
+//            System.out.println("Exception initializing server: " + ex.getMessage());
+//            ex.printStackTrace();
+//        }
+//    }
 
 }

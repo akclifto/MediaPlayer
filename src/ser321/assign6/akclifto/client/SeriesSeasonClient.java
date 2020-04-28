@@ -1,7 +1,6 @@
-package ser321.assign3.akclifto.client;
+package ser321.assign6.akclifto.client;
 
 import ser321.assign2.lindquis.MediaLibraryGui;
-import ser321.assign3.akclifto.server.Library;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,7 +25,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
-import java.rmi.Naming;
 import java.time.Duration;
 
 /**
@@ -62,7 +60,7 @@ import java.time.Duration;
  * Software Engineering, ASU
  * @version April 2020
  */
-public class SeasonRMIClient extends MediaLibraryGui implements
+public class SeriesSeasonClient extends MediaLibraryGui implements
 		TreeWillExpandListener,
 		ActionListener,
 		TreeSelectionListener {
@@ -70,17 +68,17 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 	private static final boolean debugOn = false;
 	private static final String pre = "https://www.omdbapi.com/?apikey=";
 	private static String urlOMBD;
-	private Library libraryServer;
+	private SeriesSeasonTCPProxy libraryServer;
 	private String omdbKey;
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeasonRMIClient(String author, String authorKey, Library server) {
+	public SeriesSeasonClient(String hostId, String regPort, String author, String authorKey) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
 		urlOMBD = pre + omdbKey + "&t=";
-		libraryServer = server;
+		libraryServer = new SeriesSeasonTCPProxy(hostId, Integer.parseInt(regPort));
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -257,9 +255,9 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 			String seriesName = libraryServer.getSeriesTitle(title);
 			String[] epTitles = libraryServer.getEpisodeTitles(title);
 
-
 			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
-			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesTitle(title));  // sub nodes to seriesToAdd
+			DefaultMutableTreeNode subNode = getSubLabelled(root, seriesName);  // sub nodes to seriesToAdd
+//			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesTitle(title));  // sub nodes to seriesToAdd
 
 			if(subNode != null) { //if series exists.
 
@@ -401,7 +399,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 					//set text to panels to displayed selected node information
 					episodeJTF.setText(libraryServer.getEpisodeName(parentLabel, nodeLabel));    // name of the episode
-					ratingJTF.setText(libraryServer.getEpisodeImdbRating(parentLabel, nodeLabel));  // change to rating of the episode
+					ratingJTF.setText(libraryServer.getEpisodeImdb(parentLabel, nodeLabel));  // change to rating of the episode
 					genreJTF.setText(libraryServer.getGenre(parentLabel));
 					setPosterImage(libraryServer.getPosterLink(parentLabel));
 					summaryJTA.setText(libraryServer.getEpisodeSummary(parentLabel, nodeLabel));
@@ -623,7 +621,7 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 
 		 if(option == JOptionPane.YES_OPTION) {
 			 try {
-				 System.out.println("Unsure how to implement.");
+				 System.out.println("Unsure how to implement with current design.");
 //				 library.getLibraryServer().getSeriesSeason(seriesSeasonJTF.getText()).
 //						 removeEpisode(episodeJTF.getText());
 				 refreshTree();
@@ -774,12 +772,9 @@ public class SeasonRMIClient extends MediaLibraryGui implements
 				key = args[3];
 			}
 
-			Library libraryServer;
-			libraryServer = (Library)Naming.lookup(
-					"rmi://"+hostId+":"+regPort+"/LibraryServer");
-			System.out.println("Client obtained remote object reference to" +
-					" the LibraryServer");
-			new SeasonRMIClient(name, key, libraryServer);
+			String connect = "http://" + hostId + ":" + regPort + "/";
+			System.out.println("Opening Connection to: " + connect);
+			new SeriesSeasonClient(hostId, regPort, name, key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
