@@ -55,7 +55,7 @@
 
 
     <!-- Prepare Project-->
-    <target name="prepare" depends="clean" > <!--TODO: -->
+    <target name="prepare" depends="clean" >
         <!-- Create the time stamp -->
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
