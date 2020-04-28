@@ -73,7 +73,7 @@ public class SeriesSeasonClient extends MediaLibraryGui implements
 	private static String posterImg =
 			"http://2.bp.blogspot.com/-tE3fN3JVM-c/TjtR1B_o9tI/AAAAAAAAAXo/vZN2fWNVgF4/s1600/movie_reel.jpg";
 
-	public SeriesSeasonClient(String author, String authorKey, String hostId, String regPort) {
+	public SeriesSeasonClient(String hostId, String regPort, String author, String authorKey) {
 		// sets the value of 'author' on the title window of the GUI.
 		super(author);
 		this.omdbKey = authorKey;
@@ -255,9 +255,9 @@ public class SeriesSeasonClient extends MediaLibraryGui implements
 			String seriesName = libraryServer.getSeriesTitle(title);
 			String[] epTitles = libraryServer.getEpisodeTitles(title);
 
-
 			DefaultMutableTreeNode seriesToAdd = new DefaultMutableTreeNode(seriesName);  // series node to add to tree
-			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesTitle(title));  // sub nodes to seriesToAdd
+			DefaultMutableTreeNode subNode = getSubLabelled(root, seriesName);  // sub nodes to seriesToAdd
+//			DefaultMutableTreeNode subNode = getSubLabelled(root, libraryServer.getSeriesTitle(title));  // sub nodes to seriesToAdd
 
 			if(subNode != null) { //if series exists.
 
@@ -621,7 +621,7 @@ public class SeriesSeasonClient extends MediaLibraryGui implements
 
 		 if(option == JOptionPane.YES_OPTION) {
 			 try {
-				 System.out.println("Unsure how to implement.");
+				 System.out.println("Unsure how to implement with current design.");
 //				 library.getLibraryServer().getSeriesSeason(seriesSeasonJTF.getText()).
 //						 removeEpisode(episodeJTF.getText());
 				 refreshTree();
@@ -774,7 +774,7 @@ public class SeriesSeasonClient extends MediaLibraryGui implements
 
 			String connect = "http://" + hostId + ":" + regPort + "/";
 			System.out.println("Opening Connection to: " + connect);
-			new SeriesSeasonClient(name, key, hostId, regPort);
+			new SeriesSeasonClient(hostId, regPort, name, key);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

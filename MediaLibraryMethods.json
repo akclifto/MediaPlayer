@@ -75,6 +75,11 @@
         "returns": true
     },
     {
+        "method": "checkEpisodes",
+        "params":["itemLabel"],
+        "returns": true
+    },
+    {
         "method": "getSeriesImdbRating",
         "params":["itemLabel"],
         "returns": "aRating"

@@ -208,7 +208,11 @@ public class LibraryServerSkeleton {
             } else if (method.equalsIgnoreCase("getLibrarySize")) {
                 debug("Getting library size...");
                 result.put("result", library.getLibrarySize());
-
+            } else if (method.equalsIgnoreCase("checkEpisodes")) {
+                assert params != null;
+                String seriesName = params.getString(0);
+                debug("Checking Episode list for " + seriesName);
+                result.put("result", library.checkEpisodes(seriesName));
             } else {
                 debug("Unable to match method: " + method + ". Returning 0.");
                 result.put("result", 0.0);

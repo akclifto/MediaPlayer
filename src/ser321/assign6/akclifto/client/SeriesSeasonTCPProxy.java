@@ -162,6 +162,7 @@ public class SeriesSeasonTCPProxy implements Library {
         String[] ret = new String[arr.length()];
         for(int i = 0; i < arr.length(); i++){
             ret[i] = arr.getString(i);
+//            System.out.println(ret[i]);
         }
         return  ret;
     }
@@ -185,7 +186,7 @@ public class SeriesSeasonTCPProxy implements Library {
     @Override
     public boolean checkEpisodes(String title) {
 
-        String result = callMethod("checkSeriesExists", new Object[]{title});
+        String result = callMethod("checkEpisodes", new Object[]{title});
         JSONObject res = new JSONObject(result);
         return res.optBoolean("result", false);
     }
@@ -200,8 +201,10 @@ public class SeriesSeasonTCPProxy implements Library {
 
     @Override
     public String getEpisodeImdb(String parent, String node) {
-        //TODO:
-        return null;
+
+        String result = callMethod("getEpisodeImdb", new Object[]{parent, node});
+        JSONObject res = new JSONObject(result);
+        return  res.optString("result");
     }
 
     @Override
@@ -300,7 +303,5 @@ public class SeriesSeasonTCPProxy implements Library {
         JSONObject res = new JSONObject(result);
         return res.optBoolean("result", false);
     }
-
-
 
 }

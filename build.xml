@@ -14,8 +14,8 @@
     <property name="parentDir" value="${user.dir}${file.separator}"/>
     <property name="javafxhome" value="javafx-sdk-13.0.1/"/>
     <property name="javafx-lib-home" value="${javafxhome}lib"/>
-    <property name="hostId" value="localhost"/>
-    <property name="regPort" value="8888"/>
+    <property name="host" value="localhost"/>
+    <property name="port" value="8888"/>
 
 
     <path id="compile.classpath">
@@ -40,9 +40,9 @@
     <!-- Ant Targets-->
     <target name="targets">
         <echo message="targets are clean, prepare, setup.javafx, compile, server, and client. "/>
-        <echo message="start server with: ant server -DregPort=8888"/>
-        <echo message="start client 1 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
-        <echo message="start client 2 with: ant client -DhostId=localhost -DregPort=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
+        <echo message="start server with: ant server -Dport=8888"/>
+        <echo message="start client 1 with: ant client -Dhost=localhost -Dport=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
+        <echo message="start client 2 with: ant client -Dhost=localhost -Dport=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
     </target>
 
 
@@ -126,9 +126,9 @@
 
     <!-- Build/Initiate Server -->
     <target name="server" depends="compile" description="Start server">
-                <echo message="command line server: java -cp classes:lib/json.jar LibraryTCPJsonRPCServer ${regPort}"/>
+                <echo message="command line server: java -cp classes:lib/json.jar LibraryTCPJsonRPCServer ${port}"/>
                 <java classname="ser321.assign6.akclifto.server.LibraryTCPJsonRPCServer" fork="yes">
-                    <arg value="${regPort}"/>
+                    <arg value="${port}"/>
                     <classpath refid="compile.classpath"/>
                 </java>
     </target>
@@ -137,13 +137,13 @@
     <!-- Build/Initiate Client -->
     <target name="client" depends="compile" description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
-        <echo message="command line client: java -cp classes:lib/assign2Gui.jar SeriesSeasonRMIClient ${hostId} ${regPort} ${omdbkey}"/>
+        <echo message="command line client: java -cp classes:lib/assign2Gui.jar SeriesSeasonRMIClient ${host} ${port} ${omdbkey}"/>
         <java classname="ser321.assign6.akclifto.client.SeriesSeasonClient" fork="yes">
             <classpath refid="compile.classpath"/>
-            <arg value="${hostId}"/>
-            <arg value="${regPort}"/>
-            <arg value="${omdbkey}"/>
+            <arg value="${host}"/>
+            <arg value="${port}"/>
             <arg value="${userId}"/>
+            <arg value="${omdbkey}"/>
         </java>
     </target>
     
