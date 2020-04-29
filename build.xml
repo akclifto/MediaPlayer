@@ -39,10 +39,10 @@
 
     <!-- Ant Targets-->
     <target name="targets">
-        <echo message="targets are clean, prepare, setup.javafx, compile, server, and client. "/>
+        <echo message="targets are clean, prepare, setup.javafx, compile, server, and java.client. "/>
         <echo message="start server with: ant server -Dport=8888"/>
-        <echo message="start client 1 with: ant client -Dhost=localhost -Dport=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
-        <echo message="start client 2 with: ant client -Dhost=localhost -Dport=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
+        <echo message="start client 1 with: ant java.client -Dhost=localhost -Dport=8888 -DuserId=green -Domdbkey=YourOMDBkey"/>
+        <echo message="start client 2 with: ant java.client -Dhost=localhost -Dport=8888 -DuserId=orange -Domdbkey=YourOMDBkey"/>
     </target>
 
 
@@ -55,7 +55,7 @@
 
 
     <!-- Prepare Project-->
-    <target name="prepare" depends="clean" >
+    <target name="prepare" depends="clean" > <!--TODO: -->
         <!-- Create the time stamp -->
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
@@ -135,7 +135,7 @@
 
 
     <!-- Build/Initiate Client -->
-    <target name="client" depends="compile" description="Start client">
+    <target name="java.client" depends="compile" description="Start client">
         <echo message="user.dir is: ${user.dir}"/>
         <echo message="command line client: java -cp classes:lib/assign2Gui.jar SeriesSeasonRMIClient ${host} ${port} ${omdbkey}"/>
         <java classname="ser321.assign6.akclifto.client.SeriesSeasonClient" fork="yes">

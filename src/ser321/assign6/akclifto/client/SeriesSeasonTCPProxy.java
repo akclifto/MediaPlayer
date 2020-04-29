@@ -222,7 +222,7 @@ public class SeriesSeasonTCPProxy implements Library {
     @Override
     public boolean addEpisode(String series, String episode) {
 
-        String result = callMethod("addEpisode5", new Object[]{series, episode});
+        String result = callMethod("addEpisode", new Object[]{series, episode});
         JSONObject res = new JSONObject(result);
         return res.optBoolean("result", false);
     }
